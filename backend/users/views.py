@@ -4,9 +4,11 @@ from rest_framework import status
 from users.models import CustomUser
 from .serializers import RegisterSerializer, LoginSerializer
 from django.contrib.auth import authenticate
-
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
 
 class RegisterView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = RegisterSerializer(data = request.data)
         if serializer.is_valid():
@@ -24,13 +26,15 @@ class RegisterView(APIView):
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = LoginSerializer(data = request.data)
         if serializer.is_valid():
             data = serializer.validated_data
             user = authenticate(username=data['username'], password=data['password'])
             if user is not None :
-                return Response({"username": user.username,"role":user.role})
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({"username": user.username,"role":user.role,"token":token.key})
             else :
                 return Response({"error":"Invalid credentails"}, status=status.HTTP_400_BAD_REQUEST)
         else:
