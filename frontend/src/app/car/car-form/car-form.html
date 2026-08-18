@@ -1,0 +1,28 @@
+<h2>{{ isEditMode ? 'Edit Car' : 'Add Car' }}</h2>
+<form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+  <input formControlName="model" placeholder="Model" />
+  <input formControlName="year" type="number" placeholder="Year" />
+  <input formControlName="km" type="number" placeholder="Km" />
+
+  <select formControlName="fuel_type">
+    <option value="petrol">Petrol</option>
+    <option value="diesel">Diesel</option>
+    <option value="electric">Electric</option>
+    <option value="hybrid">Hybrid</option>
+  </select>
+
+  <select formControlName="transmission_type">
+    <option value="manual">Manual</option>
+    <option value="automatic">Automatic</option>
+  </select>
+
+  <select formControlName="type">
+    <option value="sedan">Sedan</option>
+    <option value="suv">SUV</option>
+    <option value="truck">Truck</option>
+    <option value="coupe">Coupe</option>
+    <option value="van">Van</option>
+  </select>
+
+  <button type="submit" [disabled]="carForm.invalid">Save</button>
+</form>

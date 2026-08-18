@@ -1,0 +1,9 @@
+<h2>Update Profile</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <input formControlName="first_name" placeholder="First Name" />
+  <input formControlName="last_name" placeholder="Last Name" />
+  <input formControlName="email" placeholder="Email" />
+  <button type="submit" [disabled]="form.invalid">Update Profile</button>
+</form>
+<p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+<p *ngIf="successMessage" style="color: green;">{{ successMessage }}</p>

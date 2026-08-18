@@ -1,0 +1,10 @@
+<h2>My Cars</h2>
+<ul>
+  <li *ngFor="let car of cars">
+    {{ car.model }} ({{ car.year }}) - {{ car.fuel_type }}, {{ car.km }} km
+    <button (click)="deleteCar(car.id)">Delete</button>
+    <a [routerLink]="['/cars', car.id, 'edit']">Edit</a>
+    <button (click)="logout()">Logout</button>
+  </li>
+</ul>
+<a routerLink="/cars/new">Add Car</a>
