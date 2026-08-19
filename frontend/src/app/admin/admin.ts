@@ -12,12 +12,16 @@ export class Admin {
 
   constructor(private http: HttpClient) {}
 
-  getAllUsers() {
-    return this.http.get(this.usersUrl);
+  getAllUsers(page: number = 1, search: string = '') {
+    return this.http.get(`${this.usersUrl}?page=${page}&search=${search}`);
   }
 
-  getAllCars() {
-    return this.http.get(this.carsUrl);
+  getAllCars(page: number = 1) {
+    return this.http.get(`${this.carsUrl}?page=${page}`);
+  }
+
+  getGroupedCars(page: number = 1, search: string = '') {
+    return this.http.get(`${this.carsUrl}grouped/?page=${page}&search=${search}`);
   }
 
   updateUser(id: number, userData: any) {

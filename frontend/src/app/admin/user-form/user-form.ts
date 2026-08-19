@@ -33,8 +33,8 @@ export class UserForm implements OnInit {
   ngOnInit() {
     this.userId = Number(this.route.snapshot.paramMap.get('id'));
     this.adminService.getAllUsers().subscribe({
-      next: (users: any) => {
-        const user = users.find((u: any) => u.id === this.userId);
+      next: (data: any) => {
+        const user = data.results.find((u: any) => u.id === this.userId);
         if (user) {
           this.userForm.patchValue(user);
         }

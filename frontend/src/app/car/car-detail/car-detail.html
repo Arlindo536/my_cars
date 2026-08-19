@@ -1,0 +1,61 @@
+<div style="background-color: #f8f9fa; min-height: 85vh;" class="py-5">
+  <div class="container" style="max-width: 600px;">
+    <a [routerLink]="backLink" class="btn btn-outline-secondary btn-sm mb-3">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">arrow_back</i> Back to My Cars
+    </a>
+    <div class="card shadow p-4" *ngIf="car">
+      <div class="text-center mb-4">
+        <i class="material-icons" style="font-size: 64px; color: #2c3e50;">directions_car</i>
+        <h2 class="mt-2 mb-1">{{ car.model }}</h2>
+        <span class="badge" [class.bg-success]="car.fuel_type === 'electric'" [class.bg-secondary]="car.fuel_type !== 'electric'">
+          {{ car.fuel_type }}
+        </span>
+      </div>
+
+      <div class="row text-center g-3 mb-4">
+        <div class="col-6">
+          <div class="p-3 bg-light rounded">
+            <i class="material-icons text-primary">calendar_today</i>
+            <p class="mb-0 fw-bold">{{ car.year }}</p>
+            <small class="text-muted">Year ({{ carAge }} years old)</small>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-3 bg-light rounded">
+            <i class="material-icons text-primary">speed</i>
+            <p class="mb-0 fw-bold">{{ car.km }} km</p>
+            <small class="text-muted">Mileage</small>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-3 bg-light rounded">
+            <i class="material-icons text-primary">settings</i>
+            <p class="mb-0 fw-bold">{{ car.transmission_type }}</p>
+            <small class="text-muted">Transmission</small>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-3 bg-light rounded">
+            <i class="material-icons text-primary">directions_car</i>
+            <p class="mb-0 fw-bold">{{ car.type }}</p>
+            <small class="text-muted">Body Type</small>
+          </div>
+        </div>
+      </div>
+
+      <p *ngIf="car.owner" class="text-center text-muted mb-3">
+        <i class="material-icons" style="font-size: 16px; vertical-align: middle;">person</i>
+        Owned by {{ car.owner }}
+      </p>
+
+      <div class="d-flex gap-2">
+        <a [routerLink]="['/cars', car.id, 'edit']" class="btn btn-primary flex-fill">
+          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
+        </a>
+        <button class="btn btn-outline-danger flex-fill" (click)="deleteCar()">
+          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,18 +1,29 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from users.models import CustomUser
-from .serializers import RegisterSerializer, LoginSerializer, ChangePasswordSerializer, UpdateProfileSerializer, AdminUserSerializer
+from rest_framework.pagination import PageNumberPagination
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
+from django.db import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAuthenticated
-from django.db import IntegrityError
-from django.shortcuts import get_object_or_404
+from .models import CustomUser
+from .serializers import (
+    RegisterSerializer,
+    LoginSerializer,
+    ChangePasswordSerializer,
+    UpdateProfileSerializer,
+    AdminUserSerializer,
+)
+
+
+class UserPagination(PageNumberPagination):
+    page_size = 5
 
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -34,26 +45,19 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
-        serializer = LoginSerializer(data = request.data)
+        serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
             user = authenticate(username=data['username'], password=data['password'])
-            if user is not None :
+            if user is not None:
                 token, created = Token.objects.get_or_create(user=user)
-                return Response({"username": user.username,"role":user.role,"token":token.key})
-            else :
-                return Response({"error":"Invalid credentails"}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"username": user.username, "role": user.role, "token": token.key})
+            else:
+                return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UserListView(APIView):
-    def get(self, request):
-        if request.user.role != 'admin':
-            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
-        users = CustomUser.objects.all()
-        data = [{"id": u.id, "username": u.username, "email": u.email, "role": u.role} for u in users]
-        return Response(data)
 
 class ChangePasswordView(APIView):
     def post(self, request):
@@ -68,6 +72,7 @@ class ChangePasswordView(APIView):
             return Response({"message": "Password changed successfully."})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UpdateProfileView(APIView):
     def get(self, request):
         user = request.user
@@ -78,6 +83,7 @@ class UpdateProfileView(APIView):
             "last_name": user.last_name,
             "role": user.role
         })
+
     def put(self, request):
         serializer = UpdateProfileSerializer(data=request.data)
         if serializer.is_valid():
@@ -91,13 +97,20 @@ class UpdateProfileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class UserListView(APIView):
+    def get(self, request):
+        if request.user.role != 'admin':
+            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
+        search = request.query_params.get('search', '')
+        users = CustomUser.objects.all()
+        if search:
+            users = users.filter(username__icontains=search)
+        paginator = UserPagination()
+        result_page = paginator.paginate_queryset(users, request)
+        data = [{"id": u.id, "username": u.username, "email": u.email, "role": u.role} for u in result_page]
+        return paginator.get_paginated_response(data)
 
 class AdminUserDetailView(APIView):
-    def get_permission(self, request):
-        if request.user.role != 'admin':
-            return False
-        return True
-
     def put(self, request, pk):
         if request.user.role != 'admin':
             return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)

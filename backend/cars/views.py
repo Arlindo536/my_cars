@@ -2,10 +2,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from .models import Car
 from .serializers import CarSerializer, AdminCarSerializer
 from .permissions import IsOwnerOrAdmin
 from users.models import CustomUser
+
+
+class CarPagination(PageNumberPagination):
+    page_size = 10
+
+
+class OwnerPagination(PageNumberPagination):
+    page_size = 3
 
 
 class AdminCarCreateView(APIView):
@@ -29,14 +38,38 @@ class AdminCarCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class AdminCarGroupedView(APIView):
+    def get(self, request):
+        if request.user.role != 'admin':
+            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
+        search = request.query_params.get('search', '')
+        cars_qs = Car.objects.all()
+        if search:
+            cars_qs = cars_qs.filter(model__icontains=search)
+        owner_ids = list(
+            cars_qs.order_by('owner_id').values_list('owner_id', flat=True).distinct()
+        )
+        paginator = OwnerPagination()
+        page_owner_ids = paginator.paginate_queryset(owner_ids, request)
+        cars = cars_qs.filter(owner_id__in=page_owner_ids).order_by('owner_id')
+        serializer = CarSerializer(cars, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+
 class CarView(APIView):
     def get(self, request):
+        search = request.query_params.get('search', '')
         if request.user.role == 'admin':
             cars = Car.objects.all()
         else:
             cars = Car.objects.filter(owner=request.user)
-        serializer = CarSerializer(cars, many=True)
-        return Response(serializer.data)
+        if search:
+            cars = cars.filter(model__icontains=search)
+        paginator = CarPagination()
+        result_page = paginator.paginate_queryset(cars, request)
+        serializer = CarSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
 
     def post(self, request):
         serializer = CarSerializer(data=request.data)

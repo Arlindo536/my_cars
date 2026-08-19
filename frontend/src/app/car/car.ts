@@ -9,9 +9,9 @@ export class Car {
 
   constructor(private http: HttpClient) {}
 
-  getCars() {
-    return this.http.get(this.apiUrl);
-  }
+  getCars(page: number = 1, search: string = '') {
+  return this.http.get(`${this.apiUrl}?page=${page}&search=${search}`);
+}
 
   getCar(id: number) {
     return this.http.get(`${this.apiUrl}${id}/`);

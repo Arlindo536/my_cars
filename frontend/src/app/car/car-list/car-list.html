@@ -7,42 +7,85 @@
           <i class="material-icons" style="font-size: 16px; vertical-align: middle;">add</i> Add Car
         </a>
       </div>
+
+      <div class="mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by model..."
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
+
       <div *ngIf="cars.length === 0" class="text-center text-muted py-5">
         <p style="font-size: 3rem;">🚗</p>
         <p>You don't have any cars yet.</p>
       </div>
-      <div *ngIf="cars.length > 0" class="table-responsive">
-        <table class="table table-striped mb-0">
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Year</th>
-              <th>Fuel</th>
-              <th>Transmission</th>
-              <th>Type</th>
-              <th>Km</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let car of cars">
-              <td>{{ car.model }}</td>
-              <td>{{ car.year }}</td>
-              <td>{{ car.fuel_type }}</td>
-              <td>{{ car.transmission_type }}</td>
-              <td>{{ car.type }}</td>
-              <td>{{ car.km }}</td>
-              <td>
-                <a [routerLink]="['/cars', car.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
-                </a>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCar(car.id, car.model)">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+      <div *ngIf="cars.length > 0">
+        <div class="d-flex justify-content-end align-items-center mb-2 gap-2">
+          <button class="btn btn-outline-danger btn-sm" *ngIf="selectMode && selectedIds.length > 0" (click)="deleteSelected()">
+            <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i>
+            Delete Selected ({{ selectedIds.length }})
+          </button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="toggleSelectMode()">
+            {{ selectMode ? 'Cancel' : 'Select' }}
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <th *ngIf="selectMode">
+                  <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll($event)" />
+                </th>
+                <th (click)="sortBy('model')" style="cursor: pointer;">Model <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
+<th (click)="sortBy('year')" style="cursor: pointer;">Year <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
+<th (click)="sortBy('fuel_type')" style="cursor: pointer;">Fuel <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
+<th (click)="sortBy('transmission_type')" style="cursor: pointer;">Transmission <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
+<th (click)="sortBy('type')" style="cursor: pointer;">Type <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
+<th (click)="sortBy('km')" style="cursor: pointer;">Km <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let car of cars">
+                <td *ngIf="selectMode">
+                  <input
+                    type="checkbox"
+                    [checked]="selectedIds.includes(car.id)"
+                    (change)="toggleSelect(car.id, $event)"
+                  />
+                </td>
+                <td><a [routerLink]="['/cars', car.id]">{{ car.model }}</a></td>
+                <td>{{ car.year }}</td>
+                <td>{{ car.fuel_type }}</td>
+                <td>{{ car.transmission_type }}</td>
+                <td>{{ car.type }}</td>
+                <td>{{ car.km }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center mt-3 gap-2" *ngIf="cars.length > 0">
+        <button class="btn btn-outline-secondary btn-sm" [disabled]="!hasPrevious || isLoading" (click)="previousPage()">
+          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">chevron_left</i>
+        </button>
+        <button
+          *ngFor="let page of pageNumbers"
+          class="btn btn-sm"
+          [class.btn-primary]="page === currentPage"
+          [class.btn-outline-secondary]="page !== currentPage"
+          [disabled]="isLoading"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" [disabled]="!hasNext || isLoading" (click)="nextPage()">
+          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">chevron_right</i>
+        </button>
       </div>
     </div>
   </div>

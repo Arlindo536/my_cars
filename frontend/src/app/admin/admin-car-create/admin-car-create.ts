@@ -35,7 +35,7 @@ export class AdminCarCreate implements OnInit {
   ngOnInit() {
     this.adminService.getAllUsers().subscribe({
       next: (data: any) => {
-        this.users = data;
+        this.users = data.results;
         this.cdr.detectChanges();
       }
     });
