@@ -16,37 +16,39 @@
           <i class="material-icons" style="font-size: 18px; vertical-align: middle;">person</i>
           {{ group.owner }}
         </h5>
-        <table class="table table-striped mb-0">
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Year</th>
-              <th>Fuel</th>
-              <th>Transmission</th>
-              <th>Type</th>
-              <th>Km</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let car of group.cars">
-              <td>{{ car.model }}</td>
-              <td>{{ car.year }}</td>
-              <td>{{ car.fuel_type }}</td>
-              <td>{{ car.transmission_type }}</td>
-              <td>{{ car.type }}</td>
-              <td>{{ car.km }}</td>
-              <td>
-                <a [routerLink]="['/cars', car.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
-                </a>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteCar(car.id, car.model)">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Fuel</th>
+                <th>Transmission</th>
+                <th>Type</th>
+                <th>Km</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let car of group.cars">
+                <td>{{ car.model }}</td>
+                <td>{{ car.year }}</td>
+                <td>{{ car.fuel_type }}</td>
+                <td>{{ car.transmission_type }}</td>
+                <td>{{ car.type }}</td>
+                <td>{{ car.km }}</td>
+                <td>
+                  <a [routerLink]="['/cars', car.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
+                  </a>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteCar(car.id, car.model)">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

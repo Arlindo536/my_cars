@@ -18,61 +18,65 @@
           <i class="material-icons" style="font-size: 18px; vertical-align: middle;">admin_panel_settings</i>
           Admins
         </h5>
-        <table class="table table-striped mb-4">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of admins">
-              <td>{{ user.id }}</td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.email }}</td>
-              <td>
-                <a [routerLink]="['/admin/users', user.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
-                </a>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id, user.username)">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped mb-4">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of admins">
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <a [routerLink]="['/admin/users', user.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
+                  </a>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id, user.username)">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <h5 class="text-secondary mb-3">
           <i class="material-icons" style="font-size: 18px; vertical-align: middle;">people</i>
           Customers
         </h5>
-        <table class="table table-striped mb-0">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let user of customers">
-              <td>{{ user.id }}</td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.email }}</td>
-              <td>
-                <a [routerLink]="['/admin/users', user.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
-                </a>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id, user.username)">
-                  <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of customers">
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <a [routerLink]="['/admin/users', user.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
+                  </a>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id, user.username)">
+                    <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
