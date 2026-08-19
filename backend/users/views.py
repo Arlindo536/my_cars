@@ -2,12 +2,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from users.models import CustomUser
-from .serializers import RegisterSerializer, LoginSerializer, ChangePasswordSerializer, UpdateProfileSerializer
+from .serializers import RegisterSerializer, LoginSerializer, ChangePasswordSerializer, UpdateProfileSerializer, AdminUserSerializer
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 
 
 class RegisterView(APIView):
@@ -68,6 +69,15 @@ class ChangePasswordView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateProfileView(APIView):
+    def get(self, request):
+        user = request.user
+        return Response({
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "role": user.role
+        })
     def put(self, request):
         serializer = UpdateProfileSerializer(data=request.data)
         if serializer.is_valid():
@@ -79,3 +89,34 @@ class UpdateProfileView(APIView):
             user.save()
             return Response({"message": "Profile updated successfully."})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class AdminUserDetailView(APIView):
+    def get_permission(self, request):
+        if request.user.role != 'admin':
+            return False
+        return True
+
+    def put(self, request, pk):
+        if request.user.role != 'admin':
+            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
+        user = get_object_or_404(CustomUser, pk=pk)
+        serializer = AdminUserSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            user.username = data['username']
+            user.email = data['email']
+            user.first_name = data['first_name']
+            user.last_name = data['last_name']
+            user.role = data['role']
+            user.save()
+            return Response({"message": "User updated successfully."})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        if request.user.role != 'admin':
+            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
+        user = get_object_or_404(CustomUser, pk=pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

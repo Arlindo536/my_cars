@@ -2,21 +2,22 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Notification } from '../../notification';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.html',
   styleUrl: './register.css',
-  standalone: false
+  standalone: false 
 })
 export class Register {
   registerForm: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private notification: Notification
   ) {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
@@ -33,10 +34,12 @@ export class Register {
       this.http.post('http://127.0.0.1:8000/api/users/register/', this.registerForm.value)
         .subscribe({
           next: () => {
+            this.notification.success('Registration successful. Please log in.');
             this.router.navigate(['/auth/login']);
           },
           error: (err) => {
-            this.errorMessage = 'Registration failed. Please check your input.';
+            const message = err.error?.error || 'Registration failed. Please check your input.';
+            this.notification.error(message);
           }
         });
     }

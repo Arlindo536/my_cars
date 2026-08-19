@@ -22,4 +22,7 @@ export class User {
     localStorage.removeItem('role');
   }
 
+  getProfile() {
+  return this.http.get(`${this.baseUrl}update-profile/`);
+  }
 } 

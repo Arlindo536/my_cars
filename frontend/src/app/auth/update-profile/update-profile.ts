@@ -1,6 +1,8 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from '../user';
+import { Notification } from '../../notification';
 
 @Component({
   selector: 'app-update-profile',
@@ -8,15 +10,14 @@ import { User } from '../user';
   templateUrl: './update-profile.html',
   styleUrl: './update-profile.css'
 })
-export class UpdateProfile {
+export class UpdateProfile implements OnInit {
   form: FormGroup;
-  errorMessage = '';
-  successMessage = '';
 
   constructor(
     private fb: FormBuilder,
     private userService: User,
-    private cdr: ChangeDetectorRef
+    private notification: Notification,
+    private router: Router
   ) {
     this.form = this.fb.group({
       first_name: ['', Validators.required],
@@ -25,20 +26,25 @@ export class UpdateProfile {
     });
   }
 
-  onSubmit() {
-    this.errorMessage = '';
-    this.successMessage = '';
-    if (this.form.valid) {
-      this.userService.updateProfile(this.form.value).subscribe({
-        next: () => {
-          this.successMessage = 'Profile updated successfully.';
-          this.cdr.detectChanges();
-        },
-        error: (err: any) => {
-          this.errorMessage = 'Failed to update profile.';
-          this.cdr.detectChanges();
-        }
-      });
-    }
+  ngOnInit() {
+    this.userService.getProfile().subscribe({
+      next: (data: any) => {
+        this.form.patchValue(data);
+      }
+    });
   }
+
+  onSubmit() {
+  if (this.form.valid) {
+    this.userService.updateProfile(this.form.value).subscribe({
+      next: () => {
+        this.notification.success('Profile updated successfully.');
+        this.router.navigate(['/auth/profile']);
+      },
+      error: () => {
+        this.notification.error('Failed to update profile.');
+      }
+    });
+  }
+}
 }

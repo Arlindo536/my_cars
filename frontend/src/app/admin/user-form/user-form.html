@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh; background-color: #f8f9fa;">
+  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
+    <h2 class="mb-4 text-center">Edit User</h2>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <input formControlName="username" class="form-control" placeholder="Username" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="email" class="form-control" placeholder="Email" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="first_name" class="form-control" placeholder="First Name" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="last_name" class="form-control" placeholder="Last Name" />
+      </div>
+      <div class="mb-3">
+        <select formControlName="role" class="form-select">
+          <option value="customer">Customer</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">Save</button>
+    </form>
+  </div>
+</div>

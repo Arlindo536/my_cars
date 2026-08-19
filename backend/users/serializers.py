@@ -33,3 +33,11 @@ class UpdateProfileSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.EmailField()
+
+
+class AdminUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    role = serializers.ChoiceField(choices=[('admin', 'Admin'), ('customer', 'Customer')])

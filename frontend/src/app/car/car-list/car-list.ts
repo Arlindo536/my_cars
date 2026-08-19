@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Car } from '../car';
-import { User } from '../../auth/user';
-import { Router } from '@angular/router';
+import { Notification } from '../../notification';
+import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-car-list',
@@ -12,12 +13,12 @@ import { Router } from '@angular/router';
 export class CarList implements OnInit {
   cars: any[] = [];
 
-   constructor(
-  private carService: Car,
-  private cdr: ChangeDetectorRef,
-  private userService: User,
-  private router: Router
-) {}
+  constructor(
+    private carService: Car,
+    private cdr: ChangeDetectorRef,
+    private notification: Notification,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.carService.getCars().subscribe({
@@ -25,24 +26,29 @@ export class CarList implements OnInit {
         this.cars = data;
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Failed to load cars', err);
+      error: () => this.notification.error('Failed to load your cars.')
+    });
+  }
+
+  deleteCar(id: number, model: string) {
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Delete Car',
+        message: `Are you sure you want to delete ${model}? This cannot be undone.`
       }
     });
-  }
 
-  deleteCar(id: number) {
-    this.carService.deleteCar(id).subscribe({
-      next: () => {
-        this.cars = this.cars.filter(car => car.id !== id);
-        this.cdr.detectChanges();
-      },
-      error: (err: any) => console.error('Failed to delete car', err)
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.carService.deleteCar(id).subscribe({
+          next: () => {
+            this.cars = this.cars.filter(car => car.id !== id);
+            this.cdr.detectChanges();
+            this.notification.success('Car deleted successfully.');
+          },
+          error: () => this.notification.error('Failed to delete car.')
+        });
+      }
     });
-  }
-
-  logout() {
-     this.userService.logout();
-     this.router.navigate(['/auth/login']);
   }
 }

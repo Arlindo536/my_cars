@@ -1,0 +1,26 @@
+<div style="background-color: #f8f9fa; min-height: 85vh;" class="d-flex justify-content-center align-items-center">
+  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
+    <h2 class="mb-4 text-center">Create New User</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <input formControlName="username" class="form-control" placeholder="Username" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="password" type="password" class="form-control" placeholder="Password" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="confirm_password" type="password" class="form-control" placeholder="Confirm Password" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="email" class="form-control" placeholder="Email" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="first_name" class="form-control" placeholder="First Name" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="last_name" class="form-control" placeholder="Last Name" />
+      </div>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">Create User</button>
+    </form>
+  </div>
+</div>

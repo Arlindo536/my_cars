@@ -1,28 +1,43 @@
-<h2>{{ isEditMode ? 'Edit Car' : 'Add Car' }}</h2>
-<form [formGroup]="carForm" (ngSubmit)="onSubmit()">
-  <input formControlName="model" placeholder="Model" />
-  <input formControlName="year" type="number" placeholder="Year" />
-  <input formControlName="km" type="number" placeholder="Km" />
-
-  <select formControlName="fuel_type">
-    <option value="petrol">Petrol</option>
-    <option value="diesel">Diesel</option>
-    <option value="electric">Electric</option>
-    <option value="hybrid">Hybrid</option>
-  </select>
-
-  <select formControlName="transmission_type">
-    <option value="manual">Manual</option>
-    <option value="automatic">Automatic</option>
-  </select>
-
-  <select formControlName="type">
-    <option value="sedan">Sedan</option>
-    <option value="suv">SUV</option>
-    <option value="truck">Truck</option>
-    <option value="coupe">Coupe</option>
-    <option value="van">Van</option>
-  </select>
-
-  <button type="submit" [disabled]="carForm.invalid">Save</button>
-</form>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh; background-color: #f8f9fa;">
+  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
+    <h2 class="mb-4 text-center">{{ isEditMode ? 'Edit Car' : 'Add Car' }}</h2>
+    <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <input formControlName="model" class="form-control" placeholder="Model" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="year" type="number" class="form-control" placeholder="Year" />
+      </div>
+      <div class="mb-3">
+        <input formControlName="km" type="number" class="form-control" placeholder="Km" />
+      </div>
+      <div class="mb-3">
+        <select formControlName="fuel_type" class="form-select">
+          <option value="" disabled selected>Select fuel type</option>
+          <option value="petrol">Petrol</option>
+          <option value="diesel">Diesel</option>
+          <option value="electric">Electric</option>
+          <option value="hybrid">Hybrid</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select formControlName="transmission_type" class="form-select">
+          <option value="" disabled selected>Select transmission type</option>
+          <option value="manual">Manual</option>
+          <option value="automatic">Automatic</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select formControlName="type" class="form-select">
+          <option value="" disabled selected>Select car type</option>
+          <option value="sedan">Sedan</option>
+          <option value="suv">SUV</option>
+          <option value="truck">Truck</option>
+          <option value="coupe">Coupe</option>
+          <option value="van">Van</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="carForm.invalid">Save</button>
+    </form>
+  </div>
+</div>

@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
+  background-color: #dc3545 !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
+  background-color: #198754 !important;
+  color: white !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__label,
+.mat-mdc-snack-bar-container.success .mdc-snackbar__label {
+  color: white !important;
+}

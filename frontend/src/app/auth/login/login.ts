@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Notification } from '../../notification';
 
 @Component({
   selector: 'app-login',
@@ -11,12 +12,12 @@ import { Router } from '@angular/router';
 })
 export class Login {
   loginForm: FormGroup;
-  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private notification: Notification
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -31,10 +32,15 @@ export class Login {
           next: (response: any) => {
             localStorage.setItem('token', response.token);
             localStorage.setItem('role', response.role);
-            this.router.navigate(['/cars']);
+            this.notification.success('Login successful.');
+            if (response.role === 'admin') {
+              this.router.navigate(['/admin/users']);
+            } else {
+              this.router.navigate(['/cars']);
+            }
           },
           error: (err) => {
-            this.errorMessage = 'Login failed. Please check your credentials.';
+            this.notification.error('Login failed. Please check your credentials.');
           }
         });
     }

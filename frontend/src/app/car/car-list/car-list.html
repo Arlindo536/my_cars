@@ -1,10 +1,47 @@
-<h2>My Cars</h2>
-<ul>
-  <li *ngFor="let car of cars">
-    {{ car.model }} ({{ car.year }}) - {{ car.fuel_type }}, {{ car.km }} km
-    <button (click)="deleteCar(car.id)">Delete</button>
-    <a [routerLink]="['/cars', car.id, 'edit']">Edit</a>
-    <button (click)="logout()">Logout</button>
-  </li>
-</ul>
-<a routerLink="/cars/new">Add Car</a>
+<div style="background-color: #f8f9fa; min-height: 85vh;" class="py-5">
+  <div class="container">
+    <div class="card shadow p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">My Cars</h2>
+        <a routerLink="/cars/new" class="btn btn-success">
+          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">add</i> Add Car
+        </a>
+      </div>
+      <div *ngIf="cars.length === 0" class="text-center text-muted py-5">
+        <p style="font-size: 3rem;">🚗</p>
+        <p>You don't have any cars yet.</p>
+      </div>
+      <table *ngIf="cars.length > 0" class="table table-striped mb-0">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Fuel</th>
+            <th>Transmission</th>
+            <th>Type</th>
+            <th>Km</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let car of cars">
+            <td>{{ car.model }}</td>
+            <td>{{ car.year }}</td>
+            <td>{{ car.fuel_type }}</td>
+            <td>{{ car.transmission_type }}</td>
+            <td>{{ car.type }}</td>
+            <td>{{ car.km }}</td>
+            <td>
+              <a [routerLink]="['/cars', car.id, 'edit']" class="btn btn-sm btn-outline-primary me-2">
+                <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
+              </a>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteCar(car.id, car.model)">
+                <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i> Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

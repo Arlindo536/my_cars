@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand navbar-dark px-4 shadow-sm" style="background-color: #395776;">
+  <a class="navbar-brand fw-bold d-flex align-items-center" style="cursor: pointer;" (click)="goHome()">
+    <i class="material-icons me-2">directions_car</i> My Cars
+  </a>
+  <div class="ms-auto d-flex align-items-center" *ngIf="isLoggedIn">
+    <a *ngIf="role === 'customer'" routerLink="/cars" class="btn btn-outline-light btn-sm me-2">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">directions_car</i> My Cars
+    </a>
+    <a *ngIf="role === 'customer'" routerLink="/auth/profile" class="btn btn-outline-light btn-sm me-2">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">person</i> My Profile
+    </a>
+    <a *ngIf="role === 'admin'" routerLink="/admin/users" class="btn btn-outline-light btn-sm me-2">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">people</i> All Users
+    </a>
+    <a *ngIf="role === 'admin'" routerLink="/admin/cars" class="btn btn-outline-light btn-sm me-2">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">directions_car</i> All Cars
+    </a>
+    <button class="btn btn-outline-light btn-sm" (click)="logout()">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">logout</i> Logout
+    </button>
+  </div>
+  <div class="ms-auto" *ngIf="!isLoggedIn">
+    <a routerLink="/auth/login" class="btn btn-outline-light btn-sm me-2">Login</a>
+    <a routerLink="/auth/register" class="btn btn-light btn-sm">Register</a>
+  </div>
+</nav>
