@@ -97,6 +97,13 @@ class UpdateProfileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class DeleteAccountView(APIView):
+    def delete(self, request):
+        user = request.user
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class UserListView(APIView):
     def get(self, request):
         if request.user.role != 'admin':
@@ -107,8 +114,9 @@ class UserListView(APIView):
             users = users.filter(username__icontains=search)
         paginator = UserPagination()
         result_page = paginator.paginate_queryset(users, request)
-        data = [{"id": u.id, "username": u.username, "email": u.email, "role": u.role} for u in result_page]
+        data = [{"id": u.id, "username": u.username, "email": u.email, "first_name": u.first_name, "last_name": u.last_name, "role": u.role} for u in result_page]
         return paginator.get_paginated_response(data)
+
 
 class AdminUserDetailView(APIView):
     def put(self, request, pk):

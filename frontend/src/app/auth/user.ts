@@ -16,6 +16,11 @@ export class User {
   updateProfile(data: any) {
     return this.http.put(`${this.baseUrl}update-profile/`, data);
   }
+
+  deleteAccount() {
+  return this.http.delete(`${this.baseUrl}delete-account/`);
+}
+
   
   logout() {
     localStorage.removeItem('token');

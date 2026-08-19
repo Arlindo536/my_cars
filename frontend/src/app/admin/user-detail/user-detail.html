@@ -9,11 +9,12 @@
     </div>
 
     <table class="table table-borderless mb-4">
-      <tr><th>ID</th><td>{{ user.id }}</td></tr>
-      <tr><th>Email</th><td>{{ user.email }}</td></tr>
-      <tr><th>Role</th><td>{{ user.role }}</td></tr>
-    </table>
-
+  <tr><th>ID</th><td>{{ user.id }}</td></tr>
+  <tr><th>First Name</th><td>{{ user.first_name }}</td></tr>
+  <tr><th>Last Name</th><td>{{ user.last_name }}</td></tr>
+  <tr><th>Email</th><td>{{ user.email }}</td></tr>
+  <tr><th>Role</th><td>{{ user.role }}</td></tr>
+</table> 
     <div class="d-flex gap-2">
       <a [routerLink]="['/admin/users', user.id, 'edit']" class="btn btn-primary flex-fill">
         <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit
