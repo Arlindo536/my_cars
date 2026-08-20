@@ -1,15 +1,25 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 85vh; background-color: #f8f9fa;">
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
-    <h2 class="mb-4 text-center">My Profile</h2>
-    <div *ngIf="profile">
-      <p><strong>Username:</strong> {{ profile.username }}</p>
-      <p><strong>Email:</strong> {{ profile.email }}</p>
-      <p><strong>First Name:</strong> {{ profile.first_name }}</p>
-      <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
-      <p><strong>Role:</strong> {{ profile.role }}</p>
+  <div class="card shadow p-4" style="width: 100%; max-width: 420px;" *ngIf="profile">
+    <div class="text-center mb-4">
+      <i class="material-icons" style="font-size: 64px; color: #2c3e50;">account_circle</i>
+      <h2 class="mt-2 mb-1">{{ profile.username }}</h2>
+      <span class="badge" [class.bg-primary]="profile.role === 'admin'" [class.bg-secondary]="profile.role !== 'admin'">
+        {{ profile.role }}
+      </span>
     </div>
-    <a routerLink="/auth/update-profile" class="btn btn-primary w-100 mt-3">Edit Profile</a>
-    <a routerLink="/auth/change-password" class="btn btn-outline-secondary w-100 mt-2">Change Password</a>
+
+    <table class="table table-borderless mb-4">
+      <tr><th>Email</th><td>{{ profile.email }}</td></tr>
+      <tr><th>First Name</th><td>{{ profile.first_name }}</td></tr>
+      <tr><th>Last Name</th><td>{{ profile.last_name }}</td></tr>
+    </table>
+
+    <a routerLink="/auth/update-profile" class="btn btn-primary w-100 mt-2">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit Profile
+    </a>
+    <a routerLink="/auth/change-password" class="btn btn-outline-secondary w-100 mt-2">
+      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">lock</i> Change Password
+    </a>
     <button class="btn btn-outline-danger w-100 mt-2" (click)="deleteAccount()">
       <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete_forever</i>
       Delete My Account
