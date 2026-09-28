@@ -31,7 +31,7 @@ export class UserCreate {
 
   onSubmit() {
     if (this.form.valid) {
-      this.http.post('http://127.0.0.1:8000/api/users/register/', this.form.value)
+      this.http.post('/api/users/register/', this.form.value)
         .subscribe({
           next: () => {
             this.notification.success('User created successfully.');

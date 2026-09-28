@@ -5,6 +5,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from .models import Car
 from .serializers import CarSerializer, AdminCarSerializer
+from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwnerOrAdmin
 from users.models import CustomUser
 
@@ -89,7 +90,7 @@ class CarView(APIView):
 
 
 class CarDetailView(APIView):
-    permission_classes = [IsOwnerOrAdmin]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
 
     def get(self, request, pk):
         car = get_object_or_404(Car, pk=pk)

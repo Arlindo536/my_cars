@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
+from rest_framework.throttling import ScopedRateThrottle
 from .models import CustomUser
 from .serializers import (
     RegisterSerializer,
@@ -45,6 +46,8 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)

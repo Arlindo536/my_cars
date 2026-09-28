@@ -1,17 +1,21 @@
 from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
+
 
 class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField()
-    confirm_password = serializers.CharField()
-    email =  serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+    email = serializers.EmailField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
 
-def validate(self, data):
-    if data['password'] != data['confirm_password']:
-        raise serializers.ValidationError("Passwords do not match.")
-    return data
+    def validate(self, data):
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError("Passwords do not match.")
+        validate_password(data['password'])
+        return data
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

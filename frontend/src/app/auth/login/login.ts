@@ -27,7 +27,7 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.http.post('http://127.0.0.1:8000/api/users/login/', this.loginForm.value)
+      this.http.post('/api/users/login/', this.loginForm.value)
         .subscribe({
           next: (response: any) => {
             localStorage.setItem('token', response.token);

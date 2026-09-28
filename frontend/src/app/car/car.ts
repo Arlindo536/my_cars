@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class Car {
-  private apiUrl = 'http://127.0.0.1:8000/api/cars/';
+  private apiUrl = '/api/cars/';
 
   constructor(private http: HttpClient) {}
 

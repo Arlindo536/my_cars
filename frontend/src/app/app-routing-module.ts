@@ -29,6 +29,8 @@ const routes: Routes = [
     component: Login, 
     canActivate: [guestGuard] 
   },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

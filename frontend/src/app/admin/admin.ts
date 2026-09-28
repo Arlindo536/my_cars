@@ -5,10 +5,10 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class Admin {
-  private usersUrl = 'http://127.0.0.1:8000/api/users/all/';
-  private usersBaseUrl = 'http://127.0.0.1:8000/api/users/';
-  private carsUrl = 'http://127.0.0.1:8000/api/cars/';
-  private adminCarCreateUrl = 'http://127.0.0.1:8000/api/cars/admin-create/';
+  private usersUrl = '/api/users/all/';
+  private usersBaseUrl = '/api/users/';
+  private carsUrl = '/api/cars/';
+  private adminCarCreateUrl = '/api/cars/admin-create/';
 
   constructor(private http: HttpClient) {}
 

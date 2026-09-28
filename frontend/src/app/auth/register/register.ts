@@ -31,7 +31,7 @@ export class Register {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      this.http.post('http://127.0.0.1:8000/api/users/register/', this.registerForm.value)
+      this.http.post('/api/users/register/', this.registerForm.value)
         .subscribe({
           next: () => {
             this.notification.success('Registration successful. Please log in.');
