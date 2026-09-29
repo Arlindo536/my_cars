@@ -41,7 +41,8 @@
                 <th *ngIf="selectMode">
                   <input type="checkbox" [checked]="allSelected" (change)="toggleSelectAll($event)" />
                 </th>
-                <th (click)="sortBy('model')" style="cursor: pointer;">Model <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
+                <th></th>
+<th (click)="sortBy('model')" style="cursor: pointer;">Model <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
 <th (click)="sortBy('year')" style="cursor: pointer;">Year <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
 <th (click)="sortBy('fuel_type')" style="cursor: pointer;">Fuel <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
 <th (click)="sortBy('transmission_type')" style="cursor: pointer;">Transmission <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
@@ -57,6 +58,11 @@
                     [checked]="selectedIds.includes(car.id)"
                     (change)="toggleSelect(car.id, $event)"
                   />
+                </td>
+                <td style="width: 48px;">
+                  <img *ngIf="car.primary_image" [src]="car.primary_image" alt=""
+                       class="rounded" style="width: 40px; height: 40px; object-fit: cover;">
+                  <i *ngIf="!car.primary_image" class="material-icons text-muted" style="font-size: 32px;">directions_car</i>
                 </td>
                 <td><a [routerLink]="['/cars', car.id]">{{ car.model }}</a></td>
                 <td>{{ car.year }}</td>

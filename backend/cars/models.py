@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from users.models import CustomUser
 # Create your models here.
@@ -31,3 +32,18 @@ class Car(models.Model):
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
 
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+
+def car_image_path(instance, filename):
+    ext = filename.rsplit('.', 1)[-1].lower()
+    return f'car_images/{instance.car_id}/{uuid.uuid4().hex}.{ext}'
+
+
+class CarImage(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to=car_image_path)
+    is_primary = models.BooleanField(default=False)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-is_primary', 'uploaded_at']

@@ -5,11 +5,47 @@
     </a>
     <div class="card shadow p-4" *ngIf="car">
       <div class="text-center mb-4">
-        <i class="material-icons" style="font-size: 64px; color: #2c3e50;">directions_car</i>
+        <img *ngIf="primaryImageUrl" [src]="primaryImageUrl" alt="{{ car.model }}"
+             class="rounded mb-2" style="width: 100%; max-height: 220px; object-fit: cover;">
+        <i *ngIf="!primaryImageUrl" class="material-icons" style="font-size: 64px; color: #2c3e50;">directions_car</i>
         <h2 class="mt-2 mb-1">{{ car.model }}</h2>
         <span class="badge" [class.bg-success]="car.fuel_type === 'electric'" [class.bg-secondary]="car.fuel_type !== 'electric'">
           {{ car.fuel_type }}
         </span>
+      </div>
+
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="mb-0">Photos ({{ images.length }}/{{ maxImages }})</h6>
+          <label class="btn btn-outline-primary btn-sm mb-0" [class.disabled]="uploading || images.length >= maxImages">
+            <i class="material-icons" style="font-size: 16px; vertical-align: middle;">add_photo_alternate</i>
+            {{ uploading ? 'Uploading…' : 'Add photo' }}
+            <input type="file" accept="image/jpeg,image/png,image/webp" hidden
+                   [disabled]="uploading || images.length >= maxImages"
+                   (change)="onFileSelected($event)">
+          </label>
+        </div>
+
+        <div *ngIf="images.length === 0" class="text-muted small">No photos yet.</div>
+
+        <div class="row g-2" *ngIf="images.length > 0">
+          <div class="col-4" *ngFor="let img of images">
+            <div class="position-relative">
+              <img [src]="img.url" class="rounded w-100" style="height: 90px; object-fit: cover;">
+              <span *ngIf="img.is_primary" class="badge bg-primary position-absolute top-0 start-0 m-1" style="font-size: 10px;">Primary</span>
+              <div class="position-absolute top-0 end-0 m-1 d-flex gap-1">
+                <button *ngIf="!img.is_primary" type="button" class="btn btn-light btn-sm p-1" title="Set as primary"
+                        (click)="setPrimary(img.id)">
+                  <i class="material-icons" style="font-size: 14px;">star</i>
+                </button>
+                <button type="button" class="btn btn-light btn-sm p-1" title="Delete photo"
+                        (click)="deleteImage(img.id)">
+                  <i class="material-icons text-danger" style="font-size: 14px;">delete</i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="row text-center g-3 mb-4">
