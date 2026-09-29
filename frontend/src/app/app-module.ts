@@ -7,10 +7,11 @@ import { App } from './app';
 import { NavBar } from './nav-bar/nav-bar';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { ConfirmDialog } from './confirm-dialog/confirm-dialog';
+import { Home } from './home/home';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [App, NavBar, ConfirmDialog],
+  declarations: [App, NavBar, ConfirmDialog, Home],
   imports: [BrowserModule, AppRoutingModule, MatDialogModule],
   providers: [
     provideBrowserGlobalErrorListeners(),

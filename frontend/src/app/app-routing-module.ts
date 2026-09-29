@@ -5,6 +5,7 @@ import { adminGuard } from './auth/admin-guard';
 import { guestGuard } from './auth/guest-guard';
 import { Register } from './auth/register/register';
 import { Login } from './auth/login/login';
+import { Home } from './home/home';
 
 const routes: Routes = [
   {
@@ -29,7 +30,7 @@ const routes: Routes = [
     component: Login, 
     canActivate: [guestGuard] 
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', component: Home, pathMatch: 'full', canActivate: [guestGuard] },
   { path: '**', redirectTo: 'login' },
 ];
 
