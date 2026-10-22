@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Notification } from '../../notification';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-create',
@@ -31,7 +32,7 @@ export class UserCreate {
 
   onSubmit() {
     if (this.form.valid) {
-      this.http.post('http://127.0.0.1:8000/api/users/register/', this.form.value)
+      this.http.post(`${environment.apiUrl}/users/register/`, this.form.value)
         .subscribe({
           next: () => {
             this.notification.success('User created successfully.');

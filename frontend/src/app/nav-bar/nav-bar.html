@@ -1,26 +1,40 @@
-<nav class="navbar navbar-expand navbar-dark px-4 shadow-sm" style="background-color: #395776;">
-  <a class="navbar-brand fw-bold d-flex align-items-center" style="cursor: pointer;" (click)="goHome()">
-    <i class="material-icons me-2">directions_car</i> My Cars
-  </a>
-  <div class="ms-auto d-flex align-items-center" *ngIf="isLoggedIn">
-    <a *ngIf="role === 'customer'" routerLink="/cars" class="btn btn-outline-light btn-sm me-2">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">directions_car</i> My Cars
+<header class="site-header">
+  <nav class="container-xl d-flex flex-wrap align-items-center py-2" aria-label="Navigimi kryesor">
+    <a class="brand" href="/" (click)="$event.preventDefault(); goHome()">
+      <span class="brand-mark" aria-hidden="true"><i class="material-icons">directions_car</i></span>
+      <span class="brand-text">My<span class="text-accent">Cars</span></span>
     </a>
-    <a *ngIf="role === 'customer'" routerLink="/auth/profile" class="btn btn-outline-light btn-sm me-2">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">person</i> My Profile
-    </a>
-    <a *ngIf="role === 'admin'" routerLink="/admin/users" class="btn btn-outline-light btn-sm me-2">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">people</i> All Users
-    </a>
-    <a *ngIf="role === 'admin'" routerLink="/admin/cars" class="btn btn-outline-light btn-sm me-2">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">directions_car</i> All Cars
-    </a>
-    <button class="btn btn-outline-light btn-sm" (click)="logout()">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">logout</i> Logout
+
+    <button
+      type="button"
+      class="menu-toggle d-md-none ms-auto"
+      [attr.aria-expanded]="menuOpen"
+      aria-controls="main-menu"
+      (click)="menuOpen = !menuOpen"
+    >
+      <i class="material-icons" aria-hidden="true">{{ menuOpen ? 'close' : 'menu' }}</i>
+      <span class="visually-hidden">Menuja</span>
     </button>
-  </div>
-  <div class="ms-auto" *ngIf="!isLoggedIn">
-    <a routerLink="/auth/login" class="btn btn-outline-light btn-sm me-2">Login</a>
-    <a routerLink="/auth/register" class="btn btn-light btn-sm">Register</a>
-  </div>
-</nav>
+
+    <div id="main-menu" class="menu ms-md-auto" [class.open]="menuOpen" (click)="closeMenu($event)">
+      <ng-container *ngIf="isLoggedIn">
+        <ng-container *ngIf="role === 'customer'">
+          <a routerLink="/cars" routerLinkActive="active" class="nav-link-item">Makinat e mia</a>
+          <a routerLink="/auth/profile" routerLinkActive="active" class="nav-link-item">Profili</a>
+        </ng-container>
+        <ng-container *ngIf="role === 'admin'">
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-link-item">Përdoruesit</a>
+          <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link-item">Makinat</a>
+        </ng-container>
+        <button type="button" class="btn btn-outline-light btn-sm nav-cta" (click)="logout()">
+          <i class="material-icons" aria-hidden="true">logout</i> Dil
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="!isLoggedIn">
+        <a routerLink="/auth/login" routerLinkActive="active" class="nav-link-item">Hyr</a>
+        <a routerLink="/auth/register" class="btn btn-primary btn-sm nav-cta">Regjistrohu</a>
+      </ng-container>
+    </div>
+  </nav>
+</header>

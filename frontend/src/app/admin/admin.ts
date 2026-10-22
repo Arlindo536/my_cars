@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Admin {
-  private usersUrl = 'http://127.0.0.1:8000/api/users/all/';
-  private usersBaseUrl = 'http://127.0.0.1:8000/api/users/';
-  private carsUrl = 'http://127.0.0.1:8000/api/cars/';
-  private adminCarCreateUrl = 'http://127.0.0.1:8000/api/cars/admin-create/';
+  private usersUrl = `${environment.apiUrl}/users/all/`;
+  private usersBaseUrl = `${environment.apiUrl}/users/`;
+  private carsUrl = `${environment.apiUrl}/cars/`;
+  private adminCarCreateUrl = `${environment.apiUrl}/cars/admin-create/`;
 
   constructor(private http: HttpClient) {}
 

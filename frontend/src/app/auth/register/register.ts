@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Notification } from '../../notification';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -31,7 +32,7 @@ export class Register {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      this.http.post('http://127.0.0.1:8000/api/users/register/', this.registerForm.value)
+      this.http.post(`${environment.apiUrl}/users/register/`, this.registerForm.value)
         .subscribe({
           next: () => {
             this.notification.success('Registration successful. Please log in.');
