@@ -34,6 +34,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Datepicker limitation: one `dateFilter` for both ends, so a booked range's start day cannot be picked as a return day in the UI (the API allows it).
 - Headless Chrome in this environment has no Albanian ICU data, so screenshots show English month names; real browsers use `sq-AL`.
 - Login accepts `?returnUrl=` (relative app paths only, via the router); `authGuard` sets it.
+- Step 5: office name/address/coordinates live in `environment(.prod).ts` (placeholder until Arlindo picks the real address). Leaflet stays in the lazy catalog chunk; its CSS is global and marker PNGs are copied to `/leaflet` (angular.json). Tiles come from tile.openstreetmap.org (fine for a low-traffic portfolio; check OSM tile policy before heavy use).
 - Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1; ~620 kB after step 4: Material form-field/datepicker code shared with the app shell).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
 - `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
@@ -70,7 +71,8 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 2: new `Car` fields + migration, `seed_demo` management command (15-20 fictional cars), media settings.
 - [x] Step 3: public catalog endpoints + home page with filters + car detail page.
 - [x] Step 4: `bookings` app, tests (overlap, price, permissions), datepicker UI, my bookings.
-- [ ] Step 5-6: map component, sq/en translations.
+- [x] Step 5: map component (Leaflet, office at Skanderbeg Square placeholder 41.3275, 19.8187).
+- [ ] Step 6: sq/en translations.
 - [ ] Step 7: `messaging` app + UI.
 - [ ] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [ ] Step 9: README with screenshots, Docker Compose, production settings (env-driven), deploy (Arlindo has a headless ThinkPad server).

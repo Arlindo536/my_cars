@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, map, merge } from 'rxjs';
 import { Catalog, CatalogFilters } from '../catalog';
+import { environment } from '../../../environments/environment';
 import { CatalogCar, FUEL_LABELS, TRANSMISSION_LABELS, TYPE_LABELS } from '../../shared/car-labels';
 
 const PAGE_SIZE = 9;
@@ -22,6 +23,7 @@ export class Home implements OnInit {
   private location = inject(Location);
   private destroyRef = inject(DestroyRef);
 
+  readonly office = environment.office;
   readonly typeOptions = Object.entries(TYPE_LABELS);
   readonly fuelOptions = Object.entries(FUEL_LABELS);
   readonly transmissionOptions = Object.entries(TRANSMISSION_LABELS);

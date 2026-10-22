@@ -134,3 +134,10 @@
   color: var(--text-on-dark-muted);
   max-width: 40rem;
 }
+
+.contact-address {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+}

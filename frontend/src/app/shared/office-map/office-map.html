@@ -1,0 +1,11 @@
+<div class="map-wrap">
+  <div #mapEl class="map" role="region" [attr.aria-label]="'Harta: ' + office.address"></div>
+  <div class="map-info">
+    <p class="map-address mb-1">{{ office.address }}</p>
+    <p class="mb-0 small">
+      <a [href]="mapUrl" target="_blank" rel="noopener">Hap hartën</a>
+      <span aria-hidden="true"> · </span>
+      <a [href]="directionsUrl" target="_blank" rel="noopener">Udhëzime për të ardhur</a>
+    </p>
+  </div>
+</div>

@@ -122,7 +122,17 @@
 
 <section class="contact">
   <div class="container-xl py-5">
-    <h2 class="section-title">Na gjeni</h2>
-    <p class="contact-text mb-0">Zyra jonë ndodhet në Tiranë, Shqipëri. Harta dhe adresa e saktë vijnë së shpejti.</p>
+    <div class="row g-4 align-items-center">
+      <div class="col-12 col-lg-5">
+        <h2 class="section-title">Na gjeni</h2>
+        <p class="contact-text">
+          Të gjitha makinat merren dhe kthehen në zyrën tonë në qendër të Tiranës.
+        </p>
+        <p class="contact-address mb-0">{{ office.address }}</p>
+      </div>
+      <div class="col-12 col-lg-7">
+        <app-office-map></app-office-map>
+      </div>
+    </div>
   </div>
 </section>
