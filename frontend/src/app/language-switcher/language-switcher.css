@@ -1,6 +1,6 @@
 .lang-switch {
   display: inline-flex;
-  border: 1px solid #3a3a3a;
+  border: 1px solid #4a4d54;
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -16,7 +16,7 @@
 }
 
 .lang-btn + .lang-btn {
-  border-left: 1px solid #3a3a3a;
+  border-left: 1px solid #4a4d54;
 }
 
 .lang-btn:hover {

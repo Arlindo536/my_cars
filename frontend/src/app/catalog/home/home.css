@@ -2,7 +2,7 @@
   /* Placeholder until Arlindo picks a hero photo */
   background:
     radial-gradient(circle at 85% 20%, rgba(200, 16, 46, 0.28), transparent 45%),
-    linear-gradient(160deg, #1a1a1c 0%, var(--ink) 60%);
+    linear-gradient(160deg, #383b41 0%, var(--ink) 60%);
 }
 
 .hero-inner {

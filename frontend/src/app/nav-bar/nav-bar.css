@@ -45,7 +45,7 @@
 
 .menu-toggle {
   background: transparent;
-  border: 1px solid #3a3a3a;
+  border: 1px solid #4a4d54;
   border-radius: var(--radius);
   color: var(--text-on-dark);
   padding: 0.3rem 0.45rem;

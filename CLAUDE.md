@@ -63,7 +63,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Leaflet 1.9.4 + `@types/leaflet` (fix marker icon assets in `angular.json`). Office coordinates and address in `environment.ts`.
 
 ## Design (Albanian flag colours, a bit distinctive, never excessive)
-- Palette: black `#0B0B0C` / `#111111`, red accent `#C8102E` (CSS variable `--accent`), neutral greys, white cards, page background `#F6F6F6`. White text on red passes contrast.
+- Palette: charcoal `--ink #2B2D31` / `--ink-2 #33363B` / `--ink-3 #3D4046` (softened from pure black on Arlindo's request, less harsh with red and white), footer `#232529`, red accent `#C8102E` (`--accent`), text `#26282C`, white cards, page background `#F6F6F6`. Contrast checked: white on charcoal >= 12:1, muted grey >= 5:1, white on red 5.9:1.
 - Fonts: **Barlow Condensed** (800, uppercase) for headings, prices and numerals; **Inter** for body.
 - Motifs: dark header + hero with a diagonal red cut at the bottom (`clip-path` over a red wrapper), skewed red price tags and labels, small skewed red bar before section titles, dashed "road line" dividers.
 - Home: hero with background photo + title (no date form in the hero), then dark filter bar (name search + type / fuel / transmission / sort + clear), 3-column car cards (photo, name, year · type, pills, price tag, black "Shiko detajet" button), "Si funksionon" (01/02/03), dark contact/map section, black footer.

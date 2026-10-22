@@ -1,14 +1,14 @@
-/* ---------- Theme tokens (Albanian flag colours: black + red) ---------- */
+/* ---------- Theme tokens (Albanian flag colours: charcoal + red, softened from pure black) ---------- */
 :root {
-  --ink: #0b0b0c;
-  --ink-2: #111111;
-  --ink-3: #1c1c1e;
+  --ink: #2b2d31;
+  --ink-2: #33363b;
+  --ink-3: #3d4046;
   --accent: #c8102e;
   --accent-dark: #a00d25;
   --on-accent: #ffffff;
   --page-bg: #f6f6f6;
   --card-bg: #ffffff;
-  --text: #1a1a1a;
+  --text: #26282c;
   --text-muted: #5f6368;
   --text-on-dark: #f2f2f2;
   --text-on-dark-muted: #a6a6a6;
