@@ -9,4 +9,6 @@ export const environment = {
     lat: 41.3275,
     lng: 19.8187,
   },
+  // Public demo logins shown on the login page (production only, see environment.prod.ts)
+  demoAccounts: [] as { role: 'customer' | 'admin'; username: string; password: string }[],
 };

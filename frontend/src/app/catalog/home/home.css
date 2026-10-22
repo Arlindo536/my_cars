@@ -39,6 +39,17 @@
   margin-bottom: 1.75rem;
 }
 
+.demo-link {
+  display: inline-block;
+  margin-left: 1rem;
+  color: var(--text-on-dark);
+  font-weight: 600;
+}
+
+.demo-link:hover {
+  color: #ff3b55;
+}
+
 .catalog {
   padding-top: 2.5rem;
   padding-bottom: 3rem;

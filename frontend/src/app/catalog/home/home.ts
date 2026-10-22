@@ -24,6 +24,7 @@ export class Home implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   readonly office = environment.office;
+  readonly hasDemo = environment.demoAccounts.length > 0;
   readonly typeOptions = CAR_TYPES;
   readonly fuelOptions = FUEL_TYPES;
   readonly transmissionOptions = TRANSMISSION_TYPES;

@@ -156,6 +156,9 @@ REST_FRAMEWORK = {
     },
 }
 
+# Public demo logins shown on the site; they cannot change passwords, profiles or users
+DEMO_ACCOUNTS = config('DEMO_ACCOUNTS', default='', cast=Csv())
+
 # Django's own admin site; moved off /admin/ in production because the Angular app uses that path
 DJANGO_ADMIN_PATH = config('DJANGO_ADMIN_PATH', default='admin/')
 

@@ -303,5 +303,12 @@
     "deleteManyMessage": "Delete {{count}} users? This cannot be undone.",
     "deletedMany": "Users deleted.",
     "deleteManyFailed": "Some users could not be deleted."
+  },
+  "demo": {
+    "title": "Try a demo account",
+    "text": "One click and you are in. Demo accounts cannot change passwords or users.",
+    "customer": "Demo customer",
+    "admin": "Demo admin",
+    "heroLink": "or try the demo as a customer or admin →"
   }
 }

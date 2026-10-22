@@ -28,6 +28,7 @@ services:
       SECURE_COOKIES: ${SECURE_COOKIES:-True}
       SECURE_HSTS_SECONDS: ${SECURE_HSTS_SECONDS:-0}
       DJANGO_ADMIN_PATH: django-admin/
+      DEMO_ACCOUNTS: ${DEMO_ACCOUNTS:-}
       DB_NAME: ${DB_NAME:-my_cars}
       DB_USER: ${DB_USER:-my_cars}
       DB_PASSWORD: ${DB_PASSWORD}

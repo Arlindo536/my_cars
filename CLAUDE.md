@@ -81,7 +81,13 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 7: `messaging` app + UI.
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
-- [ ] Deploy to Arlindo's headless ThinkPad server (needs his server details / access; see README "Deployment").
+- [ ] Deploy to Arlindo's headless ThinkPad server (in progress, see "Server" below).
+
+## Server (p51-server, Ubuntu 26.04)
+- SSH: `arlindo@100.78.198.77` (Tailscale). Docker + compose installed; user is in the docker group.
+- Cloudflare Tunnel (`~/.cloudflared/config.yml`): `arlindo.site` -> `localhost:8080` (portfolio container, NEVER touch), `my-cars.arlindo.site` -> `localhost:8081` (this app).
+- Old deployment: `~/my_cars` on branch `deploy` (original app + multi-photo upload + demo landing page), DB volume `my_cars_pgdata` with migrations incompatible with `main`. Keep it stopped, not deleted, as rollback. Old backup: `~/my_cars_backup.sql`.
+- Public demo accounts `demo_klient` / `demo_admin` (passwords in `environment.prod.ts`, meant to be public). Backend setting `DEMO_ACCOUNTS` blocks them from changing passwords/profiles, deleting accounts and editing/deleting users.
 Later: security audit write-up (OWASP-style: auth, IDOR on bookings/messages, XSS in messages, CORS, dependency scans, ZAP).
 
 ## Working agreements

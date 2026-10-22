@@ -6,8 +6,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import CustomUser
+from .permissions import NotDemoAccount
 from .serializers import (
     RegisterSerializer,
     LoginSerializer,
@@ -60,6 +61,8 @@ class LoginView(APIView):
 
 
 class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated, NotDemoAccount]
+
     def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
@@ -74,6 +77,8 @@ class ChangePasswordView(APIView):
 
 
 class UpdateProfileView(APIView):
+    permission_classes = [IsAuthenticated, NotDemoAccount]
+
     def get(self, request):
         user = request.user
         return Response({
@@ -98,6 +103,8 @@ class UpdateProfileView(APIView):
 
 
 class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated, NotDemoAccount]
+
     def delete(self, request):
         user = request.user
         user.delete()
@@ -119,6 +126,8 @@ class UserListView(APIView):
 
 
 class AdminUserDetailView(APIView):
+    permission_classes = [IsAuthenticated, NotDemoAccount]
+
     def put(self, request, pk):
         if request.user.role != 'admin':
             return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)

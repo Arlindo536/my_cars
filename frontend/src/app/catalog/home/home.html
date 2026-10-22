@@ -5,6 +5,7 @@
       <h1 class="hero-title">{{ 'home.titleLine1' | translate }}<br /><span class="text-accent">{{ 'home.titleLine2' | translate }}</span></h1>
       <p class="hero-lead">{{ 'home.lead' | translate }}</p>
       <button type="button" class="btn btn-primary btn-lg" (click)="scrollToCars()">{{ 'home.cta' | translate }}</button>
+      <a *ngIf="hasDemo" routerLink="/auth/login" class="demo-link">{{ 'demo.heroLink' | translate }}</a>
     </div>
   </div>
 </section>

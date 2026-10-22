@@ -303,5 +303,12 @@
     "deleteManyMessage": "Të fshij {{count}} përdorues? Nuk kthehet mbrapsht.",
     "deletedMany": "Përdoruesit u fshinë.",
     "deleteManyFailed": "Disa përdorues nuk u fshinë."
+  },
+  "demo": {
+    "title": "Provo me llogari demo",
+    "text": "Një klik dhe je brenda. Llogaritë demo nuk mund të ndryshojnë fjalëkalime apo përdorues.",
+    "customer": "Klient demo",
+    "admin": "Admin demo",
+    "heroLink": "ose provo demon si klient apo admin →"
   }
 }

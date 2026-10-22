@@ -14,6 +14,7 @@ import { environment } from '../../../environments/environment';
 })
 export class Login {
   loginForm: FormGroup;
+  readonly demoAccounts = environment.demoAccounts;
 
   constructor(
     private fb: FormBuilder,
@@ -27,6 +28,11 @@ export class Login {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+  }
+
+  loginAsDemo(account: { username: string; password: string }) {
+    this.loginForm.setValue({ username: account.username, password: account.password });
+    this.onSubmit();
   }
 
   onSubmit() {

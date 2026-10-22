@@ -12,6 +12,18 @@
       </div>
       <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">{{ 'auth.loginSubmit' | translate }}</button>
     </form>
+    <div *ngIf="demoAccounts.length" class="demo-box mt-4">
+      <h2 class="h6 mb-1">{{ 'demo.title' | translate }}</h2>
+      <p class="small text-muted mb-2">{{ 'demo.text' | translate }}</p>
+      <div class="d-flex gap-2">
+        <button *ngFor="let a of demoAccounts" type="button" class="btn btn-dark btn-sm flex-fill" (click)="loginAsDemo(a)">
+          {{ (a.role === 'admin' ? 'demo.admin' : 'demo.customer') | translate }}
+        </button>
+      </div>
+      <p class="small text-muted mt-2 mb-0">
+        <span *ngFor="let a of demoAccounts; let last = last"><code>{{ a.username }}</code> / <code>{{ a.password }}</code><br *ngIf="!last" /></span>
+      </p>
+    </div>
     <p class="mt-3 text-center">{{ 'auth.noAccount' | translate }} <a routerLink="/auth/register">{{ 'auth.registerHere' | translate }}</a></p>
   </div>
 </div>

@@ -303,5 +303,12 @@
     "deleteManyMessage": "{{count}} Benutzer löschen? Das kann nicht rückgängig gemacht werden.",
     "deletedMany": "Benutzer gelöscht.",
     "deleteManyFailed": "Einige Benutzer konnten nicht gelöscht werden."
+  },
+  "demo": {
+    "title": "Mit Demo-Konto testen",
+    "text": "Ein Klick und du bist drin. Demo-Konten können keine Passwörter oder Benutzer ändern.",
+    "customer": "Demo-Kunde",
+    "admin": "Demo-Admin",
+    "heroLink": "oder teste die Demo als Kunde oder Admin →"
   }
 }
