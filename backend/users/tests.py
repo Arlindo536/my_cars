@@ -1,3 +1,7 @@
+from io import StringIO
+
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import TestCase
 from rest_framework.test import APIClient
 
@@ -54,3 +58,16 @@ class LoginTests(TestCase):
             format='json',
         )
         self.assertEqual(response.status_code, 400)
+
+
+class MakeAdminCommandTests(TestCase):
+    def test_promotes_existing_user(self):
+        CustomUser.objects.create(username='owner', email='o@example.com')
+        call_command('make_admin', 'owner', stdout=StringIO())
+        user = CustomUser.objects.get(username='owner')
+        self.assertEqual(user.role, 'admin')
+        self.assertTrue(user.is_staff)
+
+    def test_unknown_user_fails(self):
+        with self.assertRaises(CommandError):
+            call_command('make_admin', 'nobody', stdout=StringIO())

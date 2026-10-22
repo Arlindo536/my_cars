@@ -39,9 +39,10 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Step 7 (messaging): one `Conversation` per (customer, car); any admin can read and answer every thread (admins act for the rental). Customers see others' threads as 404. `is_read` is a single flag per message (shared by all admins). Polling: thread 5 s with `?after=<last id>`, inbox 15 s, nav unread badge 30 s, all paused while the tab is hidden. Sending is throttled (`send_message`: 20/min, POST only via `SendMessageThrottle`); GET polling is never throttled. Message bodies are stored verbatim and rendered only via interpolation (`white-space: pre-wrap`); verified that `<img onerror>` shows as text. Inbox serializer does 2 queries per conversation (last message, unread): fine for 20 per page, annotate if it grows.
 - Step 8: customers can no longer create cars (`POST /api/cars/` is admin-only; admins use `admin-create/`, owner defaults to the requesting admin). Photos: `POST/DELETE /api/cars/<id>/image/` (admin, multipart `image`), validated with Pillow (JPEG/PNG/WebP, max 5 MB), re-encoded to JPEG (max 1600 px, EXIF/GPS dropped) under a random `cars/<uuid>.jpg` name; old files are deleted on replace, removal and car deletion. `CarSerializer` returns absolute image URLs when given the request. Admin landing page is `/admin/bookings` (confirm/reject pending); customers land on `/` after login. `adminGuard` now redirects to `/` (it pointed to `/cars`, which would loop now that `/cars` is admin-only). Prices render through the shared `price` pipe ("35 €", "99,50 €").
 - Test quirk: specs for components declared in a feature module import that module (e.g. `AdminModule`) instead of re-declaring the component, otherwise exported components/pipes are not in scope.
+- Step 9 (Docker): backend runs gunicorn as uid 10001; the entrypoint migrates and runs collectstatic. Static/media dirs contain a `.keep` file so new named volumes copy the app user's ownership (empty dirs gave root-owned volumes and a crash). nginx re-resolves `backend` via the container DNS (`NGINX_ENTRYPOINT_LOCAL_RESOLVERS` + variable `proxy_pass`), uses `^~` for `/static/` and `/media/` (otherwise the asset regex location wins), and forwards `Host` with port (`$http_host`). CSP: `script-src 'self'`; Angular's critical-CSS inlining is disabled in production because it adds an `onload` handler the CSP blocks. A full browser run against the container showed no CSP violations or console errors. `make_admin <username>` gives a user the admin role (createsuperuser alone creates a customer).
 - Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1; ~620 kB after step 4: Material form-field/datepicker code shared with the app shell; ~658 kB after step 6: ngx-translate + sq/de locale data).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
-- `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
+- Step 9: `DEBUG` (default False), `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, secure cookies, HSTS and the Django admin path (`DJANGO_ADMIN_PATH`, `django-admin/` in Docker because Angular owns `/admin`) come from the environment. Arlindo's local `backend/.env` got `DEBUG=True`.
 - Token in `localStorage`: acceptable here, but note it in the security audit.
 - Invalid token on a public endpoint returns 401: hence `authentication_classes = []` on public views.
 
@@ -79,7 +80,8 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 6: sq/en/de translations (@ngx-translate 18.0.0).
 - [x] Step 7: `messaging` app + UI.
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
-- [ ] Step 9: README with screenshots, Docker Compose, production settings (env-driven), deploy (Arlindo has a headless ThinkPad server).
+- [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
+- [ ] Deploy to Arlindo's headless ThinkPad server (needs his server details / access; see README "Deployment").
 Later: security audit write-up (OWASP-style: auth, IDOR on bookings/messages, XSS in messages, CORS, dependency scans, ZAP).
 
 ## Working agreements

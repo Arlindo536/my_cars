@@ -22,7 +22,7 @@ from django.urls import include
 from bookings.views import CarAvailabilityView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(settings.DJANGO_ADMIN_PATH, admin.site.urls),
     path('api/users/', include('users.urls')),
     path('api/cars/<int:pk>/availability/', CarAvailabilityView.as_view(), name='car-availability'),
     path('api/cars/', include('cars.urls')),

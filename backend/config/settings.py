@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Off unless the environment says otherwise, so a forgotten variable fails safe
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 # Application definition
@@ -56,9 +57,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:4200').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:4200', cast=Csv())
+# Needed by the Django admin when it is served over HTTPS behind the proxy
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=Csv())
 
 ROOT_URLCONF = 'config.urls'
 
@@ -131,6 +134,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+# collectstatic target, served by nginx in the Docker setup
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Uploaded files (car photos)
 MEDIA_URL = 'media/'
@@ -149,4 +154,27 @@ REST_FRAMEWORK = {
         # Sending messages (messaging.views.SendMessageThrottle)
         'send_message': '20/min',
     },
+}
+
+# Django's own admin site; moved off /admin/ in production because the Angular app uses that path
+DJANGO_ADMIN_PATH = config('DJANGO_ADMIN_PATH', default='admin/')
+
+# HTTPS is terminated by the reverse proxy in front of the app
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = config('SECURE_COOKIES', default=not DEBUG, cast=bool)
+CSRF_COOKIE_SECURE = SESSION_COOKIE_SECURE
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = 'same-origin'
+X_FRAME_OPTIONS = 'DENY'
+# Car photos are up to 5 MB (cars/images.py); keep larger uploads on disk instead of in memory
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2_621_440
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {'console': {'class': 'logging.StreamHandler'}},
+    'root': {'handlers': ['console'], 'level': config('LOG_LEVEL', default='INFO')},
 }
