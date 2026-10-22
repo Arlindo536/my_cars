@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -32,6 +34,8 @@ class AdminCarCreateView(APIView):
                 fuel_type=data['fuel_type'],
                 transmission_type=data['transmission_type'],
                 type=data['type'],
+                price_per_day=data.get('price_per_day', Decimal('0.00')),
+                description=data.get('description', ''),
                 owner=owner
             )
             return Response(CarSerializer(car).data, status=status.HTTP_201_CREATED)
@@ -82,6 +86,8 @@ class CarView(APIView):
                 fuel_type=data['fuel_type'],
                 transmission_type=data['transmission_type'],
                 type=data['type'],
+                price_per_day=data.get('price_per_day', Decimal('0.00')),
+                description=data.get('description', ''),
                 owner=request.user
             )
             return Response(CarSerializer(car).data, status=status.HTTP_201_CREATED)

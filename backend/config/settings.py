@@ -129,6 +129,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Uploaded files (car photos)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 REST_FRAMEWORK = {
