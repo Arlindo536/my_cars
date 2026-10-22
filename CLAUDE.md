@@ -23,7 +23,9 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 ## Findings about the original code
 - Fixed in step 0: `RegisterSerializer.validate` sat outside the class (password confirmation never checked); stray empty `backend/__init__.py` broke test discovery.
 - Admin screens link to `/cars/:id` and reuse the `car` module (detail/edit). Do NOT delete the `car` module; later move what admin needs into the admin module.
-- API base URLs are hard-coded (`http://127.0.0.1:8000/...`) in services: introduce `environment.ts`.
+- API base URLs: moved to `src/environments/environment(.prod).ts` in step 1 (prod uses relative `/api`).
+- Frontend specs: 16 of 27 generated `should create` specs fail (missing HttpClient/MatSnackBar/router providers in TestBed); pre-existing, fix when touching each component.
+- Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
 - `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
 - Token in `localStorage`: acceptable here, but note it in the security audit.
@@ -55,7 +57,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 
 ## Plan and status (blocks are ~90 min; target finish early December)
 - [x] Step 0: local setup, register bug fix, first tests, `.env.example`, version checks.
-- [ ] Step 1: theme (CSS variables, fonts), nav-bar, footer, `environment.ts`.
+- [x] Step 1: theme (CSS variables, fonts), nav-bar, footer, `environment.ts`.
 - [ ] Step 2: new `Car` fields + migration, `seed_demo` management command (15-20 fictional cars), media settings.
 - [ ] Step 3: public catalog endpoints + home page with filters + car detail page.
 - [ ] Step 4: `bookings` app, tests (overlap, price, permissions), datepicker UI, my bookings.
