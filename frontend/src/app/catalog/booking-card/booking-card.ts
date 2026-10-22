@@ -1,11 +1,13 @@
-import { Component, DestroyRef, Input, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { EMPTY, catchError, debounceTime, filter, switchMap } from 'rxjs';
 import { CatalogCar } from '../../shared/car-labels';
 import { BookedRange, Bookings, Quote, fromApiDate, toApiDate } from '../../booking/bookings';
 import { Notification } from '../../notification';
+import { Language } from '../../language';
 
 @Component({
   selector: 'app-booking-card',
@@ -20,6 +22,13 @@ export class BookingCard implements OnInit {
   private router = inject(Router);
   private notification = inject(Notification);
   private destroyRef = inject(DestroyRef);
+  readonly language = inject(Language);
+
+  constructor() {
+    // Month and weekday names in the calendar follow the chosen language
+    const dateAdapter = inject<DateAdapter<Date>>(DateAdapter);
+    effect(() => dateAdapter.setLocale(this.language.intlLocale()));
+  }
 
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(null),
@@ -29,7 +38,7 @@ export class BookingCard implements OnInit {
   readonly minDate = startOfToday();
   readonly booked = signal<BookedRange[]>([]);
   readonly quote = signal<Quote | null>(null);
-  readonly quoteError = signal('');
+  readonly quoteError = signal(false);
   readonly submitting = signal(false);
 
   get role(): string | null {
@@ -59,13 +68,13 @@ export class BookingCard implements OnInit {
         debounceTime(150),
         filter(() => {
           this.quote.set(null);
-          this.quoteError.set('');
+          this.quoteError.set(false);
           return this.hasCompleteRange();
         }),
         // Errors are handled per request so the stream keeps working for the next range
         switchMap(() => this.bookings.getQuote(this.request()).pipe(
-          catchError(err => {
-            this.quoteError.set(firstError(err) || 'Çmimi nuk u llogarit. Provo përsëri.');
+          catchError(() => {
+            this.quoteError.set(true);
             return EMPTY;
           }),
         )),
@@ -86,17 +95,17 @@ export class BookingCard implements OnInit {
     this.bookings.createBooking(this.request()).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.notification.success('Rezervimi u dërgua. Do të konfirmohet së shpejti.');
+        this.notification.success(this.language.t('booking.sent'));
         this.router.navigate(['/bookings']);
       },
       error: err => {
         this.submitting.set(false);
         if (err.status === 409) {
-          this.notification.error('Këto data sapo u rezervuan nga dikush tjetër. Zgjidh data të tjera.');
+          this.notification.error(this.language.t('booking.conflict'));
           this.range.reset();
           this.loadAvailability();
         } else {
-          this.notification.error(firstError(err) || 'Rezervimi dështoi. Provo përsëri.');
+          this.notification.error(this.language.t('booking.failed'));
         }
       }
     });
@@ -124,17 +133,4 @@ export class BookingCard implements OnInit {
 function startOfToday(): Date {
   const now = new Date();
   return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-}
-
-// First validation message from a DRF error response, if any
-function firstError(err: any): string {
-  const body = err?.error;
-  if (!body || typeof body !== 'object') {
-    return '';
-  }
-  if (typeof body.error === 'string') {
-    return body.error;
-  }
-  const first = Object.values(body)[0];
-  return Array.isArray(first) ? String(first[0]) : '';
 }

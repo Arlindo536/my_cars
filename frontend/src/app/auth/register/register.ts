@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Notification } from '../../notification';
+import { Language } from '../../language';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -18,7 +19,8 @@ export class Register {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private notification: Notification
+    private notification: Notification,
+    private language: Language
   ) {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
@@ -35,12 +37,11 @@ export class Register {
       this.http.post(`${environment.apiUrl}/users/register/`, this.registerForm.value)
         .subscribe({
           next: () => {
-            this.notification.success('Registration successful. Please log in.');
+            this.notification.success(this.language.t('auth.registerSuccess'));
             this.router.navigate(['/auth/login']);
           },
-          error: (err) => {
-            const message = err.error?.error || 'Registration failed. Please check your input.';
-            this.notification.error(message);
+          error: () => {
+            this.notification.error(this.language.t('auth.registerFailed'));
           }
         });
     }

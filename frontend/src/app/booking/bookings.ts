@@ -42,13 +42,6 @@ export interface BookingRequest {
   end_date: string;
 }
 
-export const STATUS_LABELS: Record<string, string> = {
-  pending: 'Në pritje',
-  confirmed: 'E konfirmuar',
-  rejected: 'E refuzuar',
-  cancelled: 'E anuluar',
-};
-
 // "YYYY-MM-DD" in local time (toISOString would shift the day in UTC)
 export function toApiDate(date: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');

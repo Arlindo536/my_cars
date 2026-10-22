@@ -1,25 +1,25 @@
 <div *ngIf="loading()" class="container-xl py-5" aria-busy="true">
-  <p class="text-muted">Duke ngarkuar…</p>
+  <p class="text-muted">{{ 'common.loading' | translate }}</p>
 </div>
 
 <div *ngIf="notFound()" class="container-xl py-5 text-center">
-  <h1>Makina nuk u gjet</h1>
-  <p class="text-muted">Kjo makinë nuk ofrohet më ose lidhja është e gabuar.</p>
-  <a routerLink="/" class="btn btn-dark">Kthehu te makinat</a>
+  <h1>{{ 'car.notFoundTitle' | translate }}</h1>
+  <p class="text-muted">{{ 'car.notFoundText' | translate }}</p>
+  <a routerLink="/" class="btn btn-dark">{{ 'car.backToCars' | translate }}</a>
 </div>
 
 <div *ngIf="failed()" class="container-xl py-5 text-center">
-  <p class="mb-3">Makina nuk u ngarkua. Kontrollo lidhjen dhe provo përsëri.</p>
-  <button type="button" class="btn btn-dark" (click)="load()">Provo përsëri</button>
+  <p class="mb-3">{{ 'car.loadError' | translate }}</p>
+  <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
 </div>
 
 <ng-container *ngIf="car() as car">
   <section class="dark-band-wrap">
     <div class="dark-band">
       <div class="container-xl title-band">
-        <a routerLink="/" class="back-link">‹ Të gjitha makinat</a>
+        <a routerLink="/" class="back-link">{{ 'car.back' | translate }}</a>
         <h1 class="car-title">{{ car.model }}</h1>
-        <p class="car-subtitle mb-0">{{ car.year }} · {{ typeLabels[car.type] || car.type }}</p>
+        <p class="car-subtitle mb-0">{{ car.year }} · {{ 'type.' + car.type | translate }}</p>
       </div>
     </div>
   </section>
@@ -34,35 +34,35 @@
 
         <dl class="spec-panel">
           <div>
-            <dt>Viti</dt>
+            <dt>{{ 'car.year' | translate }}</dt>
             <dd>{{ car.year }}</dd>
           </div>
           <div>
-            <dt>Karburanti</dt>
-            <dd>{{ fuelLabels[car.fuel_type] || car.fuel_type }}</dd>
+            <dt>{{ 'car.fuel' | translate }}</dt>
+            <dd>{{ 'fuel.' + car.fuel_type | translate }}</dd>
           </div>
           <div>
-            <dt>Kambio</dt>
-            <dd>{{ transmissionLabels[car.transmission_type] || car.transmission_type }}</dd>
+            <dt>{{ 'car.transmission' | translate }}</dt>
+            <dd>{{ 'transmission.' + car.transmission_type | translate }}</dd>
           </div>
           <div>
-            <dt>Tipi</dt>
-            <dd>{{ typeLabels[car.type] || car.type }}</dd>
+            <dt>{{ 'car.type' | translate }}</dt>
+            <dd>{{ 'type.' + car.type | translate }}</dd>
           </div>
           <div>
-            <dt>Kilometrazhi</dt>
-            <dd>{{ car.km | number }} km</dd>
+            <dt>{{ 'car.mileage' | translate }}</dt>
+            <dd>{{ car.km | number: '1.0-0' : language.locale() }} km</dd>
           </div>
         </dl>
 
         <section *ngIf="car.description" class="mt-4">
-          <h2 class="section-title">Përshkrimi</h2>
+          <h2 class="section-title">{{ 'car.description' | translate }}</h2>
           <p class="description">{{ car.description }}</p>
         </section>
 
         <section class="mt-4">
-          <h2 class="section-title">Vendi i marrjes</h2>
-          <p class="text-muted">Makina merret dhe kthehet në zyrën tonë.</p>
+          <h2 class="section-title">{{ 'car.pickupPlace' | translate }}</h2>
+          <p class="text-muted">{{ 'car.pickupText' | translate }}</p>
           <app-office-map></app-office-map>
         </section>
       </div>

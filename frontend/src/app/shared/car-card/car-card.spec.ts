@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideTestTranslations } from '../../../testing/translate';
 
 import { SharedModule } from '../shared-module';
 import { CarCard } from './car-card';
@@ -10,7 +11,7 @@ describe('CarCard', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SharedModule],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideTestTranslations()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CarCard);

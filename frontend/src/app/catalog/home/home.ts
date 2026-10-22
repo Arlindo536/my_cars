@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, map, merge } from 'rxjs';
 import { Catalog, CatalogFilters } from '../catalog';
 import { environment } from '../../../environments/environment';
-import { CatalogCar, FUEL_LABELS, TRANSMISSION_LABELS, TYPE_LABELS } from '../../shared/car-labels';
+import { CAR_TYPES, CatalogCar, FUEL_TYPES, TRANSMISSION_TYPES } from '../../shared/car-labels';
 
 const PAGE_SIZE = 9;
 
@@ -24,15 +24,10 @@ export class Home implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   readonly office = environment.office;
-  readonly typeOptions = Object.entries(TYPE_LABELS);
-  readonly fuelOptions = Object.entries(FUEL_LABELS);
-  readonly transmissionOptions = Object.entries(TRANSMISSION_LABELS);
-  readonly orderingOptions: [string, string][] = [
-    ['price_per_day', 'Çmimi: nga më i ulëti'],
-    ['-price_per_day', 'Çmimi: nga më i larti'],
-    ['-year', 'Viti: më të rejat'],
-    ['model', 'Emri: A–Z'],
-  ];
+  readonly typeOptions = CAR_TYPES;
+  readonly fuelOptions = FUEL_TYPES;
+  readonly transmissionOptions = TRANSMISSION_TYPES;
+  readonly orderingOptions = ['price_per_day', '-price_per_day', '-year', 'model'];
 
   readonly filters = inject(FormBuilder).nonNullable.group({
     search: '',

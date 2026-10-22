@@ -3,19 +3,17 @@
     <div class="row g-4">
       <div class="col-12 col-md-6">
         <p class="footer-brand">My<span class="text-accent">Cars</span></p>
-        <p class="footer-muted mb-0">
-          Makina me qira në Tiranë. Projekt portofoli: makinat dhe çmimet janë shembuj, pa pagesa reale.
-        </p>
+        <p class="footer-muted mb-0">{{ 'footer.tagline' | translate }}</p>
       </div>
       <div class="col-6 col-md-3">
-        <h2 class="footer-heading">Llogaria</h2>
+        <h2 class="footer-heading">{{ 'footer.account' | translate }}</h2>
         <ul class="list-unstyled mb-0">
-          <li><a routerLink="/auth/login">Hyr</a></li>
-          <li><a routerLink="/auth/register">Regjistrohu</a></li>
+          <li><a routerLink="/auth/login">{{ 'nav.login' | translate }}</a></li>
+          <li><a routerLink="/auth/register">{{ 'nav.register' | translate }}</a></li>
         </ul>
       </div>
       <div class="col-6 col-md-3">
-        <h2 class="footer-heading">Kontakt</h2>
+        <h2 class="footer-heading">{{ 'footer.contact' | translate }}</h2>
         <p class="footer-muted mb-0">{{ office.address }}</p>
       </div>
     </div>

@@ -1,0 +1,14 @@
+<div class="lang-switch" role="group" [attr.aria-label]="'lang.label' | translate">
+  <button
+    *ngFor="let l of languages"
+    type="button"
+    class="lang-btn"
+    [class.active]="language.current() === l.code"
+    [attr.aria-pressed]="language.current() === l.code"
+    [attr.lang]="l.code"
+    [attr.title]="'lang.' + l.code | translate"
+    (click)="language.set(l.code)"
+  >
+    {{ l.label }}<span class="visually-hidden"> – {{ 'lang.' + l.code | translate }}</span>
+  </button>
+</div>

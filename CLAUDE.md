@@ -8,7 +8,7 @@ Turn `my_cars` (an internship project: role-based car management) into a realist
 - Public catalog: search by name, filter by type / fuel / transmission / price, sort, pagination.
 - Car detail page: specs, date selection with price total, booking, direct message to the owner/admin.
 - One rental place on a map (Leaflet + OpenStreetMap). No per-car location.
-- Language switch sq/en. Demo (fictional) cars and prices. No real payments.
+- Language switch sq/en/de (German added by Arlindo in step 6). Demo (fictional) cars and prices. No real payments.
 - Visual overhaul, see "Design" below. Later: a security audit of the app written up as a portfolio case study.
 
 ## Stack and conventions (stay faithful to these)
@@ -29,13 +29,14 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - `price_per_day`/`description` are optional in `CarSerializer` so the old edit form (which does not send them) cannot reset them on PUT.
 - Step 3: `CarDetailView` had `permission_classes = [IsOwnerOrAdmin]` only, so anonymous requests crashed with 500 (AnonymousUser has no `role`); fixed to `[IsAuthenticated, IsOwnerOrAdmin]`. Check other views for the same pattern in the security audit.
 - Arlindo's local `.env` sets `CORS_ALLOWED_ORIGINS=http://localhost:4201`, so run `ng serve --port 4201` locally.
-- Catalog: cars with `price_per_day = 0` are hidden (his decision). Prices are EUR. Numbers use the default en-US locale (`48,000 km`) until step 6 registers `sq`.
+- Catalog: cars with `price_per_day = 0` are hidden (his decision). Prices are EUR. 
 - Step 4 (bookings): `TIME_ZONE = 'Europe/Tirane'` so "today" is local. Rules: start >= today, end > start, max 30 days, max 1 year ahead; return day may be the next pickup day. Only customers book; admins confirm/reject pending (UI in step 8). Customers see others' bookings as 404 (no IDOR). `ConcurrentBookingTests` proves the `select_for_update` lock (it fails without it).
 - Datepicker limitation: one `dateFilter` for both ends, so a booked range's start day cannot be picked as a return day in the UI (the API allows it).
-- Headless Chrome in this environment has no Albanian ICU data, so screenshots show English month names; real browsers use `sq-AL`.
+- Headless Chrome in this environment has no Albanian ICU data, so its calendar shows English month names for sq; de/en are fine. Real browsers use `sq-AL`.
 - Login accepts `?returnUrl=` (relative app paths only, via the router); `authGuard` sets it.
 - Step 5: office name/address/coordinates live in `environment(.prod).ts` (placeholder until Arlindo picks the real address). Leaflet stays in the lazy catalog chunk; its CSS is global and marker PNGs are copied to `/leaflet` (angular.json). Tiles come from tile.openstreetmap.org (fine for a low-traffic portfolio; check OSM tile policy before heavy use).
-- Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1; ~620 kB after step 4: Material form-field/datepicker code shared with the app shell).
+- Step 6: still English-only: profile, change-password, update-profile, the customer `car` module and admin pages (rework in step 8). Car descriptions come from the DB in Albanian only (ask Arlindo if he wants per-language descriptions). Backend error messages are English; the UI shows translated generic messages instead of server text.
+- Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1; ~620 kB after step 4: Material form-field/datepicker code shared with the app shell; ~658 kB after step 6: ngx-translate + sq/de locale data).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
 - `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
 - Token in `localStorage`: acceptable here, but note it in the security audit.
@@ -54,7 +55,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 ## Frontend additions
 - Lazy modules: `catalog` (home + car detail, public), `booking`, `messages`, `shared` (car card, Leaflet map, language switcher).
 - Material datepicker range with `dateFilter` to grey out booked days.
-- `@ngx-translate/core` + `@ngx-translate/http-loader` v18 (compatible with Angular 21), `sq.json` / `en.json`, choice kept in `localStorage`.
+- `@ngx-translate/core` + `@ngx-translate/http-loader` 18.0.0, `public/i18n/{sq,en,de}.json` (keep the three files' keys identical), choice kept in `localStorage` (`lang`). `Language` service (`src/app/language.ts`): `current`, `locale()` for number/date pipes (pass it explicitly: `number:'1.0-2':language.locale()`), `intlLocale()` for the datepicker, `t()` for strings in code. `TranslatePipe` is standalone: import it in each NgModule (SharedModule re-exports it). Specs use `provideTestTranslations()` from `src/testing/translate.ts`.
 - Leaflet 1.9.4 + `@types/leaflet` (fix marker icon assets in `angular.json`). Office coordinates and address in `environment.ts`.
 
 ## Design (Albanian flag colours, a bit distinctive, never excessive)
@@ -72,7 +73,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 3: public catalog endpoints + home page with filters + car detail page.
 - [x] Step 4: `bookings` app, tests (overlap, price, permissions), datepicker UI, my bookings.
 - [x] Step 5: map component (Leaflet, office at Skanderbeg Square placeholder 41.3275, 19.8187).
-- [ ] Step 6: sq/en translations.
+- [x] Step 6: sq/en/de translations (@ngx-translate 18.0.0).
 - [ ] Step 7: `messaging` app + UI.
 - [ ] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [ ] Step 9: README with screenshots, Docker Compose, production settings (env-driven), deploy (Arlindo has a headless ThinkPad server).

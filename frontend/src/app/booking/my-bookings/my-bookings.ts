@@ -1,8 +1,9 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BookingItem, Bookings, STATUS_LABELS, fromApiDate } from '../bookings';
+import { BookingItem, Bookings, fromApiDate } from '../bookings';
 import { Notification } from '../../notification';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
+import { Language } from '../../language';
 
 const PAGE_SIZE = 10;
 
@@ -17,7 +18,7 @@ export class MyBookings implements OnInit {
   private notification = inject(Notification);
   private dialog = inject(MatDialog);
 
-  readonly statusLabels = STATUS_LABELS;
+  readonly language = inject(Language);
   readonly items = signal<BookingItem[]>([]);
   readonly count = signal(0);
   readonly page = signal(1);
@@ -60,10 +61,10 @@ export class MyBookings implements OnInit {
   cancel(booking: BookingItem) {
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
-        title: 'Anulo rezervimin',
-        message: `Do ta anulosh rezervimin e ${booking.car.model}? Datat do të lirohen për të tjerët.`,
-        confirmLabel: 'Anulo rezervimin',
-        cancelLabel: 'Mbylle',
+        title: this.language.t('myBookings.cancelTitle'),
+        message: this.language.t('myBookings.cancelMessage', { model: booking.car.model }),
+        confirmLabel: this.language.t('myBookings.cancelConfirm'),
+        cancelLabel: this.language.t('myBookings.close'),
       }
     });
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
@@ -73,9 +74,9 @@ export class MyBookings implements OnInit {
       this.bookings.cancelBooking(booking.id).subscribe({
         next: updated => {
           this.items.update(list => list.map(b => (b.id === updated.id ? updated : b)));
-          this.notification.success('Rezervimi u anulua.');
+          this.notification.success(this.language.t('myBookings.cancelled'));
         },
-        error: () => this.notification.error('Rezervimi nuk u anulua. Provo përsëri.')
+        error: () => this.notification.error(this.language.t('myBookings.cancelFailed'))
       });
     });
   }

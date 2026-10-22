@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { CatalogCar, FUEL_LABELS, TRANSMISSION_LABELS, TYPE_LABELS } from '../car-labels';
+import { Component, Input, inject } from '@angular/core';
+import { CatalogCar } from '../car-labels';
+import { Language } from '../../language';
 
 @Component({
   selector: 'app-car-card',
@@ -10,7 +11,5 @@ import { CatalogCar, FUEL_LABELS, TRANSMISSION_LABELS, TYPE_LABELS } from '../ca
 export class CarCard {
   @Input({ required: true }) car!: CatalogCar;
 
-  readonly fuelLabels = FUEL_LABELS;
-  readonly transmissionLabels = TRANSMISSION_LABELS;
-  readonly typeLabels = TYPE_LABELS;
+  readonly language = inject(Language);
 }

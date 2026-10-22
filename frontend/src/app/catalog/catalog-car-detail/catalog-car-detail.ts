@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Catalog } from '../catalog';
-import { CatalogCar, FUEL_LABELS, TRANSMISSION_LABELS, TYPE_LABELS } from '../../shared/car-labels';
+import { CatalogCar } from '../../shared/car-labels';
+import { Language } from '../../language';
 
 @Component({
   selector: 'app-catalog-car-detail',
@@ -13,9 +14,7 @@ export class CatalogCarDetail implements OnInit {
   private catalog = inject(Catalog);
   private route = inject(ActivatedRoute);
 
-  readonly fuelLabels = FUEL_LABELS;
-  readonly transmissionLabels = TRANSMISSION_LABELS;
-  readonly typeLabels = TYPE_LABELS;
+  readonly language = inject(Language);
 
   readonly car = signal<CatalogCar | null>(null);
   readonly loading = signal(true);

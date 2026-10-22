@@ -1,24 +1,7 @@
-// Albanian labels for the backend's choice values (moved to translation files in step 6)
-export const FUEL_LABELS: Record<string, string> = {
-  petrol: 'Benzinë',
-  diesel: 'Naftë',
-  electric: 'Elektrike',
-  hybrid: 'Hibride',
-};
-
-export const TRANSMISSION_LABELS: Record<string, string> = {
-  manual: 'Manuale',
-  automatic: 'Automatike',
-};
-
-export const TYPE_LABELS: Record<string, string> = {
-  sedan: 'Sedan',
-  hatchback: 'Hatchback',
-  suv: 'SUV',
-  truck: 'Pickup',
-  coupe: 'Kupe',
-  van: 'Furgon',
-};
+// Backend choice values; their labels live in public/i18n/*.json under fuel.*, transmission.*, type.*
+export const FUEL_TYPES = ['petrol', 'diesel', 'electric', 'hybrid'];
+export const TRANSMISSION_TYPES = ['manual', 'automatic'];
+export const CAR_TYPES = ['sedan', 'hatchback', 'suv', 'truck', 'coupe', 'van'];
 
 export interface CatalogCar {
   id: number;

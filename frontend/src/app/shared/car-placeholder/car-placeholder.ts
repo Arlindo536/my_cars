@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   selector: 'app-car-placeholder',
   standalone: false,
   template: `
-    <div class="ph" role="img" aria-label="Foto e makinës së shpejti">
+    <div class="ph" role="img" [attr.aria-label]="'car.photoSoonAria' | translate">
       <svg viewBox="0 0 120 48" aria-hidden="true">
         <path
           d="M8 34c0-4 2-7 6-8l14-3 12-10c2-2 5-3 8-3h22c4 0 7 1 10 4l9 9 14 3c4 1 6 4 6 8v4c0 2-1 3-3 3h-6a10 10 0 0 0-20 0H40a10 10 0 0 0-20 0h-9c-2 0-3-1-3-3z"
@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
         <circle cx="30" cy="41" r="6" />
         <circle cx="90" cy="41" r="6" />
       </svg>
-      <span>Foto së shpejti</span>
+      <span>{{ 'car.photoSoon' | translate }}</span>
     </div>
   `,
   styles: `

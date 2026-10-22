@@ -93,7 +93,15 @@
   font-size: 1rem;
 }
 
+.nav-lang {
+  margin-top: 0.5rem;
+}
+
 @media (min-width: 768px) {
+  .nav-lang {
+    margin-top: 0;
+  }
+
   .menu {
     display: flex;
     flex-basis: auto;

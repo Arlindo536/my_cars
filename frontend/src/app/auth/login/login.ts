@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Notification } from '../../notification';
+import { Language } from '../../language';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -19,7 +20,8 @@ export class Login {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private notification: Notification
+    private notification: Notification,
+    private language: Language
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -34,7 +36,7 @@ export class Login {
           next: (response: any) => {
             localStorage.setItem('token', response.token);
             localStorage.setItem('role', response.role);
-            this.notification.success('Login successful.');
+            this.notification.success(this.language.t('auth.loginSuccess'));
             const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
             if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
               this.router.navigateByUrl(returnUrl);
@@ -45,7 +47,7 @@ export class Login {
             }
           },
           error: (err) => {
-            this.notification.error('Login failed. Please check your credentials.');
+            this.notification.error(this.language.t('auth.loginFailed'));
           }
         });
     }
