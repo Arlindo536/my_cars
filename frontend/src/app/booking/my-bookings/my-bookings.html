@@ -29,7 +29,7 @@
         </p>
       </div>
       <span class="status" [attr.data-status]="b.status">{{ 'status.' + b.status | translate }}</span>
-      <span class="booking-total">{{ b.total_price | number: '1.0-2' : language.locale() }} €</span>
+      <span class="booking-total">{{ b.total_price | price: language.locale() }}</span>
       <div class="booking-actions">
         <button *ngIf="canCancel(b)" type="button" class="btn btn-outline-danger btn-sm" (click)="cancel(b)">
           <span aria-hidden="true">{{ 'myBookings.cancel' | translate }}</span>

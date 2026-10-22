@@ -1,12 +1,14 @@
 from decimal import Decimal
 
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from .models import Car
+from .images import ImageRejected, process_car_image
 from .serializers import CarSerializer, AdminCarSerializer, CatalogCarSerializer, CatalogQuerySerializer
 from .permissions import IsOwnerOrAdmin
 from users.models import CustomUser
@@ -31,7 +33,7 @@ class AdminCarCreateView(APIView):
         serializer = AdminCarSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
-            owner = get_object_or_404(CustomUser, pk=data['owner_id'])
+            owner = get_object_or_404(CustomUser, pk=data['owner_id']) if 'owner_id' in data else request.user
             car = Car.objects.create(
                 model=data['model'],
                 year=data['year'],
@@ -43,7 +45,7 @@ class AdminCarCreateView(APIView):
                 description=data.get('description', ''),
                 owner=owner
             )
-            return Response(CarSerializer(car).data, status=status.HTTP_201_CREATED)
+            return Response(CarSerializer(car, context={'request': request}).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -76,11 +78,14 @@ class CarView(APIView):
             cars = cars.filter(model__icontains=search)
         paginator = CarPagination()
         result_page = paginator.paginate_queryset(cars, request)
-        serializer = CarSerializer(result_page, many=True)
+        serializer = CarSerializer(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
 
 
     def post(self, request):
+        # The fleet is managed by admins (see AdminCarCreateView); customers no longer add cars
+        if request.user.role != 'admin':
+            return Response({"error": "Only admins can add cars."}, status=status.HTTP_403_FORBIDDEN)
         serializer = CarSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.validated_data
@@ -105,7 +110,7 @@ class CarDetailView(APIView):
     def get(self, request, pk):
         car = get_object_or_404(Car, pk=pk)
         self.check_object_permissions(request, car)
-        serializer = CarSerializer(car)
+        serializer = CarSerializer(car, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -117,12 +122,13 @@ class CarDetailView(APIView):
             for field, value in data.items():
                 setattr(car, field, value)
             car.save()
-            return Response(CarSerializer(car).data)
+            return Response(CarSerializer(car, context={'request': request}).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         car = get_object_or_404(Car, pk=pk)
         self.check_object_permissions(request, car)
+        car.image.delete(save=False)
         car.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -171,3 +177,30 @@ class CatalogDetailView(APIView):
     def get(self, request, pk):
         car = get_object_or_404(catalog_cars(), pk=pk)
         return Response(CatalogCarSerializer(car, context={'request': request}).data)
+
+
+class CarImageView(APIView):
+    """Admin uploads (POST, multipart field "image") or removes (DELETE) a car photo."""
+    parser_classes = [MultiPartParser]
+
+    def post(self, request, pk):
+        if request.user.role != 'admin':
+            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
+        car = get_object_or_404(Car, pk=pk)
+        upload = request.FILES.get('image')
+        if upload is None:
+            return Response({"image": ["No file was sent."]}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            image_file = process_car_image(upload)
+        except ImageRejected as error:
+            return Response({"image": [str(error)]}, status=status.HTTP_400_BAD_REQUEST)
+        car.image.delete(save=False)
+        car.image.save(image_file.name, image_file, save=True)
+        return Response(CarSerializer(car, context={'request': request}).data)
+
+    def delete(self, request, pk):
+        if request.user.role != 'admin':
+            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
+        car = get_object_or_404(Car, pk=pk)
+        car.image.delete(save=True)
+        return Response(CarSerializer(car, context={'request': request}).data)

@@ -1,94 +1,92 @@
-<div style="background-color: #f8f9fa; min-height: 85vh;" class="py-5">
-  <div class="container">
-    <div class="card shadow p-4">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">All Cars</h2>
-        <a routerLink="/admin/cars/new" class="btn btn-success">
-          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">add</i> Add Car
-        </a>
-      </div>
-
-      <div class="mb-4">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Search by model..."
-          [(ngModel)]="searchTerm"
-          (keyup.enter)="onSearch()"
-        />
-      </div>
-
-      <div *ngIf="cars.length === 0" class="text-center text-muted py-5">
-        <p style="font-size: 3rem;">🚗</p>
-        <p>No cars in the system yet.</p>
-      </div>
-
-      <div class="d-flex justify-content-end align-items-center mb-2 gap-2" *ngIf="cars.length > 0">
-        <button class="btn btn-outline-danger btn-sm" *ngIf="selectMode && selectedIds.length > 0" (click)="deleteSelected()">
-          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete</i>
-          Delete Selected ({{ selectedIds.length }})
-        </button>
-        <button class="btn btn-outline-secondary btn-sm" (click)="toggleSelectMode()">
-          {{ selectMode ? 'Cancel' : 'Select' }}
-        </button>
-      </div>
-
-      <div *ngFor="let group of groupedCars" class="mb-4">
-        <h5 class="text-secondary mb-2">
-          <i class="material-icons" style="font-size: 18px; vertical-align: middle;">person</i>
-          {{ group.owner }}
-        </h5>
-        <div class="table-responsive">
-          <table class="table table-striped mb-0">
-            <thead>
-              <tr>
-                <th *ngIf="selectMode"></th>
-                <th (click)="sortBy('model')" style="cursor: pointer;">Model <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
-<th (click)="sortBy('year')" style="cursor: pointer;">Year <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
-<th (click)="sortBy('fuel_type')" style="cursor: pointer;">Fuel <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
-<th (click)="sortBy('transmission_type')" style="cursor: pointer;">Transmission <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
-<th (click)="sortBy('type')" style="cursor: pointer;">Type <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
-<th (click)="sortBy('km')" style="cursor: pointer;">Km <i class="material-icons" style="font-size: 14px; vertical-align: middle;">unfold_more</i></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let car of group.cars">
-                <td *ngIf="selectMode">
-                  <input
-                    type="checkbox"
-                    [checked]="selectedIds.includes(car.id)"
-                    (change)="toggleSelect(car.id, $event)"
-                  />
-                </td>
-                <td><a [routerLink]="['/cars', car.id]">{{ car.model }}</a></td>
-                <td>{{ car.year }}</td>
-                <td>{{ car.fuel_type }}</td>
-                <td>{{ car.transmission_type }}</td>
-                <td>{{ car.type }}</td>
-                <td>{{ car.km }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-center align-items-center mt-3 gap-2" *ngIf="cars.length > 0">
-        <button class="btn btn-outline-secondary btn-sm" [disabled]="!hasPrevious || isLoading" (click)="previousPage()">
-          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">chevron_left</i>
-        </button>
-        <button
-          *ngFor="let page of pageNumbers"
-          class="btn btn-sm"
-          [class.btn-primary]="page === currentPage"
-          [class.btn-outline-secondary]="page !== currentPage"
-          [disabled]="isLoading"
-          (click)="goToPage(page)">
-          {{ page }}
-        </button>
-        <button class="btn btn-outline-secondary btn-sm" [disabled]="!hasNext || isLoading" (click)="nextPage()">
-          <i class="material-icons" style="font-size: 16px; vertical-align: middle;">chevron_right</i>
-        </button>
-      </div>
+<section class="dark-band-wrap">
+  <div class="dark-band">
+    <div class="container-xl title-band d-flex flex-wrap justify-content-between align-items-end gap-2">
+      <h1 class="mb-0">{{ 'admin.fleetTitle' | translate }}</h1>
+      <a routerLink="/admin/cars/new" class="btn btn-primary">+ {{ 'admin.newCar' | translate }}</a>
     </div>
   </div>
+</section>
+
+<div class="container-xl py-4">
+  <div class="toolbar">
+    <form class="search" role="search" (submit)="$event.preventDefault(); onSearch()">
+      <label for="fleet-search" class="visually-hidden">{{ 'home.search' | translate }}</label>
+      <input id="fleet-search" type="search" class="form-control" [(ngModel)]="searchTerm" name="search"
+        [placeholder]="'admin.searchModel' | translate" />
+      <button type="submit" class="btn btn-dark">{{ 'home.search' | translate }}</button>
+    </form>
+    <div class="d-flex gap-2" *ngIf="cars().length > 0">
+      <button *ngIf="selectMode && selectedIds().length > 0" type="button" class="btn btn-outline-danger btn-sm" (click)="deleteSelected()">
+        {{ 'admin.deleteSelected' | translate: { count: selectedIds().length } }}
+      </button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleSelectMode()">
+        {{ (selectMode ? 'admin.cancel' : 'admin.select') | translate }}
+      </button>
+    </div>
+  </div>
+
+  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+
+  <div *ngIf="failed()" class="empty-state">
+    <p class="mb-3">{{ 'admin.fleetLoadFailed' | translate }}</p>
+    <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <div *ngIf="!loading() && !failed() && cars().length === 0" class="empty-state">
+    <p class="mb-0">{{ 'admin.fleetEmpty' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading() && cars().length > 0" class="table-responsive fleet-table">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          <th *ngIf="selectMode" scope="col"><span class="visually-hidden">{{ 'admin.select' | translate }}</span></th>
+          <th scope="col">{{ 'admin.photo' | translate }}</th>
+          <th scope="col">{{ 'admin.model' | translate }}</th>
+          <th scope="col">{{ 'car.type' | translate }}</th>
+          <th scope="col" class="text-end">{{ 'admin.pricePerDay' | translate }}</th>
+          <th scope="col">{{ 'admin.catalogStatus' | translate }}</th>
+          <th scope="col" class="text-end">{{ 'admin.actions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let car of cars()">
+          <td *ngIf="selectMode">
+            <input type="checkbox" class="form-check-input" [checked]="selectedIds().includes(car.id)"
+              (change)="toggleSelect(car.id, $any($event.target).checked)"
+              [attr.aria-label]="'admin.selectCar' | translate: { model: car.model }" />
+          </td>
+          <td class="thumb-cell">
+            <img *ngIf="car.image; else noThumb" [src]="car.image" alt="" class="thumb" loading="lazy" />
+            <ng-template #noThumb><span class="thumb thumb-empty" aria-hidden="true"></span></ng-template>
+          </td>
+          <td>
+            <a [routerLink]="['/admin/cars', car.id, 'edit']" class="car-link">{{ car.model }}</a>
+            <div class="small text-muted">{{ car.year }} · {{ car.km | number: '1.0-0' : language.locale() }} km</div>
+          </td>
+          <td>{{ 'type.' + car.type | translate }}</td>
+          <td class="text-end fw-semibold">{{ car.price_per_day | price: language.locale() }}</td>
+          <td>
+            <span class="status" [class.listed]="isListed(car)">
+              {{ (isListed(car) ? 'admin.listed' : 'admin.hidden') | translate }}
+            </span>
+            <div *ngIf="car.owner && !isListed(car)" class="small text-muted">{{ 'admin.ownerLabel' | translate: { name: car.owner } }}</div>
+          </td>
+          <td class="text-end text-nowrap">
+            <a *ngIf="isListed(car)" [routerLink]="['/catalog', car.id]" class="btn btn-outline-secondary btn-sm">{{ 'admin.view' | translate }}</a>
+            <a [routerLink]="['/admin/cars', car.id, 'edit']" class="btn btn-dark btn-sm ms-1">{{ 'admin.edit' | translate }}</a>
+            <button type="button" class="btn btn-outline-danger btn-sm ms-1" (click)="deleteOne(car)">
+              {{ 'admin.delete' | translate }}<span class="visually-hidden"> {{ car.model }}</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav *ngIf="!loading() && totalPages() > 1" class="d-flex justify-content-center gap-2 mt-3" [attr.aria-label]="'common.pages' | translate">
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === 1" (click)="goToPage(page() - 1)">{{ 'common.prev' | translate }}</button>
+    <span class="align-self-center small">{{ 'common.pageOf' | translate: { page: page(), total: totalPages() } }}</span>
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">{{ 'common.next' | translate }}</button>
+  </nav>
 </div>

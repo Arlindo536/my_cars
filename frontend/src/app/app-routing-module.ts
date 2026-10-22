@@ -14,7 +14,8 @@ const routes: Routes = [
   {
     path: 'cars',
     loadChildren: () => import('./car/car-module').then(m => m.CarModule),
-    canActivate: [authGuard]
+    // Legacy pages from when customers added their own cars; the fleet now lives under /admin/cars
+    canActivate: [authGuard, adminGuard]
   },
   {
     path: 'bookings',

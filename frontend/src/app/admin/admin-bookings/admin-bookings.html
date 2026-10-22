@@ -1,0 +1,58 @@
+<section class="dark-band-wrap">
+  <div class="dark-band">
+    <div class="container-xl title-band">
+      <h1 class="mb-0">{{ 'admin.bookingsTitle' | translate }}</h1>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+  <div class="tabs" role="group" [attr.aria-label]="'admin.filterByStatus' | translate">
+    <button *ngFor="let f of filters" type="button" class="tab" [class.active]="status() === f"
+      [attr.aria-pressed]="status() === f" (click)="setStatus(f)">
+      {{ (f ? 'status.' + f : 'home.all') | translate }}
+    </button>
+  </div>
+
+  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+
+  <div *ngIf="failed()" class="empty-state">
+    <p class="mb-3">{{ 'myBookings.loadError' | translate }}</p>
+    <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <div *ngIf="!loading() && !failed() && items().length === 0" class="empty-state">
+    <p class="mb-0">{{ 'admin.noBookings' | translate }}</p>
+  </div>
+
+  <ul *ngIf="!loading() && items().length > 0" class="list-unstyled booking-list">
+    <li *ngFor="let b of items()" class="booking-row" [attr.data-status]="b.status">
+      <div>
+        <a [routerLink]="['/catalog', b.car.id]" class="booking-car">{{ b.car.model }}</a>
+        <p class="mb-0 small">
+          <strong>{{ b.customer }}</strong> ·
+          {{ b.start_date | date: 'd MMM y' : undefined : language.locale() }} → {{ b.end_date | date: 'd MMM y' : undefined : language.locale() }} ·
+          {{ (b.days === 1 ? 'common.dayOne' : 'common.dayMany') | translate: { count: b.days } }}
+        </p>
+      </div>
+      <span class="status" [attr.data-status]="b.status">{{ 'status.' + b.status | translate }}</span>
+      <span class="booking-total">{{ b.total_price | price: language.locale() }}</span>
+      <div class="actions">
+        <ng-container *ngIf="b.status === 'pending'">
+          <button type="button" class="btn btn-primary btn-sm" [disabled]="busy().includes(b.id)" (click)="confirm(b)">
+            {{ 'admin.confirm' | translate }}<span class="visually-hidden"> {{ b.car.model }}, {{ b.customer }}</span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="busy().includes(b.id)" (click)="reject(b)">
+            {{ 'admin.reject' | translate }}<span class="visually-hidden"> {{ b.car.model }}, {{ b.customer }}</span>
+          </button>
+        </ng-container>
+      </div>
+    </li>
+  </ul>
+
+  <nav *ngIf="!loading() && totalPages() > 1" class="d-flex justify-content-center gap-2 mt-3" [attr.aria-label]="'common.pages' | translate">
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === 1" (click)="goToPage(page() - 1)">{{ 'common.prev' | translate }}</button>
+    <span class="align-self-center small">{{ 'common.pageOf' | translate: { page: page(), total: totalPages() } }}</span>
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">{{ 'common.next' | translate }}</button>
+  </nav>
+</div>

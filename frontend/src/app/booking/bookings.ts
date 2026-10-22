@@ -74,6 +74,14 @@ export class Bookings {
     return this.http.post<BookingItem>(this.apiUrl, request);
   }
 
+  confirmBooking(id: number) {
+    return this.http.post<BookingItem>(`${this.apiUrl}${id}/confirm/`, {});
+  }
+
+  rejectBooking(id: number) {
+    return this.http.post<BookingItem>(`${this.apiUrl}${id}/reject/`, {});
+  }
+
   cancelBooking(id: number) {
     return this.http.post<BookingItem>(`${this.apiUrl}${id}/cancel/`, {});
   }

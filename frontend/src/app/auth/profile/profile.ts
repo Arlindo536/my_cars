@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from '../user';
+import { Language } from '../../language';
 import { Notification } from '../../notification';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 
@@ -12,6 +13,7 @@ import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
   styleUrl: './profile.css'
 })
 export class Profile implements OnInit {
+  private language = inject(Language);
   profile: any = null;
 
   constructor(
@@ -28,15 +30,17 @@ export class Profile implements OnInit {
         this.profile = data;
         this.cdr.detectChanges();
       },
-      error: () => this.notification.error('Failed to load profile.')
+      error: () => this.notification.error(this.language.t('profile.loadFailed'))
     });
   }
 
   deleteAccount() {
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
-        title: 'Delete Account',
-        message: 'Are you sure you want to permanently delete your account? This cannot be undone.'
+        title: this.language.t('profile.deleteAccount'),
+        message: this.language.t('profile.deleteMessage'),
+        confirmLabel: this.language.t('admin.delete'),
+        cancelLabel: this.language.t('admin.cancel')
       }
     });
 
@@ -46,10 +50,10 @@ export class Profile implements OnInit {
           next: () => {
             localStorage.removeItem('token');
             localStorage.removeItem('role');
-            this.notification.success('Your account has been deleted.');
+            this.notification.success(this.language.t('profile.deleted'));
             this.router.navigate(['/auth/login']);
           },
-          error: () => this.notification.error('Failed to delete account.')
+          error: () => this.notification.error(this.language.t('profile.deleteFailed'))
         });
       }
     });

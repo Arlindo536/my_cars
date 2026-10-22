@@ -1,6 +1,6 @@
 <aside class="booking-card" [attr.aria-label]="'booking.aria' | translate">
   <div class="booking-head">
-    <span class="booking-price">{{ car.price_per_day | number: '1.0-2' : language.locale() }} €</span>
+    <span class="booking-price">{{ car.price_per_day | price: language.locale() }}</span>
     <span class="booking-unit">{{ 'common.perDay' | translate }}</span>
   </div>
 
@@ -21,13 +21,13 @@
         <div *ngIf="q.available; else unavailable">
           <div class="d-flex justify-content-between">
             <span>
-              {{ q.price_per_day | number: '1.0-2' : language.locale() }} € ×
+              {{ q.price_per_day | price: language.locale() }} ×
               {{ (q.days === 1 ? 'common.dayOne' : 'common.dayMany') | translate: { count: q.days } }}
             </span>
           </div>
           <div class="total d-flex justify-content-between align-items-baseline">
             <span>{{ 'booking.total' | translate }}</span>
-            <span class="total-price">{{ q.total_price | number: '1.0-2' : language.locale() }} €</span>
+            <span class="total-price">{{ q.total_price | price: language.locale() }}</span>
           </div>
         </div>
         <ng-template #unavailable>

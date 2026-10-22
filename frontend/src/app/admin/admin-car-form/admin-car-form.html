@@ -1,0 +1,100 @@
+<section class="dark-band-wrap">
+  <div class="dark-band">
+    <div class="container-xl title-band">
+      <a routerLink="/admin/cars" class="back-link">{{ 'admin.backToFleet' | translate }}</a>
+      <h1 class="mb-0 mt-1">{{ (carId() ? 'admin.editCar' : 'admin.newCar') | translate }}</h1>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+
+  <form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="save()" class="row g-4" novalidate>
+    <div class="col-12 col-lg-7">
+      <div class="panel">
+        <div class="mb-3">
+          <label for="car-model" class="form-label">{{ 'admin.model' | translate }}</label>
+          <input id="car-model" class="form-control" formControlName="model" />
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-6">
+            <label for="car-year" class="form-label">{{ 'car.year' | translate }}</label>
+            <input id="car-year" type="number" class="form-control" formControlName="year" min="1950" [max]="maxYear" />
+          </div>
+          <div class="col-6">
+            <label for="car-km" class="form-label">{{ 'car.mileage' | translate }} (km)</label>
+            <input id="car-km" type="number" class="form-control" formControlName="km" min="0" />
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-sm-4">
+            <label for="car-fuel" class="form-label">{{ 'car.fuel' | translate }}</label>
+            <select id="car-fuel" class="form-select" formControlName="fuel_type">
+              <option value="" disabled>–</option>
+              <option *ngFor="let o of fuelOptions" [value]="o">{{ 'fuel.' + o | translate }}</option>
+            </select>
+          </div>
+          <div class="col-12 col-sm-4">
+            <label for="car-transmission" class="form-label">{{ 'car.transmission' | translate }}</label>
+            <select id="car-transmission" class="form-select" formControlName="transmission_type">
+              <option value="" disabled>–</option>
+              <option *ngFor="let o of transmissionOptions" [value]="o">{{ 'transmission.' + o | translate }}</option>
+            </select>
+          </div>
+          <div class="col-12 col-sm-4">
+            <label for="car-type" class="form-label">{{ 'car.type' | translate }}</label>
+            <select id="car-type" class="form-select" formControlName="type">
+              <option value="" disabled>–</option>
+              <option *ngFor="let o of typeOptions" [value]="o">{{ 'type.' + o | translate }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="car-price" class="form-label">{{ 'admin.pricePerDay' | translate }}</label>
+          <div class="input-group">
+            <input id="car-price" class="form-control" formControlName="price_per_day" inputmode="decimal" aria-describedby="price-help" />
+            <span class="input-group-text">€</span>
+          </div>
+          <div id="price-help" class="form-text">{{ 'admin.priceHelp' | translate }}</div>
+          <div *ngIf="form.controls.price_per_day.touched && form.controls.price_per_day.invalid" class="text-danger small">
+            {{ 'admin.priceInvalid' | translate }}
+          </div>
+        </div>
+        <div>
+          <label for="car-description" class="form-label">{{ 'car.description' | translate }}</label>
+          <textarea id="car-description" class="form-control" rows="4" formControlName="description"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="panel">
+        <span class="form-label d-block">{{ 'admin.photo' | translate }}</span>
+        <div class="photo-box">
+          <img *ngIf="preview() || (currentImage() && !removeImage); else noPhoto" [src]="preview() || currentImage()" [alt]="form.controls.model.value" />
+          <ng-template #noPhoto><app-car-placeholder></app-car-placeholder></ng-template>
+        </div>
+        <label for="car-image" class="form-label mt-3">{{ 'admin.choosePhoto' | translate }}</label>
+        <input #fileInput id="car-image" type="file" class="form-control" accept="image/jpeg,image/png,image/webp" (change)="onFileSelected($event)" aria-describedby="image-help" />
+        <div id="image-help" class="form-text">{{ 'admin.photoHelp' | translate }}</div>
+        <div *ngIf="imageError()" class="text-danger small" role="alert">{{ imageError() | translate }}</div>
+        <div class="d-flex gap-2 mt-2">
+          <button *ngIf="preview()" type="button" class="btn btn-outline-secondary btn-sm" (click)="discardPicked(fileInput)">
+            {{ 'admin.discardPhoto' | translate }}
+          </button>
+          <button *ngIf="currentImage() && !preview()" type="button" class="btn btn-outline-danger btn-sm" (click)="removeImage = !removeImage">
+            {{ (removeImage ? 'admin.keepPhoto' : 'admin.removePhoto') | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary flex-fill" [disabled]="saving()">
+          {{ (saving() ? 'admin.saving' : 'admin.save') | translate }}
+        </button>
+        <a routerLink="/admin/cars" class="btn btn-outline-secondary">{{ 'admin.cancel' | translate }}</a>
+      </div>
+    </div>
+  </form>
+</div>

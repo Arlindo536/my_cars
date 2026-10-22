@@ -1,26 +1,33 @@
-<div style="background-color: #f8f9fa; min-height: 85vh;" class="d-flex justify-content-center align-items-center">
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
-    <h2 class="mb-4 text-center">Create New User</h2>
+<div class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 440px;">
+    <h1 class="h2 mb-4 text-center">{{ 'users.createTitle' | translate }}</h1>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="mb-3">
-        <input formControlName="username" class="form-control" placeholder="Username" />
+        <label for="uc-username" class="form-label">{{ 'auth.username' | translate }}</label>
+        <input id="uc-username" formControlName="username" type="text" class="form-control" autocomplete="off" />
       </div>
       <div class="mb-3">
-        <input formControlName="password" type="password" class="form-control" placeholder="Password" />
+        <label for="uc-password" class="form-label">{{ 'auth.password' | translate }}</label>
+        <input id="uc-password" formControlName="password" type="password" class="form-control" autocomplete="new-password" />
       </div>
       <div class="mb-3">
-        <input formControlName="confirm_password" type="password" class="form-control" placeholder="Confirm Password" />
+        <label for="uc-confirm" class="form-label">{{ 'auth.confirmPassword' | translate }}</label>
+        <input id="uc-confirm" formControlName="confirm_password" type="password" class="form-control" autocomplete="new-password" />
       </div>
       <div class="mb-3">
-        <input formControlName="email" class="form-control" placeholder="Email" />
+        <label for="uc-email" class="form-label">{{ 'auth.email' | translate }}</label>
+        <input id="uc-email" formControlName="email" type="email" class="form-control" autocomplete="off" />
       </div>
       <div class="mb-3">
-        <input formControlName="first_name" class="form-control" placeholder="First Name" />
+        <label for="uc-first" class="form-label">{{ 'auth.firstName' | translate }}</label>
+        <input id="uc-first" formControlName="first_name" type="text" class="form-control" autocomplete="off" />
       </div>
       <div class="mb-3">
-        <input formControlName="last_name" class="form-control" placeholder="Last Name" />
+        <label for="uc-last" class="form-label">{{ 'auth.lastName' | translate }}</label>
+        <input id="uc-last" formControlName="last_name" type="text" class="form-control" autocomplete="off" />
       </div>
-      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">Create User</button>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">{{ 'users.create' | translate }}</button>
     </form>
+    <a routerLink="/admin/users" class="btn btn-link w-100 mt-2">{{ 'users.back' | translate }}</a>
   </div>
 </div>

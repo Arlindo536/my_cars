@@ -1,9 +1,14 @@
+import os
+import shutil
+import tempfile
 from decimal import Decimal
-from io import StringIO
+from io import BytesIO, StringIO
 
 from django.core.management import call_command
 from django.core.management.base import CommandError
-from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, override_settings
+from PIL import Image
 from rest_framework.test import APIClient
 
 from users.models import CustomUser
@@ -175,3 +180,111 @@ class CatalogApiTests(TestCase):
     def test_owner_only_endpoints_still_require_login(self):
         self.assertEqual(self.client.get('/api/cars/').status_code, 401)
         self.assertEqual(self.client.get(f'/api/cars/{self.golf.id}/').status_code, 401)
+
+
+def image_upload(name='photo.png', image_format='PNG', size=(64, 40), exif_gps=False):
+    buffer = BytesIO()
+    image = Image.new('RGB', size, (200, 16, 46))
+    kwargs = {}
+    if exif_gps:
+        exif = Image.Exif()
+        exif[0x8825] = {2: (41.0, 19.0, 48.0)}  # GPSInfo
+        kwargs['exif'] = exif
+    image.save(buffer, format=image_format, **kwargs)
+    return SimpleUploadedFile(name, buffer.getvalue(), content_type=f'image/{image_format.lower()}')
+
+
+class FleetAdminTests(TestCase):
+    def setUp(self):
+        self.media = tempfile.mkdtemp()
+        self.override = override_settings(MEDIA_ROOT=self.media)
+        self.override.enable()
+        self.admin = make_user('boss', role='admin')
+        self.customer = make_user('cust')
+        self.client = APIClient()
+        self.car = Car.objects.create(
+            model='VW Golf', year=2021, km=1000, fuel_type='diesel', transmission_type='manual',
+            type='hatchback', price_per_day=Decimal('35.00'), owner=self.admin,
+        )
+
+    def tearDown(self):
+        self.override.disable()
+        shutil.rmtree(self.media, ignore_errors=True)
+
+    def as_user(self, user):
+        self.client.force_authenticate(user)
+        return self.client
+
+    def upload(self, user, file):
+        return self.as_user(user).post(f'/api/cars/{self.car.id}/image/', {'image': file}, format='multipart')
+
+    def test_admin_create_defaults_owner_to_admin(self):
+        response = self.as_user(self.admin).post('/api/cars/admin-create/', {
+            'model': 'Fiat 500', 'year': 2020, 'km': 1, 'fuel_type': 'petrol',
+            'transmission_type': 'manual', 'type': 'hatchback', 'price_per_day': '25.00',
+        }, format='json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Car.objects.get(model='Fiat 500').owner, self.admin)
+
+    def test_customers_can_no_longer_add_cars(self):
+        response = self.as_user(self.customer).post('/api/cars/', {
+            'model': 'Mine', 'year': 2020, 'km': 1, 'fuel_type': 'petrol',
+            'transmission_type': 'manual', 'type': 'sedan',
+        }, format='json')
+        self.assertEqual(response.status_code, 403)
+
+    def test_upload_is_reencoded_as_jpeg_with_random_name(self):
+        response = self.upload(self.admin, image_upload(name='../../evil name.png'))
+        self.assertEqual(response.status_code, 200)
+        self.car.refresh_from_db()
+        self.assertRegex(self.car.image.name, r'^cars/[0-9a-f]{32}\.jpg$')
+        self.assertTrue(response.json()['image'].startswith('http://testserver/media/cars/'))
+        with Image.open(self.car.image.path) as stored:
+            self.assertEqual(stored.format, 'JPEG')
+
+    def test_exif_gps_is_removed(self):
+        self.upload(self.admin, image_upload(name='p.jpg', image_format='JPEG', exif_gps=True))
+        self.car.refresh_from_db()
+        with Image.open(self.car.image.path) as stored:
+            self.assertNotIn(0x8825, stored.getexif())
+
+    def test_large_images_are_resized(self):
+        self.upload(self.admin, image_upload(size=(3200, 2000)))
+        self.car.refresh_from_db()
+        with Image.open(self.car.image.path) as stored:
+            self.assertLessEqual(max(stored.size), 1600)
+
+    def test_non_images_and_wrong_formats_are_rejected(self):
+        fake = SimpleUploadedFile('x.png', b'<?php echo 1; ?>', content_type='image/png')
+        self.assertEqual(self.upload(self.admin, fake).status_code, 400)
+        gif = image_upload(name='x.gif', image_format='GIF')
+        self.assertEqual(self.upload(self.admin, gif).status_code, 400)
+        self.car.refresh_from_db()
+        self.assertFalse(self.car.image)
+
+    def test_too_large_file_is_rejected(self):
+        big = SimpleUploadedFile('big.png', b'0' * (5 * 1024 * 1024 + 1), content_type='image/png')
+        self.assertEqual(self.upload(self.admin, big).status_code, 400)
+
+    def test_customer_cannot_upload(self):
+        self.assertEqual(self.upload(self.customer, image_upload()).status_code, 403)
+
+    def test_replacing_and_deleting_removes_old_files(self):
+        self.upload(self.admin, image_upload())
+        self.car.refresh_from_db()
+        first = self.car.image.path
+        self.upload(self.admin, image_upload())
+        self.assertFalse(os.path.exists(first))
+        self.car.refresh_from_db()
+        second = self.car.image.path
+        self.assertEqual(self.as_user(self.admin).delete(f'/api/cars/{self.car.id}/image/').status_code, 200)
+        self.assertFalse(os.path.exists(second))
+        self.car.refresh_from_db()
+        self.assertFalse(self.car.image)
+
+    def test_deleting_car_deletes_its_photo(self):
+        self.upload(self.admin, image_upload())
+        self.car.refresh_from_db()
+        path = self.car.image.path
+        self.as_user(self.admin).delete(f'/api/cars/{self.car.id}/')
+        self.assertFalse(os.path.exists(path))

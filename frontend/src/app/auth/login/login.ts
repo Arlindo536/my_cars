@@ -41,9 +41,9 @@ export class Login {
             if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
               this.router.navigateByUrl(returnUrl);
             } else if (response.role === 'admin') {
-              this.router.navigate(['/admin/users']);
+              this.router.navigate(['/admin/bookings']);
             } else {
-              this.router.navigate(['/cars']);
+              this.router.navigate(['/']);
             }
           },
           error: (err) => {

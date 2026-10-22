@@ -4,7 +4,8 @@ import { UserList } from './user-list/user-list';
 import { AdminCarList } from './admin-car-list/admin-car-list';
 import { UserForm } from './user-form/user-form';
 import { UserCreate } from './user-create/user-create';
-import { AdminCarCreate } from './admin-car-create/admin-car-create';
+import { AdminCarForm } from './admin-car-form/admin-car-form';
+import { AdminBookings } from './admin-bookings/admin-bookings';
 import { UserDetail } from './user-detail/user-detail';
 
 const routes: Routes = [
@@ -13,7 +14,10 @@ const routes: Routes = [
   { path: 'users/:id', component: UserDetail },
   { path: 'users/:id/edit', component: UserForm },
   { path: 'cars', component: AdminCarList },
-  { path: 'cars/new', component: AdminCarCreate }
+  { path: 'cars/new', component: AdminCarForm },
+  { path: 'cars/:id/edit', component: AdminCarForm },
+  { path: 'bookings', component: AdminBookings },
+  { path: '', redirectTo: 'bookings', pathMatch: 'full' },
 ];
 
 @NgModule({

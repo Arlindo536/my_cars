@@ -3,7 +3,7 @@
     <img *ngIf="car.image; else placeholder" [src]="car.image" [alt]="car.model" loading="lazy" />
     <ng-template #placeholder><app-car-placeholder></app-car-placeholder></ng-template>
     <span class="price-tag car-price"
-      ><span>{{ car.price_per_day | number: '1.0-2' : language.locale() }} € <small>{{ 'common.perDay' | translate }}</small></span></span
+      ><span>{{ car.price_per_day | price: language.locale() }} <small>{{ 'common.perDay' | translate }}</small></span></span
     >
   </div>
   <div class="car-body">

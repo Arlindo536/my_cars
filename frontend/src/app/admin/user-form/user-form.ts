@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Admin } from '../admin';
+import { Language } from '../../language';
 import { Notification } from '../../notification';
 
 @Component({
@@ -11,6 +12,7 @@ import { Notification } from '../../notification';
   styleUrl: './user-form.css'
 })
 export class UserForm implements OnInit {
+  private language = inject(Language);
   userForm: FormGroup;
   userId!: number;
 
@@ -39,17 +41,17 @@ export class UserForm implements OnInit {
           this.userForm.patchValue(user);
         }
       },
-      error: () => this.notification.error('Failed to load user.')
+      error: () => this.notification.error(this.language.t('users.loadFailed'))
     });
   }
 
   onSubmit() {
     this.adminService.updateUser(this.userId, this.userForm.value).subscribe({
       next: () => {
-        this.notification.success('User updated successfully.');
+        this.notification.success(this.language.t('users.updated'));
         this.router.navigate(['/admin/users']);
       },
-      error: () => this.notification.error('Failed to update user.')
+      error: () => this.notification.error(this.language.t('users.updateFailed'))
     });
   }
 }

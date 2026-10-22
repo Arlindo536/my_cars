@@ -1,28 +1,21 @@
-<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh; background-color: #f8f9fa;">
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px;" *ngIf="profile">
+<div class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 440px;" *ngIf="profile">
     <div class="text-center mb-4">
-      <i class="material-icons" style="font-size: 64px; color: #2c3e50;">account_circle</i>
-      <h2 class="mt-2 mb-1">{{ profile.username }}</h2>
+      <i class="material-icons" style="font-size: 64px; color: var(--ink);" aria-hidden="true">account_circle</i>
+      <h1 class="h2 mt-2 mb-1">{{ profile.username }}</h1>
       <span class="badge" [class.bg-primary]="profile.role === 'admin'" [class.bg-secondary]="profile.role !== 'admin'">
-        {{ profile.role }}
+        {{ (profile.role === 'admin' ? 'users.roleAdmin' : 'users.roleCustomer') | translate }}
       </span>
     </div>
 
-    <table class="table table-borderless mb-4">
-      <tr><th>Email</th><td>{{ profile.email }}</td></tr>
-      <tr><th>First Name</th><td>{{ profile.first_name }}</td></tr>
-      <tr><th>Last Name</th><td>{{ profile.last_name }}</td></tr>
-    </table>
+    <dl class="row mb-4">
+      <dt class="col-5">{{ 'auth.email' | translate }}</dt><dd class="col-7">{{ profile.email }}</dd>
+      <dt class="col-5">{{ 'auth.firstName' | translate }}</dt><dd class="col-7">{{ profile.first_name }}</dd>
+      <dt class="col-5">{{ 'auth.lastName' | translate }}</dt><dd class="col-7">{{ profile.last_name }}</dd>
+    </dl>
 
-    <a routerLink="/auth/update-profile" class="btn btn-primary w-100 mt-2">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">edit</i> Edit Profile
-    </a>
-    <a routerLink="/auth/change-password" class="btn btn-outline-secondary w-100 mt-2">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">lock</i> Change Password
-    </a>
-    <button class="btn btn-outline-danger w-100 mt-2" (click)="deleteAccount()">
-      <i class="material-icons" style="font-size: 16px; vertical-align: middle;">delete_forever</i>
-      Delete My Account
-    </button>
+    <a routerLink="/auth/update-profile" class="btn btn-primary w-100 mt-2">{{ 'profile.edit' | translate }}</a>
+    <a routerLink="/auth/change-password" class="btn btn-outline-secondary w-100 mt-2">{{ 'profile.changePassword' | translate }}</a>
+    <button type="button" class="btn btn-outline-danger w-100 mt-2" (click)="deleteAccount()">{{ 'profile.deleteAccount' | translate }}</button>
   </div>
 </div>

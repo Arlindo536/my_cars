@@ -21,12 +21,12 @@
       <ng-container *ngIf="isLoggedIn">
         <ng-container *ngIf="role === 'customer'">
           <a routerLink="/bookings" routerLinkActive="active" class="nav-link-item">{{ 'nav.myBookings' | translate }}</a>
-          <a routerLink="/cars" routerLinkActive="active" class="nav-link-item">{{ 'nav.myCars' | translate }}</a>
           <a routerLink="/auth/profile" routerLinkActive="active" class="nav-link-item">{{ 'nav.profile' | translate }}</a>
         </ng-container>
         <ng-container *ngIf="role === 'admin'">
-          <a routerLink="/admin/users" routerLinkActive="active" class="nav-link-item">{{ 'nav.users' | translate }}</a>
+          <a routerLink="/admin/bookings" routerLinkActive="active" class="nav-link-item">{{ 'nav.adminBookings' | translate }}</a>
           <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link-item">{{ 'nav.fleet' | translate }}</a>
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-link-item">{{ 'nav.users' | translate }}</a>
         </ng-container>
         <a routerLink="/messages" routerLinkActive="active" class="nav-link-item">
           {{ 'nav.messages' | translate }}

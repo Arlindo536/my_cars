@@ -1,6 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Admin } from '../admin';
+import { Language } from '../../language';
 import { Notification } from '../../notification';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 
@@ -11,6 +12,7 @@ import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
   styleUrl: './user-list.css'
 })
 export class UserList implements OnInit {
+  private language = inject(Language);
   users: any[] = [];
   currentPage = 1;
   totalPages = 1;
@@ -48,7 +50,7 @@ export class UserList implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.notification.error('Failed to load users.');
+        this.notification.error(this.language.t('users.listFailed'));
       }
     });
   }
@@ -101,8 +103,10 @@ export class UserList implements OnInit {
   deleteSelected() {
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
-        title: 'Delete Selected Users',
-        message: `Are you sure you want to delete ${this.selectedIds.length} user(s)? This cannot be undone.`
+        title: this.language.t('users.deleteManyTitle'),
+        message: this.language.t('users.deleteManyMessage', { count: this.selectedIds.length }),
+        confirmLabel: this.language.t('admin.delete'),
+        cancelLabel: this.language.t('admin.cancel')
       }
     });
 
@@ -114,11 +118,11 @@ export class UserList implements OnInit {
             next: () => {
               remaining--;
               if (remaining === 0) {
-                this.notification.success('Selected users deleted successfully.');
+                this.notification.success(this.language.t('users.deletedMany'));
                 this.loadUsers();
               }
             },
-            error: () => this.notification.error('Failed to delete some users.')
+            error: () => this.notification.error(this.language.t('users.deleteManyFailed'))
           });
         });
       }

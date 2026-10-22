@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from '../user';
+import { Language } from '../../language';
 import { Notification } from '../../notification';
 
 @Component({
@@ -10,6 +11,7 @@ import { Notification } from '../../notification';
   styleUrl: './change-password.css'
 })
 export class ChangePassword {
+  private language = inject(Language);
   form: FormGroup;
 
   constructor(
@@ -28,12 +30,11 @@ export class ChangePassword {
     if (this.form.valid) {
       this.userService.changePassword(this.form.value).subscribe({
         next: () => {
-          this.notification.success('Password changed successfully.');
+          this.notification.success(this.language.t('profile.passwordChanged'));
           this.form.reset();
         },
-        error: (err: any) => {
-          const message = err.error?.error || 'Failed to change password.';
-          this.notification.error(message);
+        error: () => {
+          this.notification.error(this.language.t('profile.passwordFailed'));
         }
       });
     }

@@ -1,0 +1,79 @@
+.title-band {
+  padding-top: 2rem;
+  padding-bottom: 0.75rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.search {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1 1 18rem;
+  max-width: 28rem;
+}
+
+.empty-state {
+  text-align: center;
+  background: var(--card-bg);
+  border: 1px dashed #cfcfcf;
+  border-radius: var(--radius);
+  padding: 3rem 1rem;
+}
+
+.fleet-table {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.fleet-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.thumb {
+  display: block;
+  width: 4.5rem;
+  height: 3rem;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.thumb-empty {
+  background: repeating-linear-gradient(135deg, #ececec 0 6px, #e2e2e2 6px 12px);
+}
+
+.car-link {
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.car-link:hover {
+  color: var(--accent);
+}
+
+.status {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  background: #f1f1f1;
+  color: #5f6368;
+}
+
+.status.listed {
+  background: #d1e7dd;
+  color: #0a3622;
+}

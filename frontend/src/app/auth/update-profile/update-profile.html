@@ -1,17 +1,21 @@
-<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh; background-color: #f8f9fa;">
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
-    <h2 class="mb-4 text-center">Update Profile</h2>
+<div class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 440px;">
+    <h1 class="h2 mb-4 text-center">{{ 'profile.edit' | translate }}</h1>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="mb-3">
-        <input formControlName="first_name" class="form-control" placeholder="First Name" />
+        <label for="up-first" class="form-label">{{ 'auth.firstName' | translate }}</label>
+        <input id="up-first" formControlName="first_name" type="text" class="form-control" autocomplete="given-name" />
       </div>
       <div class="mb-3">
-        <input formControlName="last_name" class="form-control" placeholder="Last Name" />
+        <label for="up-last" class="form-label">{{ 'auth.lastName' | translate }}</label>
+        <input id="up-last" formControlName="last_name" type="text" class="form-control" autocomplete="family-name" />
       </div>
       <div class="mb-3">
-        <input formControlName="email" class="form-control" placeholder="Email" />
+        <label for="up-email" class="form-label">{{ 'auth.email' | translate }}</label>
+        <input id="up-email" formControlName="email" type="email" class="form-control" autocomplete="email" />
       </div>
-      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">Update Profile</button>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">{{ 'profile.save' | translate }}</button>
     </form>
+    <a routerLink="/auth/profile" class="btn btn-link w-100 mt-2">{{ 'profile.back' | translate }}</a>
   </div>
 </div>

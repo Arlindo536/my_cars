@@ -1,26 +1,32 @@
-<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh; background-color: #f8f9fa;">
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
-    <h2 class="mb-4 text-center">Edit User</h2>
+<div class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 440px;">
+    <h1 class="h2 mb-4 text-center">{{ 'users.editTitle' | translate }}</h1>
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="mb-3">
-        <input formControlName="username" class="form-control" placeholder="Username" />
+        <label for="uf-username" class="form-label">{{ 'auth.username' | translate }}</label>
+        <input id="uf-username" formControlName="username" type="text" class="form-control" />
       </div>
       <div class="mb-3">
-        <input formControlName="email" class="form-control" placeholder="Email" />
+        <label for="uf-email" class="form-label">{{ 'auth.email' | translate }}</label>
+        <input id="uf-email" formControlName="email" type="email" class="form-control" />
       </div>
       <div class="mb-3">
-        <input formControlName="first_name" class="form-control" placeholder="First Name" />
+        <label for="uf-first" class="form-label">{{ 'auth.firstName' | translate }}</label>
+        <input id="uf-first" formControlName="first_name" type="text" class="form-control" />
       </div>
       <div class="mb-3">
-        <input formControlName="last_name" class="form-control" placeholder="Last Name" />
+        <label for="uf-last" class="form-label">{{ 'auth.lastName' | translate }}</label>
+        <input id="uf-last" formControlName="last_name" type="text" class="form-control" />
       </div>
       <div class="mb-3">
-        <select formControlName="role" class="form-select">
-          <option value="customer">Customer</option>
-          <option value="admin">Admin</option>
+        <label for="uf-role" class="form-label">{{ 'users.role' | translate }}</label>
+        <select id="uf-role" formControlName="role" class="form-select">
+          <option value="customer">{{ 'users.roleCustomer' | translate }}</option>
+          <option value="admin">{{ 'users.roleAdmin' | translate }}</option>
         </select>
       </div>
-      <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">Save</button>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">{{ 'profile.save' | translate }}</button>
     </form>
+    <a routerLink="/admin/users" class="btn btn-link w-100 mt-2">{{ 'users.back' | translate }}</a>
   </div>
 </div>

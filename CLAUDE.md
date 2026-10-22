@@ -22,7 +22,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 
 ## Findings about the original code
 - Fixed in step 0: `RegisterSerializer.validate` sat outside the class (password confirmation never checked); stray empty `backend/__init__.py` broke test discovery.
-- Admin screens link to `/cars/:id` and reuse the `car` module (detail/edit). Do NOT delete the `car` module; later move what admin needs into the admin module.
+- Step 8 moved the admin fleet into the admin module (`/admin/cars`, `/admin/cars/new`, `/admin/cars/:id/edit`). The old `car` module (`/cars`, from when customers added their own cars) is now admin-only and unlinked; ask Arlindo before deleting it.
 - API base URLs: moved to `src/environments/environment(.prod).ts` in step 1 (prod uses relative `/api`).
 - Frontend specs: 16 of 27 generated `should create` specs fail (missing HttpClient/MatSnackBar/router providers in TestBed); pre-existing, fix when touching each component.
 - Step 2: the 11 pre-existing dev cars (owned by customers) have `price_per_day = 0` and no photo; the catalog must hide or handle them (ask Arlindo before deleting). Demo cars have no photos yet (his decision); the frontend needs a placeholder.
@@ -35,8 +35,10 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Headless Chrome in this environment has no Albanian ICU data, so its calendar shows English month names for sq; de/en are fine. Real browsers use `sq-AL`.
 - Login accepts `?returnUrl=` (relative app paths only, via the router); `authGuard` sets it.
 - Step 5: office name/address/coordinates live in `environment(.prod).ts` (placeholder until Arlindo picks the real address). Leaflet stays in the lazy catalog chunk; its CSS is global and marker PNGs are copied to `/leaflet` (angular.json). Tiles come from tile.openstreetmap.org (fine for a low-traffic portfolio; check OSM tile policy before heavy use).
-- Step 6: still English-only: profile, change-password, update-profile, the customer `car` module and admin pages (rework in step 8). Car descriptions come from the DB in Albanian only (ask Arlindo if he wants per-language descriptions). Backend error messages are English; the UI shows translated generic messages instead of server text.
+- Step 6/8: everything is translated except the legacy `car` module. Car descriptions come from the DB in Albanian only (ask Arlindo if he wants per-language descriptions). Backend error messages are English; the UI shows translated generic messages instead of server text.
 - Step 7 (messaging): one `Conversation` per (customer, car); any admin can read and answer every thread (admins act for the rental). Customers see others' threads as 404. `is_read` is a single flag per message (shared by all admins). Polling: thread 5 s with `?after=<last id>`, inbox 15 s, nav unread badge 30 s, all paused while the tab is hidden. Sending is throttled (`send_message`: 20/min, POST only via `SendMessageThrottle`); GET polling is never throttled. Message bodies are stored verbatim and rendered only via interpolation (`white-space: pre-wrap`); verified that `<img onerror>` shows as text. Inbox serializer does 2 queries per conversation (last message, unread): fine for 20 per page, annotate if it grows.
+- Step 8: customers can no longer create cars (`POST /api/cars/` is admin-only; admins use `admin-create/`, owner defaults to the requesting admin). Photos: `POST/DELETE /api/cars/<id>/image/` (admin, multipart `image`), validated with Pillow (JPEG/PNG/WebP, max 5 MB), re-encoded to JPEG (max 1600 px, EXIF/GPS dropped) under a random `cars/<uuid>.jpg` name; old files are deleted on replace, removal and car deletion. `CarSerializer` returns absolute image URLs when given the request. Admin landing page is `/admin/bookings` (confirm/reject pending); customers land on `/` after login. `adminGuard` now redirects to `/` (it pointed to `/cars`, which would loop now that `/cars` is admin-only). Prices render through the shared `price` pipe ("35 €", "99,50 €").
+- Test quirk: specs for components declared in a feature module import that module (e.g. `AdminModule`) instead of re-declaring the component, otherwise exported components/pipes are not in scope.
 - Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1; ~620 kB after step 4: Material form-field/datepicker code shared with the app shell; ~658 kB after step 6: ngx-translate + sq/de locale data).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
 - `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
@@ -76,7 +78,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 5: map component (Leaflet, office at Skanderbeg Square placeholder 41.3275, 19.8187).
 - [x] Step 6: sq/en/de translations (@ngx-translate 18.0.0).
 - [x] Step 7: `messaging` app + UI.
-- [ ] Step 8: admin changes (car form with price/description/image, bookings, messages).
+- [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [ ] Step 9: README with screenshots, Docker Compose, production settings (env-driven), deploy (Arlindo has a headless ThinkPad server).
 Later: security audit write-up (OWASP-style: auth, IDOR on bookings/messages, XSS in messages, CORS, dependency scans, ZAP).
 

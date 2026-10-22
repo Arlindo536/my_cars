@@ -24,11 +24,15 @@ class CarSerializer(serializers.Serializer):
         return obj.owner.username
 
     def get_image(self, obj):
-        return obj.image.url if obj.image else None
+        if not obj.image:
+            return None
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.image.url) if request else obj.image.url
 
 
 class AdminCarSerializer(serializers.Serializer):
-    owner_id = serializers.IntegerField()
+    # The fleet belongs to the admin creating the car unless another owner is given
+    owner_id = serializers.IntegerField(required=False)
     model = serializers.CharField()
     year = serializers.IntegerField()
     km = serializers.IntegerField()

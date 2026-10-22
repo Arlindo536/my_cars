@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../user';
+import { Language } from '../../language';
 import { Notification } from '../../notification';
 
 @Component({
@@ -11,6 +12,7 @@ import { Notification } from '../../notification';
   styleUrl: './update-profile.css'
 })
 export class UpdateProfile implements OnInit {
+  private language = inject(Language);
   form: FormGroup;
 
   constructor(
@@ -38,11 +40,11 @@ export class UpdateProfile implements OnInit {
   if (this.form.valid) {
     this.userService.updateProfile(this.form.value).subscribe({
       next: () => {
-        this.notification.success('Profile updated successfully.');
+        this.notification.success(this.language.t('profile.updated'));
         this.router.navigate(['/auth/profile']);
       },
       error: () => {
-        this.notification.error('Failed to update profile.');
+        this.notification.error(this.language.t('profile.updateFailed'));
       }
     });
   }

@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Admin } from '../admin';
+import { Language } from '../../language';
 import { Notification } from '../../notification';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 
@@ -12,6 +13,7 @@ import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
   styleUrl: './user-detail.css'
 })
 export class UserDetail implements OnInit {
+  private language = inject(Language);
   user: any = null;
   userId!: number;
 
@@ -31,15 +33,17 @@ export class UserDetail implements OnInit {
         this.user = data.results.find((u: any) => u.id === this.userId);
         this.cdr.detectChanges();
       },
-      error: () => this.notification.error('Failed to load user.')
+      error: () => this.notification.error(this.language.t('users.loadFailed'))
     });
   }
 
   deleteUser() {
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
-        title: 'Delete User',
-        message: `Are you sure you want to delete ${this.user.username}? This cannot be undone.`
+        title: this.language.t('users.deleteTitle'),
+        message: this.language.t('users.deleteMessage', { name: this.user.username }),
+        confirmLabel: this.language.t('admin.delete'),
+        cancelLabel: this.language.t('admin.cancel')
       }
     });
 
@@ -47,10 +51,10 @@ export class UserDetail implements OnInit {
       if (confirmed) {
         this.adminService.deleteUser(this.userId).subscribe({
           next: () => {
-            this.notification.success('User deleted successfully.');
+            this.notification.success(this.language.t('users.deleted'));
             this.router.navigate(['/admin/users']);
           },
-          error: () => this.notification.error('Failed to delete user.')
+          error: () => this.notification.error(this.language.t('users.deleteFailed'))
         });
       }
     });

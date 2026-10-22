@@ -7,11 +7,15 @@ import { UserList } from './user-list/user-list';
 import { AdminCarList } from './admin-car-list/admin-car-list';
 import { UserForm } from './user-form/user-form';
 import { UserCreate } from './user-create/user-create';
-import { AdminCarCreate } from './admin-car-create/admin-car-create';
+import { AdminCarForm } from './admin-car-form/admin-car-form';
+import { AdminBookings } from './admin-bookings/admin-bookings';
+import { MatDialogModule } from '@angular/material/dialog';
+import { TranslatePipe } from '@ngx-translate/core';
+import { SharedModule } from '../shared/shared-module';
 import { UserDetail } from './user-detail/user-detail';
 
 @NgModule({
-  declarations: [UserList, AdminCarList, UserForm, UserCreate, AdminCarCreate, UserDetail],
-  imports: [CommonModule, AdminRoutingModule, ReactiveFormsModule, FormsModule],
+  declarations: [UserList, AdminCarList, UserForm, UserCreate, AdminCarForm, UserDetail, AdminBookings],
+  imports: [CommonModule, AdminRoutingModule, ReactiveFormsModule, FormsModule, MatDialogModule, TranslatePipe, SharedModule],
 })
 export class AdminModule {}
