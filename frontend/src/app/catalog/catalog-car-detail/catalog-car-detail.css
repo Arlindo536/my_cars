@@ -1,0 +1,106 @@
+.title-band {
+  padding-top: 1.75rem;
+  padding-bottom: 1rem;
+}
+
+.back-link {
+  color: var(--text-on-dark-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.back-link:hover {
+  color: #ffffff;
+}
+
+.car-title {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  margin: 0.4rem 0 0.2rem;
+}
+
+.car-subtitle {
+  color: var(--text-on-dark-muted);
+  font-size: 1.05rem;
+}
+
+.photo {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #e9e9e9;
+}
+
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.spec-panel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  background: var(--ink-2);
+  color: var(--text-on-dark);
+  border-top: 4px solid var(--accent);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 1.25rem;
+  margin: 1.5rem 0 0;
+}
+
+@media (min-width: 768px) {
+  .spec-panel {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.spec-panel dt {
+  color: var(--text-on-dark-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.spec-panel dd {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.description {
+  font-size: 1.05rem;
+  max-width: 44rem;
+}
+
+.booking-card {
+  position: sticky;
+  top: 5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.booking-head {
+  background: var(--ink);
+  color: #ffffff;
+  padding: 1rem 1.25rem;
+}
+
+.booking-price {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2.4rem;
+}
+
+.booking-unit {
+  color: var(--text-on-dark-muted);
+  margin-left: 0.25rem;
+}
+
+.booking-body {
+  padding: 1.25rem;
+}

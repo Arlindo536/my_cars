@@ -100,3 +100,78 @@ class SeedDemoCommandTests(TestCase):
         make_user('someone')
         with self.assertRaises(CommandError):
             call_command('seed_demo', '--owner', 'someone', stdout=StringIO())
+
+
+class CatalogApiTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.admin = make_user('boss', role='admin')
+        customer = make_user('cust')
+
+        def car(model, price, **extra):
+            fields = dict(
+                model=model, year=2021, km=1000, fuel_type='petrol', transmission_type='manual',
+                type='sedan', price_per_day=Decimal(price), owner=self.admin,
+            )
+            fields.update(extra)
+            return Car.objects.create(**fields)
+
+        self.golf = car('VW Golf', '35.00', type='hatchback', fuel_type='diesel')
+        self.tesla = car('Tesla Model 3', '85.00', fuel_type='electric', transmission_type='automatic', year=2023)
+        self.duster = car('Dacia Duster', '40.00', type='suv', fuel_type='diesel')
+        self.unpriced = car('Old customer car', '0.00', owner=customer)
+
+    def ids(self, response):
+        return [c['id'] for c in response.json()['results']]
+
+    def test_catalog_is_public_and_hides_unpriced_cars(self):
+        response = self.client.get('/api/cars/catalog/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['count'], 3)
+        self.assertNotIn(self.unpriced.id, self.ids(response))
+
+    def test_catalog_ignores_invalid_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token not-a-real-token')
+        self.assertEqual(self.client.get('/api/cars/catalog/').status_code, 200)
+
+    def test_catalog_does_not_expose_owner(self):
+        result = self.client.get('/api/cars/catalog/').json()['results'][0]
+        self.assertNotIn('owner', result)
+
+    def test_default_ordering_is_cheapest_first(self):
+        response = self.client.get('/api/cars/catalog/')
+        self.assertEqual(self.ids(response), [self.golf.id, self.duster.id, self.tesla.id])
+
+    def test_ordering_by_year_descending(self):
+        response = self.client.get('/api/cars/catalog/', {'ordering': '-year'})
+        self.assertEqual(self.ids(response)[0], self.tesla.id)
+
+    def test_filters_combine(self):
+        response = self.client.get('/api/cars/catalog/', {'fuel': 'diesel', 'type': 'suv'})
+        self.assertEqual(self.ids(response), [self.duster.id])
+
+    def test_search_and_transmission(self):
+        response = self.client.get('/api/cars/catalog/', {'search': 'tesla', 'transmission': 'automatic'})
+        self.assertEqual(self.ids(response), [self.tesla.id])
+
+    def test_price_range(self):
+        response = self.client.get('/api/cars/catalog/', {'min_price': '36', 'max_price': '80'})
+        self.assertEqual(self.ids(response), [self.duster.id])
+
+    def test_invalid_parameters_are_rejected(self):
+        for params in ({'ordering': 'owner'}, {'fuel': 'coal'}, {'min_price': 'abc'},
+                       {'min_price': '90', 'max_price': '10'}):
+            self.assertEqual(self.client.get('/api/cars/catalog/', params).status_code, 400, params)
+
+    def test_detail_is_public(self):
+        response = self.client.get(f'/api/cars/catalog/{self.golf.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['model'], 'VW Golf')
+        self.assertEqual(response.json()['price_per_day'], '35.00')
+
+    def test_detail_of_unpriced_car_is_404(self):
+        self.assertEqual(self.client.get(f'/api/cars/catalog/{self.unpriced.id}/').status_code, 404)
+
+    def test_owner_only_endpoints_still_require_login(self):
+        self.assertEqual(self.client.get('/api/cars/').status_code, 401)
+        self.assertEqual(self.client.get(f'/api/cars/{self.golf.id}/').status_code, 401)

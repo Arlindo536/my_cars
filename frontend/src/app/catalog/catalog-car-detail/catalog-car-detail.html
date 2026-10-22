@@ -1,0 +1,80 @@
+<div *ngIf="loading()" class="container-xl py-5" aria-busy="true">
+  <p class="text-muted">Duke ngarkuar…</p>
+</div>
+
+<div *ngIf="notFound()" class="container-xl py-5 text-center">
+  <h1>Makina nuk u gjet</h1>
+  <p class="text-muted">Kjo makinë nuk ofrohet më ose lidhja është e gabuar.</p>
+  <a routerLink="/" class="btn btn-dark">Kthehu te makinat</a>
+</div>
+
+<div *ngIf="failed()" class="container-xl py-5 text-center">
+  <p class="mb-3">Makina nuk u ngarkua. Kontrollo lidhjen dhe provo përsëri.</p>
+  <button type="button" class="btn btn-dark" (click)="load()">Provo përsëri</button>
+</div>
+
+<ng-container *ngIf="car() as car">
+  <section class="dark-band-wrap">
+    <div class="dark-band">
+      <div class="container-xl title-band">
+        <a routerLink="/" class="back-link">‹ Të gjitha makinat</a>
+        <h1 class="car-title">{{ car.model }}</h1>
+        <p class="car-subtitle mb-0">{{ car.year }} · {{ typeLabels[car.type] || car.type }}</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-xl py-4">
+    <div class="row g-4">
+      <div class="col-12 col-lg-8">
+        <div class="photo">
+          <img *ngIf="car.image; else placeholder" [src]="car.image" [alt]="car.model" />
+          <ng-template #placeholder><app-car-placeholder></app-car-placeholder></ng-template>
+        </div>
+
+        <dl class="spec-panel">
+          <div>
+            <dt>Viti</dt>
+            <dd>{{ car.year }}</dd>
+          </div>
+          <div>
+            <dt>Karburanti</dt>
+            <dd>{{ fuelLabels[car.fuel_type] || car.fuel_type }}</dd>
+          </div>
+          <div>
+            <dt>Kambio</dt>
+            <dd>{{ transmissionLabels[car.transmission_type] || car.transmission_type }}</dd>
+          </div>
+          <div>
+            <dt>Tipi</dt>
+            <dd>{{ typeLabels[car.type] || car.type }}</dd>
+          </div>
+          <div>
+            <dt>Kilometrazhi</dt>
+            <dd>{{ car.km | number }} km</dd>
+          </div>
+        </dl>
+
+        <section *ngIf="car.description" class="mt-4">
+          <h2 class="section-title">Përshkrimi</h2>
+          <p class="description">{{ car.description }}</p>
+        </section>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <aside class="booking-card" aria-label="Rezervimi">
+          <div class="booking-head">
+            <span class="booking-price">{{ car.price_per_day | number: '1.0-2' }} €</span>
+            <span class="booking-unit">/ ditë</span>
+          </div>
+          <div class="booking-body">
+            <p class="text-muted small mb-3">
+              Zgjedhja e datave dhe rezervimi online do të jenë të disponueshme së shpejti.
+            </p>
+            <button type="button" class="btn btn-primary w-100" disabled>Rezervo tani</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</ng-container>

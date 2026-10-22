@@ -1,0 +1,19 @@
+<article class="car-card h-100">
+  <div class="car-photo">
+    <img *ngIf="car.image; else placeholder" [src]="car.image" [alt]="car.model" loading="lazy" />
+    <ng-template #placeholder><app-car-placeholder></app-car-placeholder></ng-template>
+    <span class="price-tag car-price"><span>{{ car.price_per_day | number: '1.0-2' }} € <small>/ ditë</small></span></span>
+  </div>
+  <div class="car-body">
+    <h3 class="car-name">{{ car.model }}</h3>
+    <p class="car-meta">{{ car.year }} · {{ typeLabels[car.type] || car.type }}</p>
+    <ul class="pills list-unstyled">
+      <li>{{ fuelLabels[car.fuel_type] || car.fuel_type }}</li>
+      <li>{{ transmissionLabels[car.transmission_type] || car.transmission_type }}</li>
+      <li>{{ car.km | number }} km</li>
+    </ul>
+    <a class="btn btn-dark w-100 mt-auto" [routerLink]="['/catalog', car.id]">
+      Shiko detajet<span class="visually-hidden">: {{ car.model }}</span>
+    </a>
+  </div>
+</article>

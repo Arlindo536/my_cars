@@ -27,6 +27,10 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Frontend specs: 16 of 27 generated `should create` specs fail (missing HttpClient/MatSnackBar/router providers in TestBed); pre-existing, fix when touching each component.
 - Step 2: the 11 pre-existing dev cars (owned by customers) have `price_per_day = 0` and no photo; the catalog must hide or handle them (ask Arlindo before deleting). Demo cars have no photos yet (his decision); the frontend needs a placeholder.
 - `price_per_day`/`description` are optional in `CarSerializer` so the old edit form (which does not send them) cannot reset them on PUT.
+- Step 3: `CarDetailView` had `permission_classes = [IsOwnerOrAdmin]` only, so anonymous requests crashed with 500 (AnonymousUser has no `role`); fixed to `[IsAuthenticated, IsOwnerOrAdmin]`. Check other views for the same pattern in the security audit.
+- Arlindo's local `.env` sets `CORS_ALLOWED_ORIGINS=http://localhost:4201`, so run `ng serve --port 4201` locally.
+- Catalog: cars with `price_per_day = 0` are hidden (his decision). Prices are EUR. Numbers use the default en-US locale (`48,000 km`) until step 6 registers `sq`.
+- `GET /api/cars/<id>/availability/` moves to step 4 (needs bookings). Detail page booking card is a disabled placeholder until then.
 - Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
 - `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
@@ -61,7 +65,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 0: local setup, register bug fix, first tests, `.env.example`, version checks.
 - [x] Step 1: theme (CSS variables, fonts), nav-bar, footer, `environment.ts`.
 - [x] Step 2: new `Car` fields + migration, `seed_demo` management command (15-20 fictional cars), media settings.
-- [ ] Step 3: public catalog endpoints + home page with filters + car detail page.
+- [x] Step 3: public catalog endpoints + home page with filters + car detail page.
 - [ ] Step 4: `bookings` app, tests (overlap, price, permissions), datepicker UI, my bookings.
 - [ ] Step 5-6: map component, sq/en translations.
 - [ ] Step 7: `messaging` app + UI.

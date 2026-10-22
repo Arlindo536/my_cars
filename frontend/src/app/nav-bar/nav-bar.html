@@ -1,6 +1,6 @@
 <header class="site-header">
   <nav class="container-xl d-flex flex-wrap align-items-center py-2" aria-label="Navigimi kryesor">
-    <a class="brand" href="/" (click)="$event.preventDefault(); goHome()">
+    <a class="brand" routerLink="/" (click)="menuOpen = false">
       <span class="brand-mark" aria-hidden="true"><i class="material-icons">directions_car</i></span>
       <span class="brand-text">My<span class="text-accent">Cars</span></span>
     </a>
@@ -17,6 +17,7 @@
     </button>
 
     <div id="main-menu" class="menu ms-md-auto" [class.open]="menuOpen" (click)="closeMenu($event)">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link-item">Makinat me qira</a>
       <ng-container *ngIf="isLoggedIn">
         <ng-container *ngIf="role === 'customer'">
           <a routerLink="/cars" routerLinkActive="active" class="nav-link-item">Makinat e mia</a>
@@ -24,7 +25,7 @@
         </ng-container>
         <ng-container *ngIf="role === 'admin'">
           <a routerLink="/admin/users" routerLinkActive="active" class="nav-link-item">Përdoruesit</a>
-          <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link-item">Makinat</a>
+          <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link-item">Flota (admin)</a>
         </ng-container>
         <button type="button" class="btn btn-outline-light btn-sm nav-cta" (click)="logout()">
           <i class="material-icons" aria-hidden="true">logout</i> Dil

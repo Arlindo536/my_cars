@@ -4,9 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from .models import Car
-from .serializers import CarSerializer, AdminCarSerializer
+from .serializers import CarSerializer, AdminCarSerializer, CatalogCarSerializer, CatalogQuerySerializer
 from .permissions import IsOwnerOrAdmin
 from users.models import CustomUser
 
@@ -17,6 +18,10 @@ class CarPagination(PageNumberPagination):
 
 class OwnerPagination(PageNumberPagination):
     page_size = 3
+
+
+class CatalogPagination(PageNumberPagination):
+    page_size = 9
 
 
 class AdminCarCreateView(APIView):
@@ -95,7 +100,7 @@ class CarView(APIView):
 
 
 class CarDetailView(APIView):
-    permission_classes = [IsOwnerOrAdmin]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin]
 
     def get(self, request, pk):
         car = get_object_or_404(Car, pk=pk)
@@ -120,3 +125,49 @@ class CarDetailView(APIView):
         self.check_object_permissions(request, car)
         car.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def catalog_cars():
+    # Cars without a price (e.g. old customer cars) are not offered for rent
+    return Car.objects.filter(price_per_day__gt=0)
+
+
+class CatalogListView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        query = CatalogQuerySerializer(data=request.query_params)
+        if not query.is_valid():
+            return Response(query.errors, status=status.HTTP_400_BAD_REQUEST)
+        filters = query.validated_data
+
+        cars = catalog_cars()
+        if filters.get('search'):
+            cars = cars.filter(model__icontains=filters['search'])
+        if 'type' in filters:
+            cars = cars.filter(type=filters['type'])
+        if 'fuel' in filters:
+            cars = cars.filter(fuel_type=filters['fuel'])
+        if 'transmission' in filters:
+            cars = cars.filter(transmission_type=filters['transmission'])
+        if 'min_price' in filters:
+            cars = cars.filter(price_per_day__gte=filters['min_price'])
+        if 'max_price' in filters:
+            cars = cars.filter(price_per_day__lte=filters['max_price'])
+        # id as tie-breaker keeps pagination stable
+        cars = cars.order_by(filters.get('ordering', 'price_per_day'), 'id')
+
+        paginator = CatalogPagination()
+        result_page = paginator.paginate_queryset(cars, request)
+        serializer = CatalogCarSerializer(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
+
+
+class CatalogDetailView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        car = get_object_or_404(catalog_cars(), pk=pk)
+        return Response(CatalogCarSerializer(car, context={'request': request}).data)

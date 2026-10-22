@@ -32,16 +32,4 @@ export class NavBar {
     localStorage.removeItem('role');
     this.router.navigate(['/auth/login']);
   }
-
-  // Until the public catalog exists (step 3) "home" depends on the role
-  goHome() {
-    this.menuOpen = false;
-    if (!this.isLoggedIn) {
-      this.router.navigate(['/auth/login']);
-    } else if (this.role === 'admin') {
-      this.router.navigate(['/admin/users']);
-    } else {
-      this.router.navigate(['/cars']);
-    }
-  }
 }

@@ -1,0 +1,128 @@
+<section class="dark-band-wrap">
+  <div class="dark-band hero">
+    <div class="container-xl hero-inner">
+      <p class="hero-kicker">Makina me qira · Tiranë</p>
+      <h1 class="hero-title">Merr timonin.<br /><span class="text-accent">Shqipëria të pret.</span></h1>
+      <p class="hero-lead">
+        Zgjidh nga flota jonë makinën e duhur për qytetin, bregdetin ose malet, me çmim të qartë për çdo ditë.
+      </p>
+      <button type="button" class="btn btn-primary btn-lg" (click)="scrollToCars()">Shiko makinat</button>
+    </div>
+  </div>
+</section>
+
+<section id="makinat" class="container-xl catalog">
+  <form class="filter-bar" [formGroup]="filters" (submit)="$event.preventDefault()" role="search" aria-label="Filtro makinat">
+    <div class="filter-field filter-search">
+      <label for="f-search">Kërko</label>
+      <input id="f-search" type="search" class="form-control" formControlName="search" placeholder="p.sh. Golf, Tesla…" autocomplete="off" />
+    </div>
+    <div class="filter-field">
+      <label for="f-type">Tipi</label>
+      <select id="f-type" class="form-select" formControlName="type">
+        <option value="">Të gjitha</option>
+        <option *ngFor="let o of typeOptions" [value]="o[0]">{{ o[1] }}</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-fuel">Karburanti</label>
+      <select id="f-fuel" class="form-select" formControlName="fuel">
+        <option value="">Të gjitha</option>
+        <option *ngFor="let o of fuelOptions" [value]="o[0]">{{ o[1] }}</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-transmission">Kambio</label>
+      <select id="f-transmission" class="form-select" formControlName="transmission">
+        <option value="">Të gjitha</option>
+        <option *ngFor="let o of transmissionOptions" [value]="o[0]">{{ o[1] }}</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="f-ordering">Rendit</label>
+      <select id="f-ordering" class="form-select" formControlName="ordering">
+        <option *ngFor="let o of orderingOptions" [value]="o[0]">{{ o[1] }}</option>
+      </select>
+    </div>
+    <div class="filter-field filter-clear">
+      <button type="button" class="btn btn-outline-light w-100" (click)="clearFilters()" [disabled]="!hasActiveFilters">Pastro</button>
+    </div>
+  </form>
+
+  <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-3">
+    <h2 class="section-title mb-0">Makinat tona</h2>
+    <p class="text-muted mb-0" aria-live="polite">
+      <ng-container *ngIf="!loading() && !failed()">{{ count() }} {{ count() === 1 ? 'makinë' : 'makina' }}</ng-container>
+    </p>
+  </div>
+
+  <div *ngIf="loading()" class="row g-4" aria-busy="true">
+    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let i of [1, 2, 3]">
+      <div class="skeleton"></div>
+    </div>
+  </div>
+
+  <div *ngIf="failed()" class="empty-state">
+    <p class="mb-3">Makinat nuk u ngarkuan. Kontrollo lidhjen dhe provo përsëri.</p>
+    <button type="button" class="btn btn-dark" (click)="load()">Provo përsëri</button>
+  </div>
+
+  <div *ngIf="!loading() && !failed() && cars().length === 0" class="empty-state">
+    <p class="mb-3">Asnjë makinë nuk përputhet me filtrat.</p>
+    <button type="button" class="btn btn-dark" (click)="clearFilters()">Pastro filtrat</button>
+  </div>
+
+  <div *ngIf="!loading() && cars().length > 0" class="row g-4">
+    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let car of cars()">
+      <app-car-card [car]="car"></app-car-card>
+    </div>
+  </div>
+
+  <nav *ngIf="!loading() && totalPages() > 1" class="d-flex justify-content-center gap-2 mt-4" aria-label="Faqet">
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === 1" (click)="goToPage(page() - 1)">
+      <span aria-hidden="true">‹</span><span class="visually-hidden">Faqja e mëparshme</span>
+    </button>
+    <button
+      type="button"
+      *ngFor="let p of pageNumbers()"
+      class="btn btn-sm"
+      [class.btn-primary]="p === page()"
+      [class.btn-outline-secondary]="p !== page()"
+      [attr.aria-current]="p === page() ? 'page' : null"
+      (click)="goToPage(p)"
+    >
+      {{ p }}
+    </button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">
+      <span aria-hidden="true">›</span><span class="visually-hidden">Faqja tjetër</span>
+    </button>
+  </nav>
+
+  <hr class="road-divider" />
+
+  <h2 class="section-title">Si funksionon</h2>
+  <ol class="steps list-unstyled row g-4 mt-1">
+    <li class="col-12 col-md-4">
+      <span class="step-number">01</span>
+      <h3 class="step-title">Zgjidh makinën</h3>
+      <p>Filtro sipas tipit, karburantit ose kambios dhe krahaso çmimet.</p>
+    </li>
+    <li class="col-12 col-md-4">
+      <span class="step-number">02</span>
+      <h3 class="step-title">Rezervo datat</h3>
+      <p>Zgjidh ditët e marrjes dhe kthimit; çmimi total llogaritet menjëherë.</p>
+    </li>
+    <li class="col-12 col-md-4">
+      <span class="step-number">03</span>
+      <h3 class="step-title">Merr çelësat</h3>
+      <p>Pas konfirmimit, eja në zyrën tonë dhe nisu për rrugë.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="contact">
+  <div class="container-xl py-5">
+    <h2 class="section-title">Na gjeni</h2>
+    <p class="contact-text mb-0">Zyra jonë ndodhet në Tiranë, Shqipëri. Harta dhe adresa e saktë vijnë së shpejti.</p>
+  </div>
+</section>

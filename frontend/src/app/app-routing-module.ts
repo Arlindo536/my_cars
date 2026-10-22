@@ -29,10 +29,16 @@ const routes: Routes = [
     component: Login, 
     canActivate: [guestGuard] 
   },
+  // Public catalog: home page and car pages. Keep it after the other routes.
+  {
+    path: '',
+    loadChildren: () => import('./catalog/catalog-module').then(m => m.CatalogModule)
+  },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

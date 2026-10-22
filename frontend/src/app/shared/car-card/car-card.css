@@ -1,0 +1,70 @@
+.car-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.car-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.car-photo {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #e9e9e9;
+}
+
+.car-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.car-price {
+  position: absolute;
+  right: 0.9rem;
+  bottom: -0.9rem;
+  font-size: 1.35rem;
+}
+
+.car-price small {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.car-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.4rem 1.1rem 1.1rem;
+}
+
+.car-name {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.car-meta {
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.pills li {
+  background: #f1f1f1;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.2rem 0.65rem;
+}
