@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Notification } from '../../notification';
 import { environment } from '../../../environments/environment';
 
@@ -18,6 +18,7 @@ export class Login {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
+    private route: ActivatedRoute,
     private notification: Notification
   ) {
     this.loginForm = this.fb.group({
@@ -34,7 +35,10 @@ export class Login {
             localStorage.setItem('token', response.token);
             localStorage.setItem('role', response.role);
             this.notification.success('Login successful.');
-            if (response.role === 'admin') {
+            const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+            if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
+              this.router.navigateByUrl(returnUrl);
+            } else if (response.role === 'admin') {
               this.router.navigate(['/admin/users']);
             } else {
               this.router.navigate(['/cars']);

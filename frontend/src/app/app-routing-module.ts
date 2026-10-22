@@ -17,6 +17,11 @@ const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'bookings',
+    loadChildren: () => import('./booking/booking-module').then(m => m.BookingModule),
+    canActivate: [authGuard]
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./admin/admin-module').then(m => m.AdminModule),
     canActivate: [authGuard, adminGuard]

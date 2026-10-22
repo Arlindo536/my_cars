@@ -1,0 +1,140 @@
+import { Component, DestroyRef, Input, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { EMPTY, catchError, debounceTime, filter, switchMap } from 'rxjs';
+import { CatalogCar } from '../../shared/car-labels';
+import { BookedRange, Bookings, Quote, fromApiDate, toApiDate } from '../../booking/bookings';
+import { Notification } from '../../notification';
+
+@Component({
+  selector: 'app-booking-card',
+  standalone: false,
+  templateUrl: './booking-card.html',
+  styleUrl: './booking-card.css'
+})
+export class BookingCard implements OnInit {
+  @Input({ required: true }) car!: CatalogCar;
+
+  private bookings = inject(Bookings);
+  private router = inject(Router);
+  private notification = inject(Notification);
+  private destroyRef = inject(DestroyRef);
+
+  readonly range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
+  readonly minDate = startOfToday();
+  readonly booked = signal<BookedRange[]>([]);
+  readonly quote = signal<Quote | null>(null);
+  readonly quoteError = signal('');
+  readonly submitting = signal(false);
+
+  get role(): string | null {
+    return localStorage.getItem('role');
+  }
+
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  // Greys out past days and days on which the car is already out
+  readonly dateFilter = (date: Date | null): boolean => {
+    if (!date) {
+      return false;
+    }
+    if (date < this.minDate) {
+      return false;
+    }
+    return !this.booked().some(r => date >= fromApiDate(r.start_date) && date < fromApiDate(r.end_date));
+  };
+
+  ngOnInit() {
+    this.loadAvailability();
+
+    this.range.valueChanges
+      .pipe(
+        debounceTime(150),
+        filter(() => {
+          this.quote.set(null);
+          this.quoteError.set('');
+          return this.hasCompleteRange();
+        }),
+        // Errors are handled per request so the stream keeps working for the next range
+        switchMap(() => this.bookings.getQuote(this.request()).pipe(
+          catchError(err => {
+            this.quoteError.set(firstError(err) || 'Çmimi nuk u llogarit. Provo përsëri.');
+            return EMPTY;
+          }),
+        )),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(quote => this.quote.set(quote));
+  }
+
+  book() {
+    if (!this.isLoggedIn) {
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl: `/catalog/${this.car.id}` } });
+      return;
+    }
+    if (!this.hasCompleteRange() || !this.quote()?.available) {
+      return;
+    }
+    this.submitting.set(true);
+    this.bookings.createBooking(this.request()).subscribe({
+      next: () => {
+        this.submitting.set(false);
+        this.notification.success('Rezervimi u dërgua. Do të konfirmohet së shpejti.');
+        this.router.navigate(['/bookings']);
+      },
+      error: err => {
+        this.submitting.set(false);
+        if (err.status === 409) {
+          this.notification.error('Këto data sapo u rezervuan nga dikush tjetër. Zgjidh data të tjera.');
+          this.range.reset();
+          this.loadAvailability();
+        } else {
+          this.notification.error(firstError(err) || 'Rezervimi dështoi. Provo përsëri.');
+        }
+      }
+    });
+  }
+
+  private loadAvailability() {
+    this.bookings.getAvailability(this.car.id).subscribe({
+      next: data => this.booked.set(data.booked),
+      // Without availability the server still rejects overlaps; just show all days
+      error: () => this.booked.set([]),
+    });
+  }
+
+  private hasCompleteRange(): boolean {
+    const { start, end } = this.range.getRawValue();
+    return !!start && !!end && end > start;
+  }
+
+  private request() {
+    const { start, end } = this.range.getRawValue();
+    return { car_id: this.car.id, start_date: toApiDate(start!), end_date: toApiDate(end!) };
+  }
+}
+
+function startOfToday(): Date {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+// First validation message from a DRF error response, if any
+function firstError(err: any): string {
+  const body = err?.error;
+  if (!body || typeof body !== 'object') {
+    return '';
+  }
+  if (typeof body.error === 'string') {
+    return body.error;
+  }
+  const first = Object.values(body)[0];
+  return Array.isArray(first) ? String(first[0]) : '';
+}

@@ -1,0 +1,54 @@
+<aside class="booking-card" aria-label="Rezervimi">
+  <div class="booking-head">
+    <span class="booking-price">{{ car.price_per_day | number: '1.0-2' }} €</span>
+    <span class="booking-unit">/ ditë</span>
+  </div>
+
+  <div class="booking-body">
+    <mat-form-field appearance="outline" class="w-100" subscriptSizing="dynamic">
+      <mat-label>Marrja – Kthimi</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [min]="minDate" [dateFilter]="dateFilter">
+        <input matStartDate formControlName="start" placeholder="Marrja" />
+        <input matEndDate formControlName="end" placeholder="Kthimi" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-hint>Ditët e zëna janë gri.</mat-hint>
+    </mat-form-field>
+
+    <div class="summary" aria-live="polite">
+      <ng-container *ngIf="quote() as q">
+        <div *ngIf="q.available; else unavailable">
+          <div class="d-flex justify-content-between">
+            <span>{{ q.price_per_day | number: '1.0-2' }} € × {{ q.days }} ditë</span>
+          </div>
+          <div class="total d-flex justify-content-between align-items-baseline">
+            <span>Totali</span>
+            <span class="total-price">{{ q.total_price | number: '1.0-2' }} €</span>
+          </div>
+        </div>
+        <ng-template #unavailable>
+          <p class="text-danger mb-0">Makina është e zënë për disa nga këto data. Zgjidh data të tjera.</p>
+        </ng-template>
+      </ng-container>
+      <p *ngIf="quoteError()" class="text-danger mb-0">{{ quoteError() }}</p>
+    </div>
+
+    <ng-container [ngSwitch]="isLoggedIn ? role : 'guest'">
+      <button *ngSwitchCase="'customer'" type="button" class="btn btn-primary btn-lg w-100"
+        [disabled]="!quote()?.available || submitting()" (click)="book()">
+        {{ submitting() ? 'Duke rezervuar…' : 'Rezervo tani' }}
+      </button>
+      <ng-container *ngSwitchCase="'admin'">
+        <button type="button" class="btn btn-primary btn-lg w-100" disabled>Rezervo tani</button>
+        <p class="small text-muted mt-2 mb-0">Adminët nuk rezervojnë. Hyr si klient për ta provuar.</p>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <button type="button" class="btn btn-primary btn-lg w-100" (click)="book()">Hyr për të rezervuar</button>
+        <p class="small text-muted mt-2 mb-0">Mund të shohësh çmimin pa llogari.</p>
+      </ng-container>
+    </ng-container>
+
+    <p class="small text-muted mt-3 mb-0">Pa pagesë online: paguan në zyrë kur merr makinën.</p>
+  </div>
+</aside>

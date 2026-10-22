@@ -20,6 +20,7 @@
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link-item">Makinat me qira</a>
       <ng-container *ngIf="isLoggedIn">
         <ng-container *ngIf="role === 'customer'">
+          <a routerLink="/bookings" routerLinkActive="active" class="nav-link-item">Rezervimet e mia</a>
           <a routerLink="/cars" routerLinkActive="active" class="nav-link-item">Makinat e mia</a>
           <a routerLink="/auth/profile" routerLinkActive="active" class="nav-link-item">Profili</a>
         </ng-container>

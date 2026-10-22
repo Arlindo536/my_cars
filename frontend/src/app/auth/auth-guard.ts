@@ -11,6 +11,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
   notification.error('You must be logged in to access this page.');
-  router.navigate(['/auth/login']);
+  router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
   return false;
 };

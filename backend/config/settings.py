@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'users',
     'cars',
+    'bookings',
 ]
 
 MIDDLEWARE = [
@@ -117,7 +118,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# Rental office is in Tirana: "today" for bookings follows local time
+TIME_ZONE = 'Europe/Tirane'
 
 USE_I18N = True
 

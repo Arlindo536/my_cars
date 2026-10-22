@@ -19,11 +19,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
+from bookings.views import CarAvailabilityView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/users/', include('users.urls')),
+    path('api/cars/<int:pk>/availability/', CarAvailabilityView.as_view(), name='car-availability'),
     path('api/cars/', include('cars.urls')),
+    path('api/bookings/', include('bookings.urls')),
 ]
 
 # Serve uploaded files in development only; production uses the web server

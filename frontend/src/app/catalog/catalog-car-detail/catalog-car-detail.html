@@ -62,18 +62,7 @@
       </div>
 
       <div class="col-12 col-lg-4">
-        <aside class="booking-card" aria-label="Rezervimi">
-          <div class="booking-head">
-            <span class="booking-price">{{ car.price_per_day | number: '1.0-2' }} €</span>
-            <span class="booking-unit">/ ditë</span>
-          </div>
-          <div class="booking-body">
-            <p class="text-muted small mb-3">
-              Zgjedhja e datave dhe rezervimi online do të jenë të disponueshme së shpejti.
-            </p>
-            <button type="button" class="btn btn-primary w-100" disabled>Rezervo tani</button>
-          </div>
-        </aside>
+        <app-booking-card [car]="car"></app-booking-card>
       </div>
     </div>
   </div>

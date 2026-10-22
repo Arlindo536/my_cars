@@ -30,8 +30,11 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Step 3: `CarDetailView` had `permission_classes = [IsOwnerOrAdmin]` only, so anonymous requests crashed with 500 (AnonymousUser has no `role`); fixed to `[IsAuthenticated, IsOwnerOrAdmin]`. Check other views for the same pattern in the security audit.
 - Arlindo's local `.env` sets `CORS_ALLOWED_ORIGINS=http://localhost:4201`, so run `ng serve --port 4201` locally.
 - Catalog: cars with `price_per_day = 0` are hidden (his decision). Prices are EUR. Numbers use the default en-US locale (`48,000 km`) until step 6 registers `sq`.
-- `GET /api/cars/<id>/availability/` moves to step 4 (needs bookings). Detail page booking card is a disabled placeholder until then.
-- Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1).
+- Step 4 (bookings): `TIME_ZONE = 'Europe/Tirane'` so "today" is local. Rules: start >= today, end > start, max 30 days, max 1 year ahead; return day may be the next pickup day. Only customers book; admins confirm/reject pending (UI in step 8). Customers see others' bookings as 404 (no IDOR). `ConcurrentBookingTests` proves the `select_for_update` lock (it fails without it).
+- Datepicker limitation: one `dateFilter` for both ends, so a booked range's start day cannot be picked as a return day in the UI (the API allows it).
+- Headless Chrome in this environment has no Albanian ICU data, so screenshots show English month names; real browsers use `sq-AL`.
+- Login accepts `?returnUrl=` (relative app paths only, via the router); `authGuard` sets it.
+- Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1; ~620 kB after step 4: Material form-field/datepicker code shared with the app shell).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
 - `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
 - Token in `localStorage`: acceptable here, but note it in the security audit.
@@ -66,7 +69,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 1: theme (CSS variables, fonts), nav-bar, footer, `environment.ts`.
 - [x] Step 2: new `Car` fields + migration, `seed_demo` management command (15-20 fictional cars), media settings.
 - [x] Step 3: public catalog endpoints + home page with filters + car detail page.
-- [ ] Step 4: `bookings` app, tests (overlap, price, permissions), datepicker UI, my bookings.
+- [x] Step 4: `bookings` app, tests (overlap, price, permissions), datepicker UI, my bookings.
 - [ ] Step 5-6: map component, sq/en translations.
 - [ ] Step 7: `messaging` app + UI.
 - [ ] Step 8: admin changes (car form with price/description/image, bookings, messages).
