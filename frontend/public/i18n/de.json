@@ -30,7 +30,8 @@
     "fleet": "Flotte (Admin)",
     "logout": "Abmelden",
     "login": "Anmelden",
-    "register": "Registrieren"
+    "register": "Registrieren",
+    "messages": "Nachrichten"
   },
   "footer": {
     "tagline": "Autovermietung in Tirana. Portfolio-Projekt: Autos und Preise sind Beispiele, keine echten Zahlungen.",
@@ -174,5 +175,31 @@
     "loginHere": "Hier anmelden",
     "registerSuccess": "Konto erstellt. Du kannst dich jetzt anmelden.",
     "registerFailed": "Registrierung fehlgeschlagen. Bitte prüfe deine Angaben."
+  },
+  "messages": {
+    "title": "Nachrichten",
+    "loadError": "Die Nachrichten konnten nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.",
+    "empty": "Du hast noch keine Unterhaltungen. Stelle eine Frage auf der Seite eines Autos.",
+    "emptyAdmin": "Bisher hat kein Kunde geschrieben.",
+    "rentalName": "My Cars",
+    "customer": "Kunde",
+    "you": "Du",
+    "unread": "ungelesen",
+    "with": "Unterhaltung mit {{name}}",
+    "backToInbox": "‹ Alle Unterhaltungen",
+    "notFound": "Unterhaltung nicht gefunden",
+    "placeholder": "Nachricht schreiben…",
+    "send": "Senden",
+    "sending": "Wird gesendet…",
+    "enterHint": "Enter sendet, Umschalt+Enter fügt eine neue Zeile ein.",
+    "sent": "Nachricht gesendet.",
+    "sendFailed": "Die Nachricht konnte nicht gesendet werden. Bitte versuche es erneut.",
+    "tooFast": "Du sendest zu schnell. Warte kurz und versuche es erneut.",
+    "askTitle": "Frag den Vermieter",
+    "askText": "Fragen zu diesem Auto? Wir antworten hier, meist noch am selben Tag.",
+    "askPlaceholder": "z. B. Gibt es einen Kindersitz?",
+    "adminNote": "Admins beantworten Fragen unter Nachrichten.",
+    "loginToAsk": "Zum Fragen anmelden",
+    "messageOwner": "Vermieter kontaktieren"
   }
 }

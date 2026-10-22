@@ -30,7 +30,8 @@
     "fleet": "Flota (admin)",
     "logout": "Dil",
     "login": "Hyr",
-    "register": "Regjistrohu"
+    "register": "Regjistrohu",
+    "messages": "Mesazhet"
   },
   "footer": {
     "tagline": "Makina me qira në Tiranë. Projekt portofoli: makinat dhe çmimet janë shembuj, pa pagesa reale.",
@@ -174,5 +175,31 @@
     "loginHere": "Hyr këtu",
     "registerSuccess": "Llogaria u krijua. Tani mund të hysh.",
     "registerFailed": "Regjistrimi dështoi. Kontrollo të dhënat."
+  },
+  "messages": {
+    "title": "Mesazhet",
+    "loadError": "Mesazhet nuk u ngarkuan. Kontrollo lidhjen dhe provo përsëri.",
+    "empty": "Nuk ke asnjë bisedë ende. Pyet për një makinë nga faqja e saj.",
+    "emptyAdmin": "Asnjë klient nuk ka shkruar ende.",
+    "rentalName": "My Cars",
+    "customer": "Klienti",
+    "you": "Ti",
+    "unread": "të palexuara",
+    "with": "Bisedë me {{name}}",
+    "backToInbox": "‹ Të gjitha bisedat",
+    "notFound": "Biseda nuk u gjet",
+    "placeholder": "Shkruaj një mesazh…",
+    "send": "Dërgo",
+    "sending": "Duke dërguar…",
+    "enterHint": "Enter dërgon, Shift+Enter kalon në rresht të ri.",
+    "sent": "Mesazhi u dërgua.",
+    "sendFailed": "Mesazhi nuk u dërgua. Provo përsëri.",
+    "tooFast": "Po dërgon shumë shpejt. Prit pak dhe provo përsëri.",
+    "askTitle": "Pyet pronarin",
+    "askText": "Ke pyetje për këtë makinë? Të përgjigjemi këtu, zakonisht brenda ditës.",
+    "askPlaceholder": "p.sh. A ka karrige për fëmijë?",
+    "adminNote": "Adminët u përgjigjen pyetjeve te Mesazhet.",
+    "loginToAsk": "Hyr për të pyetur",
+    "messageOwner": "Dërgo mesazh pronarit"
   }
 }

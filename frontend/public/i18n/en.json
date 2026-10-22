@@ -30,7 +30,8 @@
     "fleet": "Fleet (admin)",
     "logout": "Log out",
     "login": "Log in",
-    "register": "Sign up"
+    "register": "Sign up",
+    "messages": "Messages"
   },
   "footer": {
     "tagline": "Car rental in Tirana. Portfolio project: cars and prices are examples, no real payments.",
@@ -174,5 +175,31 @@
     "loginHere": "Log in here",
     "registerSuccess": "Account created. You can now log in.",
     "registerFailed": "Sign-up failed. Please check your details."
+  },
+  "messages": {
+    "title": "Messages",
+    "loadError": "Messages could not be loaded. Check your connection and try again.",
+    "empty": "You have no conversations yet. Ask about a car from its page.",
+    "emptyAdmin": "No customer has written yet.",
+    "rentalName": "My Cars",
+    "customer": "Customer",
+    "you": "You",
+    "unread": "unread",
+    "with": "Conversation with {{name}}",
+    "backToInbox": "‹ All conversations",
+    "notFound": "Conversation not found",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "sending": "Sending…",
+    "enterHint": "Enter sends, Shift+Enter adds a new line.",
+    "sent": "Message sent.",
+    "sendFailed": "The message could not be sent. Please try again.",
+    "tooFast": "You are sending too fast. Wait a moment and try again.",
+    "askTitle": "Ask the owner",
+    "askText": "Questions about this car? We reply here, usually within the day.",
+    "askPlaceholder": "e.g. Is a child seat available?",
+    "adminNote": "Admins answer questions under Messages.",
+    "loginToAsk": "Log in to ask",
+    "messageOwner": "Message the owner"
   }
 }

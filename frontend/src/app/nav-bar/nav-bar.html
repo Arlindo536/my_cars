@@ -28,6 +28,12 @@
           <a routerLink="/admin/users" routerLinkActive="active" class="nav-link-item">{{ 'nav.users' | translate }}</a>
           <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link-item">{{ 'nav.fleet' | translate }}</a>
         </ng-container>
+        <a routerLink="/messages" routerLinkActive="active" class="nav-link-item">
+          {{ 'nav.messages' | translate }}
+          <span *ngIf="messages.unread() > 0" class="nav-badge">
+            {{ messages.unread() }}<span class="visually-hidden"> {{ 'messages.unread' | translate }}</span>
+          </span>
+        </a>
         <button type="button" class="btn btn-outline-light btn-sm nav-cta" (click)="logout()">
           <i class="material-icons" aria-hidden="true">logout</i> {{ 'nav.logout' | translate }}
         </button>

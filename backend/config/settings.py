@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'cars',
     'bookings',
+    'messaging',
 ]
 
 MIDDLEWARE = [
@@ -144,4 +145,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_THROTTLE_RATES': {
+        # Sending messages (messaging.views.SendMessageThrottle)
+        'send_message': '20/min',
+    },
 }

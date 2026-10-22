@@ -1,0 +1,47 @@
+<section class="dark-band-wrap">
+  <div class="dark-band">
+    <div class="container-xl title-band">
+      <h1 class="mb-0">{{ 'messages.title' | translate }}</h1>
+    </div>
+  </div>
+</section>
+
+<div class="container-xl py-4">
+  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+
+  <div *ngIf="failed()" class="empty-state">
+    <p class="mb-3">{{ 'messages.loadError' | translate }}</p>
+    <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </div>
+
+  <div *ngIf="!loading() && !failed() && items().length === 0" class="empty-state">
+    <p class="mb-3">{{ (isAdmin ? 'messages.emptyAdmin' : 'messages.empty') | translate }}</p>
+    <a *ngIf="!isAdmin" routerLink="/" class="btn btn-primary">{{ 'myBookings.pickCar' | translate }}</a>
+  </div>
+
+  <ul *ngIf="!loading() && items().length > 0" class="list-unstyled conversation-list">
+    <li *ngFor="let c of items()">
+      <a [routerLink]="['/messages', c.id]" class="conversation" [class.unread]="c.unread > 0">
+        <div class="conversation-main">
+          <span class="conversation-car">{{ c.car.model }}</span>
+          <span class="conversation-with">{{ isAdmin ? c.customer : ('messages.rentalName' | translate) }}</span>
+          <p *ngIf="c.last_message as m" class="conversation-snippet mb-0">
+            <span *ngIf="m.mine">{{ 'messages.you' | translate }}: </span>{{ m.body }}
+          </p>
+        </div>
+        <div class="conversation-meta">
+          <time [attr.datetime]="c.updated_at">{{ c.updated_at | date: 'd MMM, HH:mm' : undefined : language.locale() }}</time>
+          <span *ngIf="c.unread > 0" class="unread-badge">
+            {{ c.unread }}<span class="visually-hidden"> {{ 'messages.unread' | translate }}</span>
+          </span>
+        </div>
+      </a>
+    </li>
+  </ul>
+
+  <nav *ngIf="!loading() && totalPages() > 1" class="d-flex justify-content-center gap-2 mt-3" [attr.aria-label]="'common.pages' | translate">
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === 1" (click)="goToPage(page() - 1)">{{ 'common.prev' | translate }}</button>
+    <span class="align-self-center small">{{ 'common.pageOf' | translate: { page: page(), total: totalPages() } }}</span>
+    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">{{ 'common.next' | translate }}</button>
+  </nav>
+</div>

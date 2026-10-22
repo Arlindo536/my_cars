@@ -36,6 +36,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Login accepts `?returnUrl=` (relative app paths only, via the router); `authGuard` sets it.
 - Step 5: office name/address/coordinates live in `environment(.prod).ts` (placeholder until Arlindo picks the real address). Leaflet stays in the lazy catalog chunk; its CSS is global and marker PNGs are copied to `/leaflet` (angular.json). Tiles come from tile.openstreetmap.org (fine for a low-traffic portfolio; check OSM tile policy before heavy use).
 - Step 6: still English-only: profile, change-password, update-profile, the customer `car` module and admin pages (rework in step 8). Car descriptions come from the DB in Albanian only (ask Arlindo if he wants per-language descriptions). Backend error messages are English; the UI shows translated generic messages instead of server text.
+- Step 7 (messaging): one `Conversation` per (customer, car); any admin can read and answer every thread (admins act for the rental). Customers see others' threads as 404. `is_read` is a single flag per message (shared by all admins). Polling: thread 5 s with `?after=<last id>`, inbox 15 s, nav unread badge 30 s, all paused while the tab is hidden. Sending is throttled (`send_message`: 20/min, POST only via `SendMessageThrottle`); GET polling is never throttled. Message bodies are stored verbatim and rendered only via interpolation (`white-space: pre-wrap`); verified that `<img onerror>` shows as text. Inbox serializer does 2 queries per conversation (last message, unread): fine for 20 per page, annotate if it grows.
 - Production build: initial bundle ~572 kB exceeds the 500 kB budget warning (was ~562 kB before step 1; ~620 kB after step 4: Material form-field/datepicker code shared with the app shell; ~658 kB after step 6: ngx-translate + sq/de locale data).
 - `app-routing-module.ts` has no `''` route: the public catalog will be the home page.
 - `DEBUG=True`, `ALLOWED_HOSTS=['*']`: make env-driven before deployment.
@@ -74,7 +75,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 4: `bookings` app, tests (overlap, price, permissions), datepicker UI, my bookings.
 - [x] Step 5: map component (Leaflet, office at Skanderbeg Square placeholder 41.3275, 19.8187).
 - [x] Step 6: sq/en/de translations (@ngx-translate 18.0.0).
-- [ ] Step 7: `messaging` app + UI.
+- [x] Step 7: `messaging` app + UI.
 - [ ] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [ ] Step 9: README with screenshots, Docker Compose, production settings (env-driven), deploy (Arlindo has a headless ThinkPad server).
 Later: security audit write-up (OWASP-style: auth, IDOR on bookings/messages, XSS in messages, CORS, dependency scans, ZAP).

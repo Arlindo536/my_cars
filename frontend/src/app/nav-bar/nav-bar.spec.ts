@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TranslatePipe } from '@ngx-translate/core';
 import { provideTestTranslations } from '../../testing/translate';
 
@@ -14,7 +16,7 @@ describe('NavBar', () => {
     await TestBed.configureTestingModule({
       declarations: [NavBar, LanguageSwitcher],
       imports: [RouterModule.forRoot([]), TranslatePipe],
-      providers: [provideTestTranslations()],
+      providers: [provideTestTranslations(), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavBar);

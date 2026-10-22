@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/cars/<int:pk>/availability/', CarAvailabilityView.as_view(), name='car-availability'),
     path('api/cars/', include('cars.urls')),
     path('api/bookings/', include('bookings.urls')),
+    path('api/messages/', include('messaging.urls')),
 ]
 
 # Serve uploaded files in development only; production uses the web server

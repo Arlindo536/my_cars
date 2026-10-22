@@ -1,0 +1,23 @@
+<section id="pyet" class="ask-box" aria-labelledby="ask-title">
+  <h2 id="ask-title" class="section-title">{{ 'messages.askTitle' | translate }}</h2>
+  <p class="text-muted">{{ 'messages.askText' | translate }}</p>
+
+  <ng-container [ngSwitch]="isLoggedIn ? role : 'guest'">
+    <form *ngSwitchCase="'customer'" (submit)="$event.preventDefault(); send()">
+      <label for="ask-body" class="visually-hidden">{{ 'messages.askTitle' | translate }}</label>
+      <textarea
+        id="ask-body"
+        class="form-control mb-2"
+        rows="3"
+        [formControl]="body"
+        [attr.maxlength]="maxLength"
+        [placeholder]="'messages.askPlaceholder' | translate"
+      ></textarea>
+      <button type="submit" class="btn btn-dark" [disabled]="!body.value.trim() || sending()">
+        {{ (sending() ? 'messages.sending' : 'messages.send') | translate }}
+      </button>
+    </form>
+    <p *ngSwitchCase="'admin'" class="small text-muted mb-0">{{ 'messages.adminNote' | translate }}</p>
+    <button *ngSwitchDefault type="button" class="btn btn-dark" (click)="login()">{{ 'messages.loginToAsk' | translate }}</button>
+  </ng-container>
+</section>

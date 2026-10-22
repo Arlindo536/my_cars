@@ -60,6 +60,8 @@
           <p class="description">{{ car.description }}</p>
         </section>
 
+        <app-ask-owner class="d-block mt-4" [car]="car"></app-ask-owner>
+
         <section class="mt-4">
           <h2 class="section-title">{{ 'car.pickupPlace' | translate }}</h2>
           <p class="text-muted">{{ 'car.pickupText' | translate }}</p>

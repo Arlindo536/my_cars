@@ -1,0 +1,88 @@
+.title-band {
+  padding-top: 2rem;
+  padding-bottom: 0.75rem;
+}
+
+.empty-state {
+  text-align: center;
+  background: var(--card-bg);
+  border: 1px dashed #cfcfcf;
+  border-radius: var(--radius);
+  padding: 3rem 1rem;
+}
+
+.conversation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.conversation {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.conversation:hover {
+  border-color: #cfcfcf;
+}
+
+.conversation.unread {
+  border-left-color: var(--accent);
+}
+
+.conversation-main {
+  min-width: 0;
+}
+
+.conversation-car {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+
+.conversation-with {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.conversation-snippet {
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversation.unread .conversation-snippet {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.conversation-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.unread-badge {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: 999px;
+  min-width: 1.5rem;
+  padding: 0.1rem 0.45rem;
+  text-align: center;
+  font-weight: 700;
+}

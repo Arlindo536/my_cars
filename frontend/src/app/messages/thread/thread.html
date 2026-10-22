@@ -1,0 +1,59 @@
+<p *ngIf="loading()" class="container-xl py-5 text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+
+<div *ngIf="notFound()" class="container-xl py-5 text-center">
+  <h1>{{ 'messages.notFound' | translate }}</h1>
+  <a routerLink="/messages" class="btn btn-dark">{{ 'messages.backToInbox' | translate }}</a>
+</div>
+
+<div *ngIf="failed()" class="container-xl py-5 text-center">
+  <p class="mb-3">{{ 'messages.loadError' | translate }}</p>
+  <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+</div>
+
+<ng-container *ngIf="conversation() as c">
+  <section class="dark-band-wrap">
+    <div class="dark-band">
+      <div class="container-xl title-band">
+        <a routerLink="/messages" class="back-link">{{ 'messages.backToInbox' | translate }}</a>
+        <h1 class="thread-title">
+          <a [routerLink]="['/catalog', c.car.id]">{{ c.car.model }}</a>
+        </h1>
+        <p class="thread-with mb-0">
+          {{ 'messages.with' | translate: { name: isAdmin ? c.customer : ('messages.rentalName' | translate) } }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-xl py-4">
+    <div class="chat">
+      <ol #scroller class="chat-log list-unstyled" aria-live="polite" [attr.aria-label]="'messages.title' | translate">
+        <li *ngFor="let m of items()" class="bubble-row" [class.mine]="m.mine">
+          <div class="bubble">
+            <span class="visually-hidden">{{ (m.mine ? 'messages.you' : (isAdmin ? 'messages.customer' : 'messages.rentalName')) | translate }}:</span>
+            <!-- Interpolation escapes HTML: message text is never rendered as markup -->
+            <p class="bubble-text mb-1">{{ m.body }}</p>
+            <time class="bubble-time" [attr.datetime]="m.created_at">{{ m.created_at | date: 'd MMM, HH:mm' : undefined : language.locale() }}</time>
+          </div>
+        </li>
+      </ol>
+
+      <form class="composer" (submit)="$event.preventDefault(); send()">
+        <label for="message-body" class="visually-hidden">{{ 'messages.placeholder' | translate }}</label>
+        <textarea
+          id="message-body"
+          class="form-control"
+          rows="2"
+          [formControl]="body"
+          [attr.maxlength]="maxLength"
+          [placeholder]="'messages.placeholder' | translate"
+          (keydown)="onKeydown($event)"
+        ></textarea>
+        <button type="submit" class="btn btn-primary" [disabled]="!body.value.trim() || sending()">
+          {{ (sending() ? 'messages.sending' : 'messages.send') | translate }}
+        </button>
+      </form>
+      <p class="small text-muted mt-1 mb-0">{{ 'messages.enterHint' | translate }}</p>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,92 @@
+.title-band {
+  padding-top: 1.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.back-link {
+  color: var(--text-on-dark-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.back-link:hover {
+  color: #ffffff;
+}
+
+.thread-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 0.4rem 0 0.2rem;
+}
+
+.thread-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.thread-title a:hover {
+  color: #ff3b55;
+}
+
+.thread-with {
+  color: var(--text-on-dark-muted);
+}
+
+.chat {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  height: min(60vh, 34rem);
+  overflow-y: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.bubble-row {
+  display: flex;
+}
+
+.bubble-row.mine {
+  justify-content: flex-end;
+}
+
+.bubble {
+  max-width: 80%;
+  background: #f1f1f1;
+  border-radius: 12px 12px 12px 2px;
+  padding: 0.55rem 0.8rem;
+}
+
+.mine .bubble {
+  background: var(--ink);
+  color: #ffffff;
+  border-radius: 12px 12px 2px 12px;
+}
+
+.bubble-text {
+  white-space: pre-wrap; /* keep the sender's line breaks */
+  overflow-wrap: anywhere;
+}
+
+.bubble-time {
+  display: block;
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+.composer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.composer textarea {
+  resize: vertical;
+}

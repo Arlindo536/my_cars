@@ -10,9 +10,10 @@ import { SharedModule } from '../shared/shared-module';
 import { Home } from './home/home';
 import { CatalogCarDetail } from './catalog-car-detail/catalog-car-detail';
 import { BookingCard } from './booking-card/booking-card';
+import { AskOwner } from './ask-owner/ask-owner';
 
 @NgModule({
-  declarations: [Home, CatalogCarDetail, BookingCard],
+  declarations: [Home, CatalogCarDetail, BookingCard, AskOwner],
   imports: [
     CommonModule, ReactiveFormsModule, CatalogRoutingModule, SharedModule,
     MatDatepickerModule, MatFormFieldModule, MatInputModule,

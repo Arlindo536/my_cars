@@ -111,6 +111,12 @@ export class BookingCard implements OnInit {
     });
   }
 
+  scrollToAsk() {
+    const box = document.getElementById('pyet');
+    box?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    box?.querySelector<HTMLElement>('textarea, button')?.focus({ preventScroll: true });
+  }
+
   private loadAvailability() {
     this.bookings.getAvailability(this.car.id).subscribe({
       next: data => this.booked.set(data.booked),
