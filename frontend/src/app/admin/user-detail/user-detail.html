@@ -3,7 +3,7 @@
     <div class="text-center mb-4">
       <i class="material-icons" style="font-size: 64px; color: var(--steel);" aria-hidden="true">account_circle</i>
       <h1 class="h2 mt-2 mb-1">{{ user.username }}</h1>
-      <span class="badge" [class.bg-primary]="user.role === 'admin'" [class.bg-secondary]="user.role !== 'admin'">
+      <span class="role-badge" [attr.data-role]="user.role">
         {{ (user.role === 'admin' ? 'users.roleAdmin' : 'users.roleCustomer') | translate }}
       </span>
     </div>

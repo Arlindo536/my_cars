@@ -1,0 +1,10 @@
+home-mobile | perf 79 | a11y 100 | bp 100 | seo 82 | LCP 4.1 s | CLS 0 | TBT 150 ms
+home-desktop | perf 99 | a11y 100 | bp 100 | seo 82 | LCP 0.9 s | CLS 0 | TBT 0 ms
+car-mobile | perf 70 | a11y 100 | bp 100 | seo 82 | LCP 4.7 s | CLS 0 | TBT 310 ms
+car-desktop | perf 98 | a11y 100 | bp 100 | seo 83 | LCP 1.1 s | CLS 0 | TBT 0 ms
+login-mobile | perf 74 | a11y 100 | bp 100 | seo 82 | LCP 4.3 s | CLS 0 | TBT 240 ms
+login-desktop | perf 99 | a11y 100 | bp 100 | seo 82 | LCP 0.9 s | CLS 0 | TBT 0 ms
+register-mobile | perf 74 | a11y 100 | bp 100 | seo 82 | LCP 4.3 s | CLS 0 | TBT 230 ms
+register-desktop | perf 99 | a11y 100 | bp 100 | seo 82 | LCP 0.9 s | CLS 0 | TBT 0 ms
+notfound-mobile | perf 79 | a11y 100 | bp 100 | seo 82 | LCP 3.9 s | CLS 0 | TBT 190 ms
+notfound-desktop | perf 99 | a11y 100 | bp 100 | seo 82 | LCP 0.8 s | CLS 0 | TBT 0 ms

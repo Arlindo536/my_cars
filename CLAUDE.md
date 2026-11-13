@@ -18,7 +18,7 @@ Backend (`backend/`): Django 6 + Django REST Framework, PostgreSQL, Token authen
 - Role checks like the existing code: `request.user.role` (`'admin'` / `'customer'`), `IsOwnerOrAdmin` for object permissions. Default permission is `IsAuthenticated`; public views set `authentication_classes = []` and `permission_classes = [AllowAny]`.
 - Pagination: a `PageNumberPagination` subclass per view.
 - Money: `DecimalField`, never float. The server computes prices, never trust the client.
-Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy-loaded feature modules, services `providedIn: 'root'`, Bootstrap 5.3.3 (npm, bundled) for layout, Angular Material only for dialogs/snackbars/datepicker, token and role in `localStorage`, `authInterceptor`, route guards.
+Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy-loaded feature modules, services `providedIn: 'root'`, Bootstrap 5.3.3 (npm, only the used SCSS parts and utility groups in `src/bootstrap.scss`) for layout, Angular Material only for dialogs/snackbars/datepicker, token and role in `localStorage`, `authInterceptor`, route guards.
 
 ## Findings about the original code
 - Fixed in step 0: `RegisterSerializer.validate` sat outside the class (password confirmation never checked); stray empty `backend/__init__.py` broke test discovery.
@@ -89,7 +89,7 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
 - [x] Deployed 2026-10-22 to https://my-cars.arlindo.site (see "Server" below).
-- [ ] Visual upgrade (manual above): phases 0-6 done 2026-11-13 (audit, tokens/themes, base components/states, shell + motion, home, car page, auth/messaging/map/admin); next: phase 7 (polish, axe audit, budgets, deploy with rollback). Still open for Arlindo: font, default theme, `/login` route, photos, prerendering the home page for mobile LCP.
+- [ ] Visual upgrade (manual above): phases 0-7 done 2026-11-13 except the deploy (waits for Arlindo's OK). Pre-existing bug found: `/admin/users/:id` is blank for users after the first page of the list (needs his OK to fix, like `/login`). Still open for Arlindo: font, default theme, `/login` route, photos, prerendering the home page for mobile LCP.
 
 ## Server (p51-server, Ubuntu 26.04)
 - SSH: `arlindo@100.78.198.77` (Tailscale). Docker + compose installed; user is in the docker group.

@@ -1,0 +1,35 @@
+// Bootstrap 5.3 (same version as before), only the parts the app uses.
+// Not included: alert, accordion, breadcrumb, button-group, carousel, close, dropdown, list-group, modal,
+// nav/navbar, offcanvas, pagination, placeholders, popover, progress, spinners, toasts, tooltip
+// (the app has its own toasts, nav and dialogs). Add an import here before using one of them.
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities';
+
+// Only the utility groups the templates use (the full set is ~70 kB of CSS, 1345 classes; we use ~50).
+// Using a utility from another group? Add its key here (keys: bootstrap/scss/_utilities.scss).
+$utilities: map-get-multiple(
+  $utilities,
+  (
+    'align', 'display', 'shadow', 'width', 'flex', 'flex-wrap', 'gap', 'justify-content', 'align-items',
+    'align-self', 'margin-top', 'margin-bottom', 'margin-start', 'padding', 'padding-y', 'padding-bottom',
+    'font-weight', 'text-align', 'white-space', 'color', 'background-color', 'rounded', 'visibility'
+  )
+);
+
+@import 'bootstrap/scss/root';
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/tables';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/helpers';
+@import 'bootstrap/scss/utilities/api';

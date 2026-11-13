@@ -49,8 +49,13 @@
                 "output": "fonts"
               }
             ],
+            "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": ["import", "global-builtin", "color-functions"]
+              }
+            },
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/bootstrap.scss",
               "src/material-theme.scss",
               "node_modules/leaflet/dist/leaflet.css",
               "src/fonts.css",
@@ -63,8 +68,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "950kB",
-                  "maximumError": "1.1MB"
+                  "maximumWarning": "850kB",
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",

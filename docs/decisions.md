@@ -225,3 +225,24 @@ Same defaults as before (Arlindo's open questions unchanged).
 - Lighthouse (`lighthouse-phase6.txt`): login, register and home accessibility 100, CLS 0.
 - Tests: backend 76 OK; frontend 52 passed / **7** failed. The `UserList` legacy spec was rewritten while touching the component (it now tests the bulk bar through real clicks); the 7 left are user-detail, user-form, update-profile, confirm-dialog and the legacy car pages.
 - Screenshots: `docs/visual-upgrade/phase6/`.
+
+## Phase 7: polish and hardening (2026-11-13; deploy pending Arlindo's OK)
+
+### What changed
+- **Bootstrap trimmed.** `src/bootstrap.scss` imports only what the templates use (reboot, type, containers, grid, tables, forms incl. input-group and floating labels, buttons, card, badge, helpers) plus a reduced **utilities** map (23 groups; the templates use ~50 of 1345 utility classes). Same Bootstrap version (5.3.3). Sass deprecation warnings from Bootstrap's `@import` code are silenced in `angular.json` (third-party). **Global CSS: 270 → 141 kB raw, 39.5 → 19.3 kB gzipped**; initial bundle 899 → 769 kB raw. A script check confirmed every Bootstrap class used in templates/TS still exists, and a pixel diff of all 88 page screenshots (22 pages × 375/1280 × light/dark, production build) against the previous build found no change except the intended `<code>` colour from Phase 6.
+- **Budget** tightened back: initial warning 850 kB / error 1 MB.
+- **Role badges** (profile, admin user detail) use a token style (`.role-badge`); Bootstrap's grey badge had white text at 2.55:1 in dark theme (found by axe).
+- Recorded the test data created for screenshots in `docs/audit.md` (Arlindo keeps it).
+
+### Audits
+- **axe-core 4.10.3** (WCAG 2.0/2.1/2.2 A + AA + best practices), 21 pages × 375/1280 × light/dark, guest/customer/admin, production build: **no violations except** `page-has-heading-one` on `/admin/users/:id`, which is **blank because of a pre-existing bug** (the page loads page 1 of the user list and looks for the id there, so any user after the first five shows nothing; the baseline screenshot is blank too). Fixing it changes data loading (use the existing `GET /api/users/<id>/`), so it waits for Arlindo with the `/login` route bug.
+- **Lighthouse** (`lighthouse-phase7.txt`): accessibility 100 and CLS 0 on home, car, login, register, 404; desktop performance 98-99; mobile 70-79 (baseline home 46, car 57). Mobile LCP 3.9-4.7 s (simulated): see Phase 4 for why and the prerendering option.
+- **Firefox 159** (WebDriver BiDi): home, car page, login, thread, admin at 375/1280 in light and dark: same rendering as Chrome, 0 console errors, no horizontal overflow. **Safari/iOS not tested** (not available on this machine).
+- CSP: production build served with the nginx policy, every page, 0 console errors.
+- Timing/easing: all motion uses the tokens (`--dur-micro` 180 ms, `--dur-ui` 350 ms, `--dur-reveal` 700 ms, arlindo.site easings); the only fixed durations are the button spinner (0.7 s), skeleton shimmer (1.4 s), the scroll cue (3 nudges) and the map pulse (4 pulses), all finite or off with reduced motion except the spinner, which slows down.
+
+### Tests
+Backend 76 OK. Frontend 52 passed / 7 failed: the remaining legacy `should create` specs (user detail/form, update profile, confirm dialog, legacy car pages) that failed before the visual upgrade (14 at the start). The manual's "all tests green" is therefore **not met** yet.
+
+### Before/after
+`docs/visual-upgrade/phase7/before-after-*.webp` (home, car page, login, my bookings, thread, admin bookings) and `firefox-home-car-admin.webp`.

@@ -106,3 +106,10 @@ Console: no errors on any page except the broken `/login` and `/register` routes
 ## 6. Reference: arlindo.site motion language
 
 From its `style.css` and scripts (fetched 2026-11-13): `--ease-out: cubic-bezier(.22,1,.36,1)`, `--ease-in-out: cubic-bezier(.65,0,.35,1)`, `--dur-micro: .25s`, `--dur-ui: .5s`, `--dur-reveal: 1s`, respects `prefers-reduced-motion`, uses GSAP + Lenis (smooth scroll). my_cars will reuse the same token names and easings with shorter app durations, and **no Lenis** (the manual forbids scroll hijacking in a data-heavy app).
+
+## Test data added during the visual upgrade (dev database only)
+Created by Claude on 2026-11-13 at 14:29 (Phase 0) through the API, with the existing tokens of `Ana` (customer) and `admin`, so that "my bookings", messages and the admin pages have content for screenshots. Arlindo decided to keep them for testing.
+- Booking 4: Ana, Volkswagen ID.4 (car 35), 2026-11-20 → 2026-11-24, pending.
+- Booking 5: Ana, Ford Mustang (car 36), 2026-12-05 → 2026-12-08, pending.
+- Conversation about car 35: message 4 from Ana ("Përshëndetje! A përfshihet sigurimi i plotë në çmim?") and message 5, the admin's reply.
+No users or tokens were created. A generated test photo was uploaded to car 35 in Phase 5 and removed again with the same endpoint.

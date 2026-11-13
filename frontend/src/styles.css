@@ -666,6 +666,22 @@ a {
   }
 }
 
+/* Role label on profile pages (Bootstrap's grey badge had white text at 2.6:1 in dark theme) */
+.role-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--neutral-wash);
+  color: var(--text);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.role-badge[data-role='admin'] {
+  background: var(--brand-wash);
+  color: var(--brand-text);
+}
+
 /* ---------- Admin: calm, dense, almost no motion ---------- */
 .admin-head {
   display: flex;
