@@ -1,0 +1,31 @@
+<div class="admin" [class.collapsed]="collapsed()">
+  <nav class="admin-side" [attr.aria-label]="'admin.panel' | translate">
+    <button type="button" class="side-toggle" [attr.aria-expanded]="!collapsed()" (click)="toggle()" [attr.aria-label]="'admin.collapse' | translate">
+      <i class="material-icons" aria-hidden="true">{{ collapsed() ? 'chevron_right' : 'chevron_left' }}</i>
+    </button>
+    <ul class="list-unstyled side-links">
+      <li *ngFor="let l of links">
+        <a [routerLink]="l.path" routerLinkActive="active" class="side-link" [attr.title]="collapsed() ? (l.label | translate) : null">
+          <i class="material-icons" aria-hidden="true">{{ l.icon }}</i>
+          <span class="side-label" [class.visually-hidden]="collapsed()">{{ l.label | translate }}</span>
+          <span *ngIf="l.path === '/messages' && messages.unread() > 0" class="side-badge">
+            {{ messages.unread() }}<span class="visually-hidden"> {{ 'messages.unread' | translate }}</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="admin-main">
+    <nav *ngIf="crumbs().length > 0" class="crumbs container-fluid" [attr.aria-label]="'admin.breadcrumb' | translate">
+      <ol class="list-unstyled">
+        <li><a routerLink="/admin/bookings">{{ 'admin.panel' | translate }}</a></li>
+        <li *ngFor="let c of crumbs(); let last = last">
+          <a *ngIf="c.link && !last; else current" [routerLink]="c.link">{{ c.label | translate }}</a>
+          <ng-template #current><span aria-current="page">{{ c.label | translate }}</span></ng-template>
+        </li>
+      </ol>
+    </nav>
+    <router-outlet></router-outlet>
+  </div>
+</div>

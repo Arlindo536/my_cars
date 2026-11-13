@@ -1,7 +1,7 @@
-
+/* Neutral box: red stays for the primary action */
 .demo-box {
-  border: 1px dashed var(--brand-ui);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-md);
   padding: 0.9rem;
-  background: var(--brand-wash);
+  background: var(--bg-2);
 }

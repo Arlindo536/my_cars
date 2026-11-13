@@ -1,0 +1,133 @@
+.auth {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: calc(100vh - var(--header-h));
+}
+
+@media (min-width: 992px) {
+  .auth {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+}
+
+/* ---------- Brand panel ---------- */
+.auth-panel {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(160deg, var(--band-2) 0%, var(--band-1) 60%);
+  color: var(--band-text);
+  --focus-ring: var(--band-focus);
+}
+
+.auth-art {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.auth-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(0deg, var(--band-1) 10%, transparent 70%);
+}
+
+.auth-panel-inner {
+  padding: var(--space-5) var(--space-4);
+  max-width: 34rem;
+}
+
+.auth-kicker {
+  color: var(--band-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.auth-claim {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-xl);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.text-accent {
+  color: var(--band-brand-text);
+}
+
+/* Phones: a short band above the form; the steps only on wide screens */
+.auth-steps {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .auth-panel-inner {
+    padding: var(--space-8) var(--space-7);
+  }
+
+  .auth-claim {
+    font-size: var(--fs-3xl);
+    margin-bottom: var(--space-6);
+  }
+
+  .auth-steps {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+  }
+}
+
+.auth-steps li {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.step-n {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--band-muted);
+  min-width: 2rem;
+}
+
+.auth-steps strong {
+  display: block;
+}
+
+.step-text {
+  display: block;
+  color: var(--band-muted);
+  font-size: var(--fs-sm);
+}
+
+/* ---------- Form side ---------- */
+.auth-form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+@media (min-width: 992px) {
+  .auth-form {
+    align-items: center;
+    padding: var(--space-8) var(--space-6);
+  }
+}
+
+.auth-form-inner {
+  width: 100%;
+  max-width: 26rem;
+}
+
+.auth-title {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-5);
+}

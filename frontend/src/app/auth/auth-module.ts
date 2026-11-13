@@ -8,10 +8,11 @@ import { Register } from './register/register';
 import { ChangePassword } from './change-password/change-password';
 import { UpdateProfile } from './update-profile/update-profile';
 import { Profile } from './profile/profile';
+import { AuthLayout } from './auth-layout/auth-layout';
 import { UiModule } from '../ui/ui-module';
 
 @NgModule({
-  declarations: [Login, Register, ChangePassword, UpdateProfile, Profile],
+  declarations: [Login, Register, ChangePassword, UpdateProfile, Profile, AuthLayout],
   imports: [CommonModule, AuthRoutingModule, ReactiveFormsModule, TranslatePipe, UiModule],
 })
 export class AuthModule {}

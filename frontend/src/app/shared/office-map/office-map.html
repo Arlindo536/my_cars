@@ -1,11 +1,22 @@
 <div class="map-wrap">
   <div #mapEl class="map" role="region" [attr.aria-label]="'map.aria' | translate: { address: office.address }"></div>
   <div class="map-info">
-    <p class="map-address mb-1">{{ office.address }}</p>
-    <p class="mb-0 small">
-      <a [href]="mapUrl" target="_blank" rel="noopener">{{ 'map.open' | translate }}</a>
-      <span aria-hidden="true"> · </span>
-      <a [href]="directionsUrl" target="_blank" rel="noopener">{{ 'map.directions' | translate }}</a>
-    </p>
+    <div class="map-details">
+      <p class="map-name mb-1">{{ office.name }}</p>
+      <p class="map-line mb-1">
+        <i class="material-icons" aria-hidden="true">place</i>
+        <span>{{ office.address }}</span>
+      </p>
+      <p class="map-line mb-0">
+        <i class="material-icons" aria-hidden="true">schedule</i>
+        <span><span class="visually-hidden">{{ 'map.hoursLabel' | translate }}: </span>{{ 'map.hours' | translate }}</span>
+      </p>
+    </div>
+    <div class="map-actions">
+      <a class="btn btn-dark" [href]="directionsUrl" target="_blank" rel="noopener">
+        <i class="material-icons" aria-hidden="true">directions</i> {{ 'map.directions' | translate }}
+      </a>
+      <a class="map-open" [href]="mapUrl" target="_blank" rel="noopener">{{ 'map.open' | translate }}</a>
+    </div>
   </div>
 </div>

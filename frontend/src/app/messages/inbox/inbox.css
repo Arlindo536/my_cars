@@ -33,7 +33,27 @@
 }
 
 .conversation-main {
+  flex: 1;
   min-width: 0;
+}
+
+.conv-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--bg-2);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.conv-avatar .material-icons {
+  font-size: 1.2rem;
+  color: var(--text-muted);
 }
 
 .conversation-car {

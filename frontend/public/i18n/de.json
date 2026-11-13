@@ -175,7 +175,9 @@
   "map": {
     "aria": "Karte: {{address}}",
     "open": "Karte öffnen",
-    "directions": "Route planen"
+    "directions": "Route planen",
+    "hoursLabel": "Öffnungszeiten",
+    "hours": "Mo–Sa 08:00–20:00 · So 09:00–14:00"
   },
   "auth": {
     "username": "Benutzername",
@@ -226,7 +228,11 @@
     "askPlaceholder": "z. B. Gibt es einen Kindersitz?",
     "adminNote": "Admins beantworten Fragen unter Nachrichten.",
     "loginToAsk": "Zum Fragen anmelden",
-    "messageOwner": "Vermieter kontaktieren"
+    "messageOwner": "Vermieter kontaktieren",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "newOne": "1 neue Nachricht",
+    "newMany": "{{count}} neue Nachrichten"
   },
   "admin": {
     "actions": "Aktionen",
@@ -279,7 +285,15 @@
     "deleteCarMessage": "{{model}} löschen? Buchungen und Unterhaltungen dazu werden ebenfalls gelöscht. Das kann nicht rückgängig gemacht werden.",
     "deleteCarsMessage": "{{count}} Autos löschen? Buchungen und Unterhaltungen dazu werden ebenfalls gelöscht. Das kann nicht rückgängig gemacht werden.",
     "carsDeleted": "Gelöscht.",
-    "carsDeleteFailed": "Einige Autos konnten nicht gelöscht werden."
+    "carsDeleteFailed": "Einige Autos konnten nicht gelöscht werden.",
+    "panel": "Adminbereich",
+    "collapse": "Seitenleiste einklappen",
+    "breadcrumb": "Du bist hier",
+    "statPending": "Offene Buchungen",
+    "statConfirmed": "Bestätigte Buchungen",
+    "statFleet": "Autos in der Flotte",
+    "statUnread": "Ungelesene Nachrichten",
+    "overview": "Übersicht"
   },
   "profile": {
     "back": "‹ Zurück zum Profil",
@@ -326,7 +340,8 @@
     "deleteManyTitle": "Benutzer löschen",
     "deleteManyMessage": "{{count}} Benutzer löschen? Das kann nicht rückgängig gemacht werden.",
     "deletedMany": "Benutzer gelöscht.",
-    "deleteManyFailed": "Einige Benutzer konnten nicht gelöscht werden."
+    "deleteManyFailed": "Einige Benutzer konnten nicht gelöscht werden.",
+    "detailTitle": "Benutzerdetails"
   },
   "demo": {
     "title": "Mit Demo-Konto testen",

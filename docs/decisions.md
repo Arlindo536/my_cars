@@ -189,3 +189,39 @@ Same API calls (availability, quote, create), same rules and messages. Checked i
 - Spec grid: 360 to 1440 px in sq / en / de, no broken words or overflowing tiles.
 - Lighthouse (`lighthouse-phase5.txt`): car page accessibility 100, CLS 0 (bottom bar included); mobile perf 74, desktop 98.
 - Tests: backend 76 OK; frontend 51 passed / 8 failed (same 8 legacy specs). New: Gallery (no photos, keyboard wrap + thumbnails, swipe doesn't open the lightbox).
+
+## Phase 6: auth, messaging, map, admin (2026-11-13)
+
+Same defaults as before (Arlindo's open questions unchanged).
+
+### Auth (login, register)
+- **Split layout** (`AuthLayout` in `AuthModule`): graphite brand panel with the road art (now a shared `app-road-art` in `UiModule`, also used by the home hero; `align="end"` keeps the road in view in a tall, narrow panel), the home claim and the three true "how it works" steps; the form on the other side. On phones the panel is a short band above the form and the steps are hidden.
+- **Floating labels** (Bootstrap `form-floating`), keeping the Phase 2 inline errors, password toggle and loading button. The page heading is now an `h1` (it was an `h2` with no `h1` on the page). First and last name side by side from 576 px.
+- The public **demo logins** (production build only) stay next to the form in a neutral box (was red dashed), **never in the artwork**, as the manual asks. Bootstrap's pink `<code>` colour failed contrast there (3.8:1); `--bs-code-color` now uses `--text` globally.
+
+### Messaging
+- Thread: **day separators** (Today / Yesterday / weekday + date) and **sender groups**: consecutive messages from the same side within 5 minutes join (tighter corners, one visible time on the last one; screen readers still get every time). Neutral bubbles (theirs `--bg-2`, mine ink), no red.
+- **Scroll to latest:** follows new messages smoothly when you are at the bottom or just sent one; if you scrolled up, a "N new messages ↓" pill appears instead of jumping (polling as before). New messages after the first load rise in softly (off with reduced motion).
+- Inbox: avatar per conversation (customer initials for admins, a car icon for customers).
+- **Not added: typing indicator.** The API has no typing signal (polling, no WebSockets), and an indicator without data would be fake.
+- Not changed: list and thread stay separate pages (a two-pane layout would change routing).
+
+### Map
+- **CSS marker** (`divIcon`): red dot with a white ring and a soft pulse in `--brand-ui` that runs 4 times and stops (no endless motion; none with reduced motion). The Leaflet marker PNGs are no longer copied into the build.
+- **Tiles muted** (slightly desaturated); in **dark theme inverted and dimmed** with a CSS filter on the tile pane (no new tile provider, CSP unchanged). Leaflet controls, attribution and popup use the tokens.
+- **Info card** under the map: office name, address, **opening hours (fictional: Mon–Sat 08:00–20:00, Sun 09:00–14:00, translated; Arlindo to confirm or change)**, a "Get directions" button and "Open map" link (OpenStreetMap, new tab).
+
+### Admin
+- **`AdminShell`** around every admin route (routing: one `''` parent with the existing pages as children; guards unchanged at the app level). **Collapsible sidebar** from 992 px (Bookings, Fleet, Users, Messages with the unread badge; collapsed state in `localStorage` `adminSidebar`, labels stay for screen readers when collapsed); on phones the header drawer already has these links. **Breadcrumbs** from `data.breadcrumb` on each route (they replace the "back to fleet" link).
+- Page headers are plain (`.admin-head`) instead of graphite bands with the red cut: calmer, denser, and no large dark blocks in admin.
+- **Stat cards** on the landing page (bookings): pending, confirmed, cars in the fleet, unread messages. Counts come from the existing list endpoints' `count` and the unread endpoint; they count up from 0 in 400 ms. Only "pending" uses the red tint (it asks for action); fleet and messages cards link to their pages. If the counters fail, the page works without them.
+- **Tables** (fleet, users): scroll in their own box with a **sticky header row**, row hover, existing status badges and pagination. The existing multi-select delete became a **bulk-action bar** pinned to the bottom while rows are selected.
+- **Not added: sortable columns.** The admin list endpoints have no ordering parameter, and sorting only the visible page of a paginated list would mislead. Needs a backend change (Arlindo's call).
+- No charts (no data series to show).
+
+### Verified
+- Production build with the nginx CSP: every page at 375 / 1280 in light and dark, 0 console errors.
+- Admin stays admin-only: `/admin/cars/35/edit` as guest goes to login, as customer to `/`; neither loads the shell or calls admin lists. As admin: shell, breadcrumbs "Admin panel / Fleet / Edit car", collapse to 72 px with the state stored, breadcrumb link works.
+- Lighthouse (`lighthouse-phase6.txt`): login, register and home accessibility 100, CLS 0.
+- Tests: backend 76 OK; frontend 52 passed / **7** failed. The `UserList` legacy spec was rewritten while touching the component (it now tests the bulk bar through real clicks); the 7 left are user-detail, user-form, update-profile, confirm-dialog and the legacy car pages.
+- Screenshots: `docs/visual-upgrade/phase6/`.

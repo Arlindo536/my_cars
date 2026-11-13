@@ -21,6 +21,10 @@
   <ul *ngIf="!loading() && items().length > 0" class="list-unstyled conversation-list">
     <li *ngFor="let c of items()">
       <a [routerLink]="['/messages', c.id]" class="conversation" [class.unread]="c.unread > 0">
+        <span class="conv-avatar" aria-hidden="true">
+          <ng-container *ngIf="isAdmin; else rentalIcon">{{ initials(c.customer) }}</ng-container>
+          <ng-template #rentalIcon><i class="material-icons">directions_car</i></ng-template>
+        </span>
         <div class="conversation-main">
           <span class="conversation-car">{{ c.car.model }}</span>
           <span class="conversation-with">{{ isAdmin ? c.customer : ('messages.rentalName' | translate) }}</span>

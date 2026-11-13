@@ -1,0 +1,25 @@
+<section class="stats" [attr.aria-label]="'admin.overview' | translate" [attr.aria-busy]="!stats()">
+  <ng-container *ngIf="stats() as list; else loadingTpl">
+    <ng-container *ngFor="let s of list">
+      <a *ngIf="s.link; else plain" class="stat stat-link" [routerLink]="s.link" [attr.data-stat]="s.key">
+        <ng-container *ngTemplateOutlet="body; context: { $implicit: s }"></ng-container>
+      </a>
+      <ng-template #plain>
+        <div class="stat" [attr.data-stat]="s.key">
+          <ng-container *ngTemplateOutlet="body; context: { $implicit: s }"></ng-container>
+        </div>
+      </ng-template>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #body let-s>
+    <i class="material-icons stat-icon" aria-hidden="true">{{ s.icon }}</i>
+    <span class="stat-label">{{ s.label | translate }}</span>
+    <span class="stat-value" aria-hidden="true" [appCountUp]="s.value" [countUpFrom]="0" [countUpMs]="400"></span>
+    <span class="visually-hidden">{{ s.value }}</span>
+  </ng-template>
+
+  <ng-template #loadingTpl>
+    <div *ngFor="let i of [1, 2, 3, 4]" class="stat stat-loading" aria-hidden="true"></div>
+  </ng-template>
+</section>

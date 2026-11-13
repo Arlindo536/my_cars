@@ -1,13 +1,8 @@
-<section class="dark-band-wrap">
-  <div class="dark-band">
-    <div class="container-xl title-band">
-      <a routerLink="/admin/cars" class="back-link">{{ 'admin.backToFleet' | translate }}</a>
-      <h1 class="mb-0 mt-1">{{ (carId() ? 'admin.editCar' : 'admin.newCar') | translate }}</h1>
-    </div>
-  </div>
-</section>
+<header class="admin-head container-fluid">
+  <h1 class="mb-0">{{ (carId() ? 'admin.editCar' : 'admin.newCar') | translate }}</h1>
+</header>
 
-<div class="container-xl py-4">
+<div class="container-fluid pb-5">
   <app-skeleton *ngIf="loading()" variant="detail"></app-skeleton>
 
   <form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="save()" class="row g-4" novalidate>

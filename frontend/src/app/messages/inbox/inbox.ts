@@ -61,4 +61,9 @@ export class Inbox implements OnInit {
     this.page.set(page);
     this.load();
   }
+
+  // "ana_k" -> "AK"
+  initials(name: string): string {
+    return name.split(/[\s._-]+/).filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
+  }
 }

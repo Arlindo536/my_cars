@@ -31,16 +31,28 @@
 
   <div class="container-xl py-4">
     <div class="chat">
-      <ol #scroller class="chat-log list-unstyled" aria-live="polite" [attr.aria-label]="'messages.title' | translate">
-        <li *ngFor="let m of items()" class="bubble-row" [class.mine]="m.mine">
-          <div class="bubble">
-            <span class="visually-hidden">{{ (m.mine ? 'messages.you' : (isAdmin ? 'messages.customer' : 'messages.rentalName')) | translate }}:</span>
-            <!-- Interpolation escapes HTML: message text is never rendered as markup -->
-            <p class="bubble-text mb-1">{{ m.body }}</p>
-            <time class="bubble-time" [attr.datetime]="m.created_at">{{ m.created_at | date: 'd MMM, HH:mm' : undefined : language.locale() }}</time>
-          </div>
-        </li>
-      </ol>
+      <div class="chat-frame">
+        <ol #scroller class="chat-log list-unstyled" aria-live="polite" [attr.aria-label]="'messages.title' | translate" (scroll)="onScroll()">
+          <ng-container *ngFor="let e of entries(); trackBy: trackEntry">
+            <li *ngIf="e.kind === 'day'" class="day-sep">
+              <span>{{ e.relative ? ('messages.' + e.relative | translate) : (e.date | date: 'EEEE, d MMMM' : undefined : language.locale()) }}</span>
+            </li>
+            <li *ngIf="e.kind === 'message'" class="bubble-row" [class.mine]="e.message.mine" [class.first]="e.first" [class.last]="e.last" [class.fresh]="e.fresh">
+              <div class="bubble">
+                <span class="visually-hidden">{{ (e.message.mine ? 'messages.you' : (isAdmin ? 'messages.customer' : 'messages.rentalName')) | translate }}:</span>
+                <!-- Interpolation escapes HTML: message text is never rendered as markup -->
+                <p class="bubble-text mb-0">{{ e.message.body }}</p>
+                <!-- One visible time per group; screen readers get it on every message -->
+                <time class="bubble-time" [class.visually-hidden]="!e.last" [attr.datetime]="e.message.created_at">{{ e.message.created_at | date: 'HH:mm' : undefined : language.locale() }}</time>
+              </div>
+            </li>
+          </ng-container>
+        </ol>
+        <button *ngIf="unseen() > 0" type="button" class="new-pill" (click)="showLatest()">
+          {{ (unseen() === 1 ? 'messages.newOne' : 'messages.newMany') | translate: { count: unseen() } }}
+          <i class="material-icons" aria-hidden="true">arrow_downward</i>
+        </button>
+      </div>
 
       <form class="composer" (submit)="$event.preventDefault(); send()">
         <label for="message-body" class="visually-hidden">{{ 'messages.placeholder' | translate }}</label>

@@ -47,16 +47,13 @@ export class OfficeMap implements AfterViewInit, OnDestroy {
     if (this.destroyed) {
       return;
     }
-    // Leaflet looks for its marker images relative to the CSS by default, which breaks
-    // under the Angular build; the images are copied to /leaflet (see angular.json)
-    const markerIcon = L.icon({
-      iconUrl: 'leaflet/marker-icon.png',
-      iconRetinaUrl: 'leaflet/marker-icon-2x.png',
-      shadowUrl: 'leaflet/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41],
+    // A CSS marker (no image): red dot with a soft pulse that stops after a few rounds (styles.css, "Map")
+    const markerIcon = L.divIcon({
+      className: 'office-pin',
+      html: '<span class="office-pin-pulse"></span><span class="office-pin-dot"></span>',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -14],
     });
     const position: Leaflet.LatLngExpression = [this.office.lat, this.office.lng];
     this.map = L.map(this.mapEl.nativeElement, {

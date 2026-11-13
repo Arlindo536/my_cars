@@ -1,0 +1,25 @@
+<div class="auth">
+  <section class="auth-panel" [attr.aria-label]="'home.howItWorks' | translate">
+    <app-road-art class="auth-art" align="end"></app-road-art>
+    <div class="auth-panel-inner">
+      <p class="auth-kicker">{{ 'home.kicker' | translate }}</p>
+      <p class="auth-claim">{{ 'home.titleLine1' | translate }} <span class="text-accent">{{ 'home.titleLine2' | translate }}</span></p>
+      <ol class="auth-steps list-unstyled">
+        <li *ngFor="let n of [1, 2, 3]">
+          <span class="step-n" aria-hidden="true">0{{ n }}</span>
+          <span>
+            <strong>{{ 'home.step' + n + 'Title' | translate }}</strong>
+            <span class="step-text">{{ 'home.step' + n + 'Text' | translate }}</span>
+          </span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="auth-form">
+    <div class="auth-form-inner">
+      <h1 class="auth-title">{{ heading }}</h1>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

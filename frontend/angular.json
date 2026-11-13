@@ -34,11 +34,6 @@
                 "input": "public"
               },
               {
-                "glob": "*.png",
-                "input": "node_modules/leaflet/dist/images",
-                "output": "leaflet"
-              },
-              {
                 "glob": "{inter-latin-wght-normal,inter-latin-ext-wght-normal}.woff2",
                 "input": "node_modules/@fontsource-variable/inter/files",
                 "output": "fonts"

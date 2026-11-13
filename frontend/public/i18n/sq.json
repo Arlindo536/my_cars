@@ -175,7 +175,9 @@
   "map": {
     "aria": "Harta: {{address}}",
     "open": "Hap hartën",
-    "directions": "Udhëzime për të ardhur"
+    "directions": "Udhëzime për të ardhur",
+    "hoursLabel": "Orari",
+    "hours": "Hën–Sht 08:00–20:00 · Die 09:00–14:00"
   },
   "auth": {
     "username": "Emri i përdoruesit",
@@ -226,7 +228,11 @@
     "askPlaceholder": "p.sh. A ka karrige për fëmijë?",
     "adminNote": "Adminët u përgjigjen pyetjeve te Mesazhet.",
     "loginToAsk": "Hyr për të pyetur",
-    "messageOwner": "Dërgo mesazh pronarit"
+    "messageOwner": "Dërgo mesazh pronarit",
+    "today": "Sot",
+    "yesterday": "Dje",
+    "newOne": "1 mesazh i ri",
+    "newMany": "{{count}} mesazhe të reja"
   },
   "admin": {
     "actions": "Veprime",
@@ -279,7 +285,15 @@
     "deleteCarMessage": "Ta fshij {{model}}? Fshihen edhe rezervimet dhe bisedat e saj. Nuk kthehet mbrapsht.",
     "deleteCarsMessage": "Të fshij {{count}} makina? Fshihen edhe rezervimet dhe bisedat e tyre. Nuk kthehet mbrapsht.",
     "carsDeleted": "U fshi.",
-    "carsDeleteFailed": "Disa makina nuk u fshinë."
+    "carsDeleteFailed": "Disa makina nuk u fshinë.",
+    "panel": "Paneli i adminit",
+    "collapse": "Ngushto menunë anësore",
+    "breadcrumb": "Ku ndodhesh",
+    "statPending": "Rezervime në pritje",
+    "statConfirmed": "Rezervime të konfirmuara",
+    "statFleet": "Makina në flotë",
+    "statUnread": "Mesazhe pa lexuar",
+    "overview": "Përmbledhje"
   },
   "profile": {
     "back": "‹ Kthehu te profili",
@@ -326,7 +340,8 @@
     "deleteManyTitle": "Fshi përdoruesit",
     "deleteManyMessage": "Të fshij {{count}} përdorues? Nuk kthehet mbrapsht.",
     "deletedMany": "Përdoruesit u fshinë.",
-    "deleteManyFailed": "Disa përdorues nuk u fshinë."
+    "deleteManyFailed": "Disa përdorues nuk u fshinë.",
+    "detailTitle": "Detajet e përdoruesit"
   },
   "demo": {
     "title": "Provo me llogari demo",

@@ -1,13 +1,9 @@
-<section class="dark-band-wrap">
-  <div class="dark-band">
-    <div class="container-xl d-flex flex-wrap justify-content-between align-items-end gap-2" style="padding-top: 2rem; padding-bottom: 0.75rem;">
-      <h1 class="mb-0">{{ 'users.title' | translate }}</h1>
-      <a routerLink="/admin/users/new" class="btn btn-primary">+ {{ 'users.add' | translate }}</a>
-    </div>
-  </div>
-</section>
+<header class="admin-head container-fluid">
+  <h1 class="mb-0">{{ 'users.title' | translate }}</h1>
+  <a routerLink="/admin/users/new" class="btn btn-primary">+ {{ 'users.add' | translate }}</a>
+</header>
 
-<div class="container-xl py-4">
+<div class="container-fluid pb-5">
   <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
     <form class="d-flex gap-2" role="search" style="flex: 1 1 18rem; max-width: 28rem;" (submit)="$event.preventDefault(); onSearch()">
       <label for="user-search" class="visually-hidden">{{ 'home.search' | translate }}</label>
@@ -16,9 +12,6 @@
       <button type="submit" class="btn btn-dark">{{ 'home.search' | translate }}</button>
     </form>
     <div class="d-flex gap-2" *ngIf="users.length > 0">
-      <button class="btn btn-outline-danger btn-sm" *ngIf="selectMode && selectedIds.length > 0" (click)="deleteSelected()">
-        {{ 'admin.deleteSelected' | translate: { count: selectedIds.length } }}
-      </button>
       <button class="btn btn-outline-secondary btn-sm" (click)="toggleSelectMode()">
         {{ (selectMode ? 'admin.cancel' : 'admin.select') | translate }}
       </button>
@@ -31,7 +24,7 @@
 
   <div *ngIf="users.length > 0">
     <h2 class="section-title h4">{{ 'users.admins' | translate }}</h2>
-        <div class="table-responsive users-table mb-4">
+        <div class="admin-table users-table mb-4">
           <table class="table align-middle mb-0">
             <thead>
               <tr>
@@ -56,7 +49,7 @@
         </div>
 
     <h2 class="section-title h4">{{ 'users.customers' | translate }}</h2>
-        <div class="table-responsive users-table mb-4">
+        <div class="admin-table users-table mb-4">
           <table class="table align-middle mb-0">
             <thead>
               <tr>
@@ -99,4 +92,12 @@
       <span aria-hidden="true">›</span><span class="visually-hidden">{{ 'common.nextPage' | translate }}</span>
     </button>
   </div>
+</div>
+
+<!-- Bulk actions for the selected rows, pinned to the bottom while selecting -->
+<div *ngIf="selectMode && selectedIds.length > 0" class="bulk-bar" role="region" [attr.aria-label]="'admin.select' | translate">
+  <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteSelected()">
+    {{ 'admin.deleteSelected' | translate: { count: selectedIds.length } }}
+  </button>
+  <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleSelectMode()">{{ 'admin.cancel' | translate }}</button>
 </div>

@@ -38,40 +38,86 @@
   margin: 0 auto;
 }
 
+.chat-frame {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
 .chat-log {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 2px;
   height: min(60vh, 34rem);
   overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--bg-1);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm), var(--highlight);
   padding: 1rem;
-  margin-bottom: 0.75rem;
+  margin: 0;
+}
+
+.day-sep {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.day-sep::before,
+.day-sep::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--line);
 }
 
 .bubble-row {
   display: flex;
 }
 
+.bubble-row.first {
+  margin-top: var(--space-2);
+}
+
 .bubble-row.mine {
   justify-content: flex-end;
 }
 
+/* Neutral bubbles: theirs on the raised surface, mine in ink. Corners join within a group */
 .bubble {
   max-width: 80%;
   background: var(--bg-2);
   color: var(--text);
-  border-radius: 14px 14px 14px 4px;
-  padding: 0.55rem 0.8rem;
+  border-radius: 6px 16px 16px 6px;
+  padding: 0.5rem 0.8rem;
+}
+
+.first .bubble {
+  border-top-left-radius: 16px;
+}
+
+.last .bubble {
+  border-bottom-left-radius: 16px;
 }
 
 .mine .bubble {
   background: var(--btn-ink);
   color: var(--btn-ink-text);
-  border-radius: 14px 14px 4px 14px;
+  border-radius: 16px 6px 6px 16px;
+}
+
+.mine.first .bubble {
+  border-top-right-radius: 16px;
+}
+
+.mine.last .bubble {
+  border-bottom-right-radius: 16px;
 }
 
 .bubble-text {
@@ -81,8 +127,52 @@
 
 .bubble-time {
   display: block;
+  margin-top: 0.15rem;
   font-size: 0.72rem;
-  opacity: 0.7;
+  opacity: 0.75;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* New messages after the first load rise in softly */
+.fresh {
+  animation: msg-in var(--dur-ui) var(--ease-out);
+}
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.new-pill {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-3);
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--bg-1);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+}
+
+.new-pill .material-icons {
+  font-size: 1.1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fresh {
+    animation: none;
+  }
 }
 
 .composer {

@@ -13,9 +13,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared-module';
 import { UserDetail } from './user-detail/user-detail';
+import { AdminShell } from './admin-shell/admin-shell';
+import { AdminStats } from './admin-stats/admin-stats';
 
 @NgModule({
-  declarations: [UserList, AdminCarList, UserForm, UserCreate, AdminCarForm, UserDetail, AdminBookings],
+  declarations: [UserList, AdminCarList, UserForm, UserCreate, AdminCarForm, UserDetail, AdminBookings, AdminShell, AdminStats],
   imports: [CommonModule, AdminRoutingModule, ReactiveFormsModule, FormsModule, MatDialogModule, TranslatePipe, SharedModule],
 })
 export class AdminModule {}

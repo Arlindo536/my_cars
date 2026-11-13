@@ -1,53 +1,61 @@
-<div class="d-flex justify-content-center align-items-center" style="min-height: 85vh;">
-  <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
-    <h2 class="mb-4 text-center">{{ 'auth.registerTitle' | translate }}</h2>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
-      <div class="mb-3">
-        <label for="reg-username" class="form-label">{{ 'auth.username' | translate }}</label>
-        <input id="reg-username" formControlName="username" type="text" class="form-control" autocomplete="username"
+<app-auth-layout [heading]="'auth.registerTitle' | translate">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input id="reg-username" formControlName="username" type="text" class="form-control" placeholder=" " autocomplete="username"
           [attr.aria-invalid]="showError('username')" aria-describedby="reg-username-error" />
-        <app-field-error [control]="registerForm.get('username')" errorId="reg-username-error"></app-field-error>
+        <label for="reg-username">{{ 'auth.username' | translate }}</label>
       </div>
-      <div class="mb-3">
-        <label for="reg-password" class="form-label">{{ 'auth.password' | translate }}</label>
-        <div class="password-wrap">
-          <input #pw id="reg-password" formControlName="password" type="password" class="form-control" autocomplete="new-password"
-            [attr.aria-invalid]="showError('password')" aria-describedby="reg-password-error" />
-          <button [appPasswordToggle]="pw"></button>
-        </div>
-        <app-field-error [control]="registerForm.get('password')" errorId="reg-password-error"></app-field-error>
+      <app-field-error [control]="registerForm.get('username')" errorId="reg-username-error"></app-field-error>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating password-wrap">
+        <input #pw id="reg-password" formControlName="password" type="password" class="form-control" placeholder=" " autocomplete="new-password"
+          [attr.aria-invalid]="showError('password')" aria-describedby="reg-password-error" />
+        <label for="reg-password">{{ 'auth.password' | translate }}</label>
+        <button [appPasswordToggle]="pw"></button>
       </div>
-      <div class="mb-3">
-        <label for="reg-confirm_password" class="form-label">{{ 'auth.confirmPassword' | translate }}</label>
-        <div class="password-wrap">
-          <input #pw2 id="reg-confirm_password" formControlName="confirm_password" type="password" class="form-control" autocomplete="new-password"
-            [attr.aria-invalid]="showError('confirm_password')" aria-describedby="reg-confirm-error" />
-          <button [appPasswordToggle]="pw2"></button>
-        </div>
-        <app-field-error [control]="registerForm.get('confirm_password')" errorId="reg-confirm-error"></app-field-error>
+      <app-field-error [control]="registerForm.get('password')" errorId="reg-password-error"></app-field-error>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating password-wrap">
+        <input #pw2 id="reg-confirm_password" formControlName="confirm_password" type="password" class="form-control" placeholder=" " autocomplete="new-password"
+          [attr.aria-invalid]="showError('confirm_password')" aria-describedby="reg-confirm-error" />
+        <label for="reg-confirm_password">{{ 'auth.confirmPassword' | translate }}</label>
+        <button [appPasswordToggle]="pw2"></button>
       </div>
-      <div class="mb-3">
-        <label for="reg-email" class="form-label">{{ 'auth.email' | translate }}</label>
-        <input id="reg-email" formControlName="email" type="email" class="form-control" autocomplete="email"
+      <app-field-error [control]="registerForm.get('confirm_password')" errorId="reg-confirm-error"></app-field-error>
+    </div>
+    <div class="mb-3">
+      <div class="form-floating">
+        <input id="reg-email" formControlName="email" type="email" class="form-control" placeholder=" " autocomplete="email"
           [attr.aria-invalid]="showError('email')" aria-describedby="reg-email-error" />
-        <app-field-error [control]="registerForm.get('email')" errorId="reg-email-error"></app-field-error>
+        <label for="reg-email">{{ 'auth.email' | translate }}</label>
       </div>
-      <div class="mb-3">
-        <label for="reg-first_name" class="form-label">{{ 'auth.firstName' | translate }}</label>
-        <input id="reg-first_name" formControlName="first_name" type="text" class="form-control" autocomplete="given-name"
-          [attr.aria-invalid]="showError('first_name')" aria-describedby="reg-first-error" />
+      <app-field-error [control]="registerForm.get('email')" errorId="reg-email-error"></app-field-error>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-6">
+        <div class="form-floating">
+          <input id="reg-first_name" formControlName="first_name" type="text" class="form-control" placeholder=" " autocomplete="given-name"
+            [attr.aria-invalid]="showError('first_name')" aria-describedby="reg-first-error" />
+          <label for="reg-first_name">{{ 'auth.firstName' | translate }}</label>
+        </div>
         <app-field-error [control]="registerForm.get('first_name')" errorId="reg-first-error"></app-field-error>
       </div>
-      <div class="mb-3">
-        <label for="reg-last_name" class="form-label">{{ 'auth.lastName' | translate }}</label>
-        <input id="reg-last_name" formControlName="last_name" type="text" class="form-control" autocomplete="family-name"
-          [attr.aria-invalid]="showError('last_name')" aria-describedby="reg-last-error" />
+      <div class="col-12 col-sm-6">
+        <div class="form-floating">
+          <input id="reg-last_name" formControlName="last_name" type="text" class="form-control" placeholder=" " autocomplete="family-name"
+            [attr.aria-invalid]="showError('last_name')" aria-describedby="reg-last-error" />
+          <label for="reg-last_name">{{ 'auth.lastName' | translate }}</label>
+        </div>
         <app-field-error [control]="registerForm.get('last_name')" errorId="reg-last-error"></app-field-error>
       </div>
-      <button type="submit" class="btn btn-primary w-100" [disabled]="submitting()" [class.is-loading]="submitting()" [attr.aria-busy]="submitting()">
-        {{ (submitting() ? 'auth.submitting' : 'auth.registerSubmit') | translate }}
-      </button>
-    </form>
-    <p class="mt-3 text-center">{{ 'auth.haveAccount' | translate }} <a routerLink="/auth/login">{{ 'auth.loginHere' | translate }}</a></p>
-  </div>
-</div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="submitting()" [class.is-loading]="submitting()" [attr.aria-busy]="submitting()">
+      {{ (submitting() ? 'auth.submitting' : 'auth.registerSubmit') | translate }}
+    </button>
+  </form>
+
+  <p class="mt-4 mb-0">{{ 'auth.haveAccount' | translate }} <a routerLink="/auth/login">{{ 'auth.loginHere' | translate }}</a></p>
+</app-auth-layout>

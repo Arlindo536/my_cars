@@ -1,12 +1,10 @@
-<section class="dark-band-wrap">
-  <div class="dark-band">
-    <div class="container-xl title-band">
-      <h1 class="mb-0">{{ 'admin.bookingsTitle' | translate }}</h1>
-    </div>
-  </div>
-</section>
+<header class="admin-head container-fluid">
+  <h1 class="mb-0">{{ 'admin.bookingsTitle' | translate }}</h1>
+</header>
 
-<div class="container-xl py-4">
+<div class="container-fluid pb-5">
+  <app-admin-stats></app-admin-stats>
+
   <div class="tabs" role="group" [attr.aria-label]="'admin.filterByStatus' | translate">
     <button *ngFor="let f of filters" type="button" class="tab" [class.active]="status() === f"
       [attr.aria-pressed]="status() === f" (click)="setStatus(f)">

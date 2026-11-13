@@ -12,6 +12,8 @@ export class CountUp implements OnChanges, OnDestroy {
   @Input() countUpMs = 500;
   // Text for a value (e.g. a price); intermediate frames get whole numbers, the last one the exact value
   @Input() countUpFormat: (value: number) => string = String;
+  // Start value for the very first number (e.g. 0 for dashboard counters); null shows it at once
+  @Input() countUpFrom: number | null = null;
 
   private el = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private shown: number | null = null;
@@ -19,7 +21,7 @@ export class CountUp implements OnChanges, OnDestroy {
 
   ngOnChanges() {
     cancelAnimationFrame(this.frame);
-    const from = this.shown;
+    const from = this.shown ?? this.countUpFrom;
     const to = this.appCountUp;
     if (from === null || from === to || prefersReducedMotion() || typeof requestAnimationFrame === 'undefined') {
       this.render(to);
