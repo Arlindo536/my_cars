@@ -1,22 +1,31 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 85vh;">
   <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
     <h2 class="mb-4 text-center">{{ 'auth.loginTitle' | translate }}</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="mb-3">
         <label for="login-username" class="form-label">{{ 'auth.username' | translate }}</label>
-        <input id="login-username" formControlName="username" class="form-control" autocomplete="username" />
+        <input id="login-username" formControlName="username" class="form-control" autocomplete="username"
+          [attr.aria-invalid]="showError('username')" aria-describedby="login-username-error" />
+        <app-field-error [control]="loginForm.get('username')" errorId="login-username-error"></app-field-error>
       </div>
       <div class="mb-3">
         <label for="login-password" class="form-label">{{ 'auth.password' | translate }}</label>
-        <input id="login-password" formControlName="password" type="password" class="form-control" autocomplete="current-password" />
+        <div class="password-wrap">
+          <input #pw id="login-password" formControlName="password" type="password" class="form-control" autocomplete="current-password"
+            [attr.aria-invalid]="showError('password')" aria-describedby="login-password-error" />
+          <button [appPasswordToggle]="pw"></button>
+        </div>
+        <app-field-error [control]="loginForm.get('password')" errorId="login-password-error"></app-field-error>
       </div>
-      <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">{{ 'auth.loginSubmit' | translate }}</button>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="submitting()" [class.is-loading]="submitting()" [attr.aria-busy]="submitting()">
+        {{ (submitting() ? 'auth.submitting' : 'auth.loginSubmit') | translate }}
+      </button>
     </form>
     <div *ngIf="demoAccounts.length" class="demo-box mt-4">
       <h2 class="h6 mb-1">{{ 'demo.title' | translate }}</h2>
       <p class="small text-muted mb-2">{{ 'demo.text' | translate }}</p>
       <div class="d-flex gap-2">
-        <button *ngFor="let a of demoAccounts" type="button" class="btn btn-dark btn-sm flex-fill" (click)="loginAsDemo(a)">
+        <button *ngFor="let a of demoAccounts" type="button" class="btn btn-dark btn-sm flex-fill" [disabled]="submitting()" (click)="loginAsDemo(a)">
           {{ (a.role === 'admin' ? 'demo.admin' : 'demo.customer') | translate }}
         </button>
       </div>

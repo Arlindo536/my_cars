@@ -182,7 +182,10 @@
     "loginHere": "Hier anmelden",
     "registerSuccess": "Konto erstellt. Du kannst dich jetzt anmelden.",
     "registerFailed": "Registrierung fehlgeschlagen. Bitte prüfe deine Angaben.",
-    "noPermission": "Du hast keine Berechtigung für diese Seite."
+    "noPermission": "Du hast keine Berechtigung für diese Seite.",
+    "showPassword": "Passwort anzeigen",
+    "hidePassword": "Passwort verbergen",
+    "submitting": "Wird gesendet …"
   },
   "messages": {
     "title": "Nachrichten",
@@ -316,5 +319,15 @@
     "customer": "Demo-Kunde",
     "admin": "Demo-Admin",
     "heroLink": "oder teste die Demo als Kunde oder Admin →"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich.",
+    "email": "Bitte eine gültige E-Mail-Adresse eingeben.",
+    "mismatch": "Die Passwörter stimmen nicht überein."
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "text": "Die Adresse ist vielleicht falsch oder die Seite wurde entfernt. Unsere Autos sind noch da.",
+    "home": "Autos ansehen"
   }
 }

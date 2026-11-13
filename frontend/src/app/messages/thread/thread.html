@@ -1,13 +1,17 @@
-<p *ngIf="loading()" class="container-xl py-5 text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
-
-<div *ngIf="notFound()" class="container-xl py-5 text-center">
-  <h1>{{ 'messages.notFound' | translate }}</h1>
-  <a routerLink="/messages" class="btn btn-dark">{{ 'messages.backToInbox' | translate }}</a>
+<div *ngIf="loading()" class="container-xl py-5">
+  <app-skeleton variant="row" [count]="4"></app-skeleton>
 </div>
 
-<div *ngIf="failed()" class="container-xl py-5 text-center">
-  <p class="mb-3">{{ 'messages.loadError' | translate }}</p>
-  <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+<div *ngIf="notFound()" class="container-xl py-5">
+  <app-empty-state illustration="lost" [level]="1" [heading]="'messages.notFound' | translate">
+    <a routerLink="/messages" class="btn btn-dark">{{ 'messages.backToInbox' | translate }}</a>
+  </app-empty-state>
+</div>
+
+<div *ngIf="failed()" class="container-xl py-5">
+  <app-empty-state illustration="error" [text]="'messages.loadError' | translate">
+    <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </app-empty-state>
 </div>
 
 <ng-container *ngIf="conversation() as c">
@@ -49,7 +53,7 @@
           [placeholder]="'messages.placeholder' | translate"
           (keydown)="onKeydown($event)"
         ></textarea>
-        <button type="submit" class="btn btn-primary" [disabled]="!body.value.trim() || sending()">
+        <button type="submit" class="btn btn-primary" [disabled]="!body.value.trim() || sending()" [class.is-loading]="sending()" [attr.aria-busy]="sending()">
           {{ (sending() ? 'messages.sending' : 'messages.send') | translate }}
         </button>
       </form>

@@ -1,22 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { RouterModule } from '@angular/router';
+import { AdminModule } from '../admin-module';
+import { provideTestTranslations } from '../../../testing/translate';
 
 import { UserCreate } from './user-create';
 
 describe('UserCreate', () => {
-  let component: UserCreate;
-  let fixture: ComponentFixture<UserCreate>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserCreate],
+      imports: [AdminModule, RouterModule.forRoot([])],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideTestTranslations()],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(UserCreate);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('has a show/hide button for every password field', () => {
+    const fixture = TestBed.createComponent(UserCreate);
+    fixture.detectChanges();
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelectorAll('.password-toggle').length).toBe(el.querySelectorAll('.password-wrap input').length);
+    expect(el.querySelectorAll('.password-toggle').length).toBeGreaterThan(0);
   });
 });

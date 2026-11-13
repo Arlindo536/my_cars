@@ -182,7 +182,10 @@
     "loginHere": "Log in here",
     "registerSuccess": "Account created. You can now log in.",
     "registerFailed": "Sign-up failed. Please check your details.",
-    "noPermission": "You do not have permission to view this page."
+    "noPermission": "You do not have permission to view this page.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "submitting": "Sending…"
   },
   "messages": {
     "title": "Messages",
@@ -316,5 +319,15 @@
     "customer": "Demo customer",
     "admin": "Demo admin",
     "heroLink": "or try the demo as a customer or admin →"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Enter a valid email address.",
+    "mismatch": "The passwords do not match."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The address may be wrong or the page was removed. Our cars are still here.",
+    "home": "Browse cars"
   }
 }

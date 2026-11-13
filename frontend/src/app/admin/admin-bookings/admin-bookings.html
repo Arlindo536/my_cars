@@ -14,16 +14,13 @@
     </button>
   </div>
 
-  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+  <app-skeleton *ngIf="loading()" variant="row" [count]="3"></app-skeleton>
 
-  <div *ngIf="failed()" class="empty-state">
-    <p class="mb-3">{{ 'myBookings.loadError' | translate }}</p>
+  <app-empty-state *ngIf="failed()" illustration="error" [text]="'myBookings.loadError' | translate">
     <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
-  </div>
+  </app-empty-state>
 
-  <div *ngIf="!loading() && !failed() && items().length === 0" class="empty-state">
-    <p class="mb-0">{{ 'admin.noBookings' | translate }}</p>
-  </div>
+  <app-empty-state *ngIf="!loading() && !failed() && items().length === 0" illustration="calendar" [text]="'admin.noBookings' | translate"></app-empty-state>
 
   <ul *ngIf="!loading() && items().length > 0" class="list-unstyled booking-list">
     <li *ngFor="let b of items()" class="booking-row" [attr.data-status]="b.status">
@@ -35,11 +32,11 @@
           {{ (b.days === 1 ? 'common.dayOne' : 'common.dayMany') | translate: { count: b.days } }}
         </p>
       </div>
-      <span class="status" [attr.data-status]="b.status">{{ 'status.' + b.status | translate }}</span>
+      <app-status-badge [status]="b.status">{{ 'status.' + b.status | translate }}</app-status-badge>
       <span class="booking-total">{{ b.total_price | price: language.locale() }}</span>
       <div class="actions">
         <ng-container *ngIf="b.status === 'pending'">
-          <button type="button" class="btn btn-primary btn-sm" [disabled]="busy().includes(b.id)" (click)="confirm(b)">
+          <button type="button" class="btn btn-primary btn-sm" [disabled]="busy().includes(b.id)" [attr.aria-busy]="busy().includes(b.id)" (click)="confirm(b)">
             {{ 'admin.confirm' | translate }}<span class="visually-hidden"> {{ b.car.model }}, {{ b.customer }}</span>
           </button>
           <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="busy().includes(b.id)" (click)="reject(b)">

@@ -182,7 +182,10 @@
     "loginHere": "Hyr këtu",
     "registerSuccess": "Llogaria u krijua. Tani mund të hysh.",
     "registerFailed": "Regjistrimi dështoi. Kontrollo të dhënat.",
-    "noPermission": "Nuk ke leje për këtë faqe."
+    "noPermission": "Nuk ke leje për këtë faqe.",
+    "showPassword": "Shfaq fjalëkalimin",
+    "hidePassword": "Fshih fjalëkalimin",
+    "submitting": "Duke dërguar…"
   },
   "messages": {
     "title": "Mesazhet",
@@ -316,5 +319,15 @@
     "customer": "Klient demo",
     "admin": "Admin demo",
     "heroLink": "ose provo demon si klient apo admin →"
+  },
+  "validation": {
+    "required": "Kjo fushë është e detyrueshme.",
+    "email": "Shkruani një email të vlefshëm.",
+    "mismatch": "Fjalëkalimet nuk përputhen."
+  },
+  "notFound": {
+    "title": "Kjo faqe nuk u gjet",
+    "text": "Adresa mund të jetë e gabuar ose faqja është hequr. Makinat tona janë ende këtu.",
+    "home": "Shiko makinat"
   }
 }

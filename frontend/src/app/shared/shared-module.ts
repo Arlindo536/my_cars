@@ -6,10 +6,11 @@ import { CarCard } from './car-card/car-card';
 import { CarPlaceholder } from './car-placeholder/car-placeholder';
 import { OfficeMap } from './office-map/office-map';
 import { PricePipe } from './price-pipe';
+import { UiModule } from '../ui/ui-module';
 
 @NgModule({
   declarations: [CarCard, CarPlaceholder, OfficeMap, PricePipe],
-  imports: [CommonModule, RouterModule, TranslatePipe],
-  exports: [CarCard, CarPlaceholder, OfficeMap, PricePipe, TranslatePipe],
+  imports: [CommonModule, RouterModule, TranslatePipe, UiModule],
+  exports: [CarCard, CarPlaceholder, OfficeMap, PricePipe, TranslatePipe, UiModule],
 })
 export class SharedModule {}

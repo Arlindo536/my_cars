@@ -1,32 +1,52 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 85vh;">
   <div class="card shadow p-4" style="width: 100%; max-width: 420px;">
     <h2 class="mb-4 text-center">{{ 'auth.registerTitle' | translate }}</h2>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="mb-3">
         <label for="reg-username" class="form-label">{{ 'auth.username' | translate }}</label>
-        <input id="reg-username" formControlName="username" type="text" class="form-control" autocomplete="username" />
+        <input id="reg-username" formControlName="username" type="text" class="form-control" autocomplete="username"
+          [attr.aria-invalid]="showError('username')" aria-describedby="reg-username-error" />
+        <app-field-error [control]="registerForm.get('username')" errorId="reg-username-error"></app-field-error>
       </div>
       <div class="mb-3">
         <label for="reg-password" class="form-label">{{ 'auth.password' | translate }}</label>
-        <input id="reg-password" formControlName="password" type="password" class="form-control" autocomplete="new-password" />
+        <div class="password-wrap">
+          <input #pw id="reg-password" formControlName="password" type="password" class="form-control" autocomplete="new-password"
+            [attr.aria-invalid]="showError('password')" aria-describedby="reg-password-error" />
+          <button [appPasswordToggle]="pw"></button>
+        </div>
+        <app-field-error [control]="registerForm.get('password')" errorId="reg-password-error"></app-field-error>
       </div>
       <div class="mb-3">
         <label for="reg-confirm_password" class="form-label">{{ 'auth.confirmPassword' | translate }}</label>
-        <input id="reg-confirm_password" formControlName="confirm_password" type="password" class="form-control" autocomplete="new-password" />
+        <div class="password-wrap">
+          <input #pw2 id="reg-confirm_password" formControlName="confirm_password" type="password" class="form-control" autocomplete="new-password"
+            [attr.aria-invalid]="showError('confirm_password')" aria-describedby="reg-confirm-error" />
+          <button [appPasswordToggle]="pw2"></button>
+        </div>
+        <app-field-error [control]="registerForm.get('confirm_password')" errorId="reg-confirm-error"></app-field-error>
       </div>
       <div class="mb-3">
         <label for="reg-email" class="form-label">{{ 'auth.email' | translate }}</label>
-        <input id="reg-email" formControlName="email" type="email" class="form-control" autocomplete="email" />
+        <input id="reg-email" formControlName="email" type="email" class="form-control" autocomplete="email"
+          [attr.aria-invalid]="showError('email')" aria-describedby="reg-email-error" />
+        <app-field-error [control]="registerForm.get('email')" errorId="reg-email-error"></app-field-error>
       </div>
       <div class="mb-3">
         <label for="reg-first_name" class="form-label">{{ 'auth.firstName' | translate }}</label>
-        <input id="reg-first_name" formControlName="first_name" type="text" class="form-control" autocomplete="given-name" />
+        <input id="reg-first_name" formControlName="first_name" type="text" class="form-control" autocomplete="given-name"
+          [attr.aria-invalid]="showError('first_name')" aria-describedby="reg-first-error" />
+        <app-field-error [control]="registerForm.get('first_name')" errorId="reg-first-error"></app-field-error>
       </div>
       <div class="mb-3">
         <label for="reg-last_name" class="form-label">{{ 'auth.lastName' | translate }}</label>
-        <input id="reg-last_name" formControlName="last_name" type="text" class="form-control" autocomplete="family-name" />
+        <input id="reg-last_name" formControlName="last_name" type="text" class="form-control" autocomplete="family-name"
+          [attr.aria-invalid]="showError('last_name')" aria-describedby="reg-last-error" />
+        <app-field-error [control]="registerForm.get('last_name')" errorId="reg-last-error"></app-field-error>
       </div>
-      <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">{{ 'auth.registerSubmit' | translate }}</button>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="submitting()" [class.is-loading]="submitting()" [attr.aria-busy]="submitting()">
+        {{ (submitting() ? 'auth.submitting' : 'auth.registerSubmit') | translate }}
+      </button>
     </form>
     <p class="mt-3 text-center">{{ 'auth.haveAccount' | translate }} <a routerLink="/auth/login">{{ 'auth.loginHere' | translate }}</a></p>
   </div>

@@ -13,7 +13,7 @@
         [attr.maxlength]="maxLength"
         [placeholder]="'messages.askPlaceholder' | translate"
       ></textarea>
-      <button type="submit" class="btn btn-dark" [disabled]="!body.value.trim() || sending()">
+      <button type="submit" class="btn btn-dark" [disabled]="!body.value.trim() || sending()" [class.is-loading]="sending()" [attr.aria-busy]="sending()">
         {{ (sending() ? 'messages.sending' : 'messages.send') | translate }}
       </button>
     </form>

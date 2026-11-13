@@ -94,6 +94,8 @@
   --band-line: rgba(241, 238, 233, 0.14);
   --band-brand-text: #f47a7a;
   --band-focus: #f47a7a;
+  --band-success: #4ade80;
+  --band-error: #ff8a80;
   --band-hover: rgba(241, 238, 233, 0.08);
   --band-active: rgba(241, 238, 233, 0.12);
   --hero-glow: rgba(198, 40, 40, 0.22);
@@ -152,6 +154,8 @@
   --band-line: rgba(241, 238, 233, 0.09);
   --band-brand-text: #f47a7a;
   --band-focus: #f47a7a;
+  --band-success: #4ade80;
+  --band-error: #ff8a80;
   --band-hover: rgba(241, 238, 233, 0.08);
   --band-active: rgba(241, 238, 233, 0.12);
   --hero-glow: rgba(198, 40, 40, 0.16);

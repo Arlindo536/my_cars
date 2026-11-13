@@ -1,0 +1,22 @@
+<!-- The live region exists before any toast, so screen readers announce new ones -->
+<div class="toast-stack" aria-live="polite" aria-relevant="additions">
+  @for (t of notification.toasts(); track t.id) {
+    <div
+      class="toast-item"
+      [attr.data-kind]="t.kind"
+      [attr.role]="t.kind === 'error' ? 'alert' : 'status'"
+      animate.enter="toast-in"
+      animate.leave="toast-out"
+      (mouseenter)="notification.pause(t.id)"
+      (mouseleave)="notification.resume(t.id)"
+      (focusin)="notification.pause(t.id)"
+      (focusout)="notification.resume(t.id)"
+    >
+      <i class="material-icons toast-icon" aria-hidden="true">{{ t.kind === 'error' ? 'error_outline' : 'check_circle' }}</i>
+      <p class="toast-text">{{ t.message }}</p>
+      <button type="button" class="toast-close" [attr.aria-label]="'common.close' | translate" (click)="notification.dismiss(t.id)">
+        <i class="material-icons" aria-hidden="true">close</i>
+      </button>
+    </div>
+  }
+</div>

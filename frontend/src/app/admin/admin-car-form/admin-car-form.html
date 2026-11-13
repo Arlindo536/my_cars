@@ -8,7 +8,7 @@
 </section>
 
 <div class="container-xl py-4">
-  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+  <app-skeleton *ngIf="loading()" variant="detail"></app-skeleton>
 
   <form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="save()" class="row g-4" novalidate>
     <div class="col-12 col-lg-7">
@@ -90,7 +90,7 @@
       </div>
 
       <div class="d-flex gap-2 mt-3">
-        <button type="submit" class="btn btn-primary flex-fill" [disabled]="saving()">
+        <button type="submit" class="btn btn-primary flex-fill" [disabled]="saving()" [class.is-loading]="saving()" [attr.aria-busy]="saving()">
           {{ (saving() ? 'admin.saving' : 'admin.save') | translate }}
         </button>
         <a routerLink="/admin/cars" class="btn btn-outline-secondary">{{ 'admin.cancel' | translate }}</a>

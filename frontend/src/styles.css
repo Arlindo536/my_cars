@@ -130,6 +130,32 @@ a {
   transform: scale(0.98);
 }
 
+/* Loading: inline spinner before the label (pair with [disabled] and aria-busy) */
+.btn.is-loading::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  vertical-align: -0.15em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.is-loading::before {
+    animation-duration: 2s;
+  }
+}
+
 /* Primary: the one red action per view */
 .btn-primary {
   --bs-btn-color: var(--on-brand);
@@ -252,6 +278,50 @@ a {
   background-color: var(--bg-2);
 }
 
+/* Invalid after the user touched it; the message (icon + text) comes from <app-field-error> */
+.form-control[aria-invalid='true'],
+.form-select[aria-invalid='true'] {
+  border-color: var(--error);
+}
+
+.form-control[aria-invalid='true']:focus,
+.form-select[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 3px var(--error-wash);
+}
+
+/* Password field with a show/hide button inside the right edge */
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap .form-control {
+  padding-right: 3rem;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.15rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+}
+
+.password-toggle:hover {
+  color: var(--text);
+}
+
+.password-toggle .material-icons {
+  font-size: 1.2rem;
+}
+
 /* ---------- Surfaces ---------- */
 .card {
   --bs-card-bg: var(--bg-1);
@@ -334,15 +404,6 @@ a {
   color: var(--band-text);
 }
 
-/* Empty / error placeholders (shared look until the Phase 2 component) */
-.empty-state {
-  text-align: center;
-  background: var(--bg-1);
-  border: 1px dashed var(--line-strong);
-  border-radius: var(--radius-lg);
-  padding: 3rem 1rem;
-}
-
 /* Status chips: always text (never colour alone), tinted by status */
 .status {
   display: inline-block;
@@ -361,21 +422,7 @@ a {
 }
 
 .status[data-status='confirmed'],
-.status.listed {
+.status[data-status='listed'] {
   background: var(--success-wash);
   color: var(--success);
-}
-
-/* ---------- Snackbars (status colours, not the brand red) ---------- */
-.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
-  background-color: var(--error-strong) !important;
-}
-
-.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
-  background-color: var(--success-strong) !important;
-}
-
-.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__label,
-.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__label {
-  color: var(--on-brand) !important;
 }

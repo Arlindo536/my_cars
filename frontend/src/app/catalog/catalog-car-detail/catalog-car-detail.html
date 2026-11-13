@@ -1,16 +1,17 @@
-<div *ngIf="loading()" class="container-xl py-5" aria-busy="true">
-  <p class="text-muted">{{ 'common.loading' | translate }}</p>
+<div *ngIf="loading()" class="container-xl py-5">
+  <app-skeleton variant="detail"></app-skeleton>
 </div>
 
-<div *ngIf="notFound()" class="container-xl py-5 text-center">
-  <h1>{{ 'car.notFoundTitle' | translate }}</h1>
-  <p class="text-muted">{{ 'car.notFoundText' | translate }}</p>
-  <a routerLink="/" class="btn btn-dark">{{ 'car.backToCars' | translate }}</a>
+<div *ngIf="notFound()" class="container-xl py-5">
+  <app-empty-state illustration="lost" [level]="1" [heading]="'car.notFoundTitle' | translate" [text]="'car.notFoundText' | translate">
+    <a routerLink="/" class="btn btn-primary">{{ 'car.backToCars' | translate }}</a>
+  </app-empty-state>
 </div>
 
-<div *ngIf="failed()" class="container-xl py-5 text-center">
-  <p class="mb-3">{{ 'car.loadError' | translate }}</p>
-  <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+<div *ngIf="failed()" class="container-xl py-5">
+  <app-empty-state illustration="error" [text]="'car.loadError' | translate">
+    <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </app-empty-state>
 </div>
 
 <ng-container *ngIf="car() as car">

@@ -1,0 +1,49 @@
+<div class="empty" [attr.role]="illustration === 'error' ? 'alert' : null">
+  <svg class="ill" viewBox="0 0 200 120" aria-hidden="true">
+    <!-- road -->
+    <line class="road" x1="8" y1="106" x2="192" y2="106" />
+    <!-- car (side view) -->
+    <g class="car">
+      <path d="M22 92c0-5 3-9 8-10l19-4 16-13c3-3 7-4 11-4h29c5 0 9 1 13 5l12 12 19 4c5 1 8 5 8 10v5c0 3-1 4-4 4h-8a13 13 0 0 0-26 0H64a13 13 0 0 0-26 0H26c-3 0-4-1-4-4z" />
+      <circle cx="51" cy="101" r="8" />
+      <circle cx="129" cy="101" r="8" />
+    </g>
+    <!-- accent per state -->
+    <g class="accent" [ngSwitch]="illustration">
+      <g *ngSwitchCase="'search'">
+        <circle cx="160" cy="30" r="14" />
+        <line x1="170" y1="40" x2="182" y2="52" />
+      </g>
+      <g *ngSwitchCase="'error'">
+        <path d="M160 12l20 34h-40z" />
+        <line x1="160" y1="24" x2="160" y2="35" />
+        <circle class="dot" cx="160" cy="40.5" r="1.6" />
+      </g>
+      <g *ngSwitchCase="'calendar'">
+        <rect x="144" y="14" width="34" height="32" rx="4" />
+        <line x1="144" y1="24" x2="178" y2="24" />
+        <line x1="152" y1="9" x2="152" y2="17" />
+        <line x1="170" y1="9" x2="170" y2="17" />
+      </g>
+      <g *ngSwitchCase="'inbox'">
+        <path d="M144 14h36a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4h-24l-9 8v-8h-3a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z" />
+        <line x1="150" y1="24" x2="174" y2="24" />
+        <line x1="150" y1="31" x2="166" y2="31" />
+      </g>
+      <g *ngSwitchCase="'lost'">
+        <line x1="166" y1="14" x2="166" y2="104" />
+        <path d="M150 18h30l6 7-6 7h-30z" />
+        <path d="M182 40h-30l-6 7 6 7h30z" />
+      </g>
+      <g *ngSwitchDefault>
+        <path d="M144 46V24l18-12 18 12v22" />
+        <line x1="152" y1="46" x2="172" y2="46" />
+      </g>
+    </g>
+  </svg>
+
+  <h1 *ngIf="level === 1 && heading" class="empty-title h3">{{ heading }}</h1>
+  <h2 *ngIf="level === 2 && heading" class="empty-title h5">{{ heading }}</h2>
+  <p *ngIf="text" class="empty-text">{{ text }}</p>
+  <div class="empty-actions"><ng-content></ng-content></div>
+</div>

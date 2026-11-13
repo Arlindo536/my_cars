@@ -1,0 +1,38 @@
+<div class="skeleton-wrap" role="status" [attr.data-variant]="variant">
+  <span class="visually-hidden">{{ 'common.loading' | translate }}</span>
+
+  <ng-container [ngSwitch]="variant">
+    <div *ngSwitchCase="'card'" class="row g-4" aria-hidden="true">
+      <div class="col-12 col-sm-6 col-lg-4" *ngFor="let i of items">
+        <div class="sk-card">
+          <div class="sk sk-photo"></div>
+          <div class="sk-body">
+            <div class="sk sk-line w-60 lg"></div>
+            <div class="sk sk-line w-40"></div>
+            <div class="sk-pills"><span class="sk sk-pill"></span><span class="sk sk-pill"></span><span class="sk sk-pill"></span></div>
+            <div class="sk sk-button"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'detail'" class="row g-4" aria-hidden="true">
+      <div class="col-12 col-lg-8">
+        <div class="sk sk-hero"></div>
+        <div class="sk sk-line w-80 mt"></div>
+        <div class="sk sk-line w-60"></div>
+      </div>
+      <div class="col-12 col-lg-4"><div class="sk sk-panel"></div></div>
+    </div>
+
+    <ul *ngSwitchDefault class="list-unstyled sk-rows" aria-hidden="true">
+      <li *ngFor="let i of items" class="sk-row">
+        <div class="sk-row-main">
+          <div class="sk sk-line w-40 lg"></div>
+          <div class="sk sk-line w-60"></div>
+        </div>
+        <div class="sk sk-line sk-row-end"></div>
+      </li>
+    </ul>
+  </ng-container>
+</div>

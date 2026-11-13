@@ -5,6 +5,7 @@ import { adminGuard } from './auth/admin-guard';
 import { guestGuard } from './auth/guest-guard';
 import { Register } from './auth/register/register';
 import { Login } from './auth/login/login';
+import { NotFound } from './not-found/not-found';
 
 const routes: Routes = [
   {
@@ -45,7 +46,7 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./catalog/catalog-module').then(m => m.CatalogModule)
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', component: NotFound },
 ];
 
 @NgModule({

@@ -25,16 +25,15 @@
     </div>
   </div>
 
-  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+  <app-skeleton *ngIf="loading()" variant="row" [count]="3"></app-skeleton>
 
-  <div *ngIf="failed()" class="empty-state">
-    <p class="mb-3">{{ 'admin.fleetLoadFailed' | translate }}</p>
+  <app-empty-state *ngIf="failed()" illustration="error" [text]="'admin.fleetLoadFailed' | translate">
     <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
-  </div>
+  </app-empty-state>
 
-  <div *ngIf="!loading() && !failed() && cars().length === 0" class="empty-state">
-    <p class="mb-0">{{ 'admin.fleetEmpty' | translate }}</p>
-  </div>
+  <app-empty-state *ngIf="!loading() && !failed() && cars().length === 0" illustration="garage" [text]="'admin.fleetEmpty' | translate">
+    <a routerLink="/admin/cars/new" class="btn btn-primary">+ {{ 'admin.newCar' | translate }}</a>
+  </app-empty-state>
 
   <div *ngIf="!loading() && cars().length > 0" class="table-responsive fleet-table">
     <table class="table align-middle mb-0">
@@ -67,9 +66,9 @@
           <td>{{ 'type.' + car.type | translate }}</td>
           <td class="text-end fw-semibold">{{ car.price_per_day | price: language.locale() }}</td>
           <td>
-            <span class="status" [class.listed]="isListed(car)">
+            <app-status-badge [status]="isListed(car) ? 'listed' : 'hidden'">
               {{ (isListed(car) ? 'admin.listed' : 'admin.hidden') | translate }}
-            </span>
+            </app-status-badge>
             <div *ngIf="car.owner && !isListed(car)" class="small text-muted">{{ 'admin.ownerLabel' | translate: { name: car.owner } }}</div>
           </td>
           <td class="text-end text-nowrap">

@@ -60,3 +60,31 @@ Tests: backend 76 OK; frontend 25 passed / 14 failed, the same 14 pre-existing `
 - Optional baby-blue secondary: **not added** (manual default: no). `--steel` is the only secondary.
 - Brand name/logo: kept the text wordmark "MyCars" + car icon (placeholder until Arlindo decides).
 - The manual says SQ | EN; the app keeps SQ | EN | DE.
+
+## Phase 2: base components and states (2026-11-13)
+
+Arlindo had not answered the Phase 1 questions yet, so the defaults stay: Sora headings, theme follows the system, the two functional bugs (`/login` route, empty admins table) untouched.
+
+### What changed
+- **`UiModule`** (`src/app/ui/`), separate from `SharedModule` so the eager shell can use it without pulling Leaflet into the initial bundle:
+  - `app-skeleton` (`card` / `row` / `detail`): shaped like the real content, `role="status"` with a hidden "loading" label, shimmer off under reduced motion. Replaces every "Loading…" line (home, car page, my bookings, inbox, thread, admin bookings, fleet, car form).
+  - `app-empty-state`: small original line illustration (car on a dashed road + accent: magnifier, warning sign, calendar, speech bubble, signpost, garage), optional heading (`h1` for whole-page states, `h2` otherwise), text and projected actions. Error variant is `role="alert"`. Used for every empty, error and not-found state above; the fleet's empty state gained an "Add car" action.
+  - `app-status-badge`: icon + text per status (pending, confirmed, rejected, cancelled, listed, hidden); colour is never the only signal.
+  - `app-field-error`: inline message with icon under a field once it was touched, linked with `aria-describedby`; inputs get `aria-invalid` and an error-hue border. Refreshes on `control.events`, so `markAllAsTouched()` on submit shows it (needed with zoneless change detection).
+  - `appPasswordToggle`: show/hide button inside password fields (44 px, `aria-pressed`, translated label). On login, register, change password, admin "new user".
+- **Toasts** replace the Material snackbar behind the same `Notification.success/error` API: bottom of the screen (centred on mobile, right on desktop), stacked (max 4), auto-dismiss 4 s / 6 s, paused on hover/focus, close button, icon + text, `aria-live` region with errors as `role="alert"`; enter/leave via Angular's `animate.enter/leave`. Dropping `MatSnackBar` cut the initial bundle from 910 to 865 kB.
+- **404 page**: unknown URLs show a "page not found" state with a link to the cars instead of silently redirecting home (`**` route now renders `NotFound`).
+- **Buttons**: `.is-loading` adds an inline spinner (with `disabled` + `aria-busy`) on booking, ask-owner, thread send, car form save, login and register. Login/register no longer keep the submit disabled while the form is invalid: submitting shows the inline errors instead, and register checks the password confirmation client-side (the API still validates it).
+- Legacy car list: the two icon-only pagination buttons got `aria-label`s. A scan of all templates finds no other unlabelled icon-only button or link.
+- Icons stay **Material Icons** (one set, already used everywhere).
+
+### Verified
+- Lighthouse (production build + CSP): accessibility 100 on home, car page, register and 404, mobile and desktop; CLS 0 on all. Mobile performance read 65 on home this time, but the Phase 1 build measured 65 too in the same session (machine load), so no regression; desktop 97-99.
+- Keyboard (scripted): Tab reaches the password toggle, Enter toggles it; the toast close button is reachable and Space closes it; focus ring visible.
+- No console errors or CSP violations on any page of the production build; only third party is the OSM tiles.
+- Tests: backend 76 OK; frontend 39 passed / 8 failed. The 8 are the remaining legacy `should create` specs; the specs of every component touched here (App, Login, Register, ChangePassword, UserCreate) were rewritten and pass, plus new specs for toasts and the UI components.
+- Screenshots of the new states (light/dark): `docs/visual-upgrade/phase2/`.
+
+### Deferred
+- Auth pages keep their card layout (split layout is Phase 6); floating labels likewise.
+- Admin "Confirm/Reject" show `aria-busy` but no spinner (both share one busy flag, so the clicked one isn't known).

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { environment } from '../../../environments/environment';
 export class Login {
   loginForm: FormGroup;
   readonly demoAccounts = environment.demoAccounts;
+  readonly submitting = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -35,27 +36,40 @@ export class Login {
     this.onSubmit();
   }
 
+  /** True once the user has touched an invalid field (drives aria-invalid and the inline message) */
+  showError(name: string): boolean {
+    const c = this.loginForm.get(name);
+    return !!c && c.invalid && c.touched;
+  }
+
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.http.post(`${environment.apiUrl}/users/login/`, this.loginForm.value)
-        .subscribe({
-          next: (response: any) => {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('role', response.role);
-            this.notification.success(this.language.t('auth.loginSuccess'));
-            const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-            if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
-              this.router.navigateByUrl(returnUrl);
-            } else if (response.role === 'admin') {
-              this.router.navigate(['/admin/bookings']);
-            } else {
-              this.router.navigate(['/']);
-            }
-          },
-          error: (err) => {
-            this.notification.error(this.language.t('auth.loginFailed'));
-          }
-        });
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
     }
+    if (this.submitting()) {
+      return;
+    }
+    this.submitting.set(true);
+    this.http.post(`${environment.apiUrl}/users/login/`, this.loginForm.value).subscribe({
+      next: (response: any) => {
+        this.submitting.set(false);
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('role', response.role);
+        this.notification.success(this.language.t('auth.loginSuccess'));
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
+          this.router.navigateByUrl(returnUrl);
+        } else if (response.role === 'admin') {
+          this.router.navigate(['/admin/bookings']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+      error: () => {
+        this.submitting.set(false);
+        this.notification.error(this.language.t('auth.loginFailed'));
+      }
+    });
   }
 }

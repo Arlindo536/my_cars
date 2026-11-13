@@ -7,17 +7,16 @@
 </section>
 
 <div class="container-xl py-4">
-  <p *ngIf="loading()" class="text-muted" aria-busy="true">{{ 'common.loading' | translate }}</p>
+  <app-skeleton *ngIf="loading()" variant="row" [count]="3"></app-skeleton>
 
-  <div *ngIf="failed()" class="empty-state">
-    <p class="mb-3">{{ 'messages.loadError' | translate }}</p>
+  <app-empty-state *ngIf="failed()" illustration="error" [text]="'messages.loadError' | translate">
     <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
-  </div>
+  </app-empty-state>
 
-  <div *ngIf="!loading() && !failed() && items().length === 0" class="empty-state">
-    <p class="mb-3">{{ (isAdmin ? 'messages.emptyAdmin' : 'messages.empty') | translate }}</p>
+  <app-empty-state *ngIf="!loading() && !failed() && items().length === 0" illustration="inbox"
+    [text]="(isAdmin ? 'messages.emptyAdmin' : 'messages.empty') | translate">
     <a *ngIf="!isAdmin" routerLink="/" class="btn btn-primary">{{ 'myBookings.pickCar' | translate }}</a>
-  </div>
+  </app-empty-state>
 
   <ul *ngIf="!loading() && items().length > 0" class="list-unstyled conversation-list">
     <li *ngFor="let c of items()">

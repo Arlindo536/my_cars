@@ -24,7 +24,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Fixed in step 0: `RegisterSerializer.validate` sat outside the class (password confirmation never checked); stray empty `backend/__init__.py` broke test discovery.
 - Step 8 moved the admin fleet into the admin module (`/admin/cars`, `/admin/cars/new`, `/admin/cars/:id/edit`). The old `car` module (`/cars`, from when customers added their own cars) is now admin-only and unlinked; ask Arlindo before deleting it.
 - API base URLs: moved to `src/environments/environment(.prod).ts` in step 1 (prod uses relative `/api`).
-- Frontend specs: 16 of 27 generated `should create` specs fail (missing HttpClient/MatSnackBar/router providers in TestBed); pre-existing, fix when touching each component.
+- Frontend specs: 8 legacy `should create` specs still fail (missing providers in TestBed: user detail/form/list, update profile, confirm dialog, legacy car pages); fix when touching each component.
 - Step 2: the 11 pre-existing dev cars (owned by customers) have `price_per_day = 0` and no photo; the catalog must hide or handle them (ask Arlindo before deleting). Demo cars have no photos yet (his decision); the frontend needs a placeholder.
 - `price_per_day`/`description` are optional in `CarSerializer` so the old edit form (which does not send them) cannot reset them on PUT.
 - Step 3: `CarDetailView` had `permission_classes = [IsOwnerOrAdmin]` only, so anonymous requests crashed with 500 (AnonymousUser has no `role`); fixed to `[IsAuthenticated, IsOwnerOrAdmin]`. Check other views for the same pattern in the security audit.
@@ -69,6 +69,8 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - Red is an accent only (primary button, price tag, small bars, badges, active underline); errors use rose/coral, never brand red. No pure black/white surfaces (white cards in light theme are fine).
 - Fonts: Sora (display) + Inter (UI), self-hosted from Fontsource in `/fonts`; Material Icons self-hosted; Bootstrap 5.3.3 bundled from npm. No CDNs (CSP is `style-src 'self' 'unsafe-inline'; font-src 'self'`).
 - Motion tokens match arlindo.site (`--ease-out`, `--ease-in-out`, `--dur-*`); honour reduced motion; no smooth-scroll library.
+- Shared states live in `UiModule` (`src/app/ui/`: `app-skeleton`, `app-empty-state`, `app-status-badge`, `app-field-error`, `appPasswordToggle`); use them instead of ad-hoc "Loading…" text or empty boxes. Busy buttons: `[class.is-loading]` + `disabled` + `aria-busy`.
+- Notifications are our own toasts (`Notification` service + `<app-toast-host>` in `app.html`), not MatSnackBar. Unknown URLs render `NotFound`.
 - Copy is Albanian by default (`sq`), mobile-first, accessible (real buttons/links, labels, 4.5:1 contrast, 44 px targets).
 
 ## Plan and status (blocks are ~90 min; target finish early December)
@@ -83,7 +85,7 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
 - [x] Deployed 2026-10-22 to https://my-cars.arlindo.site (see "Server" below).
-- [ ] Visual upgrade (manual above): phase 0 audit + phase 1 tokens/themes done 2026-11-13, waiting for Arlindo's review.
+- [ ] Visual upgrade (manual above): phases 0-2 done 2026-11-13 (audit, tokens/themes, base components/states); phase 1 review questions still open (font, default theme, `/login` route, photos).
 
 ## Server (p51-server, Ubuntu 26.04)
 - SSH: `arlindo@100.78.198.77` (Tailscale). Docker + compose installed; user is in the docker group.

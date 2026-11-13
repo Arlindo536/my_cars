@@ -8,11 +8,17 @@
       </div>
       <div class="mb-3">
         <label for="uc-password" class="form-label">{{ 'auth.password' | translate }}</label>
-        <input id="uc-password" formControlName="password" type="password" class="form-control" autocomplete="new-password" />
+        <div class="password-wrap">
+          <input #pw0 id="uc-password" formControlName="password" type="password" class="form-control" autocomplete="new-password" />
+          <button [appPasswordToggle]="pw0"></button>
+        </div>
       </div>
       <div class="mb-3">
         <label for="uc-confirm" class="form-label">{{ 'auth.confirmPassword' | translate }}</label>
-        <input id="uc-confirm" formControlName="confirm_password" type="password" class="form-control" autocomplete="new-password" />
+        <div class="password-wrap">
+          <input #pw1 id="uc-confirm" formControlName="confirm_password" type="password" class="form-control" autocomplete="new-password" />
+          <button [appPasswordToggle]="pw1"></button>
+        </div>
       </div>
       <div class="mb-3">
         <label for="uc-email" class="form-label">{{ 'auth.email' | translate }}</label>

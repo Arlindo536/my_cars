@@ -39,7 +39,7 @@
 
     <ng-container [ngSwitch]="isLoggedIn ? role : 'guest'">
       <button *ngSwitchCase="'customer'" type="button" class="btn btn-primary btn-lg w-100"
-        [disabled]="!quote()?.available || submitting()" (click)="book()">
+        [disabled]="!quote()?.available || submitting()" [class.is-loading]="submitting()" [attr.aria-busy]="submitting()" (click)="book()">
         {{ (submitting() ? 'booking.booking' : 'booking.bookNow') | translate }}
       </button>
       <ng-container *ngSwitchCase="'admin'">

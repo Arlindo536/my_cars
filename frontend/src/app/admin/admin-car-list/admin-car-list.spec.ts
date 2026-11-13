@@ -29,7 +29,7 @@ describe('AdminCarList', () => {
       ],
     });
     fixture.detectChanges();
-    const statuses = [...fixture.nativeElement.querySelectorAll('.status')].map((s: HTMLElement) => s.textContent!.trim());
+    const statuses = [...fixture.nativeElement.querySelectorAll('.status-label')].map((s: HTMLElement) => s.textContent!.trim());
     expect(statuses).toEqual(['Në katalog', 'E fshehur']);
   });
 });

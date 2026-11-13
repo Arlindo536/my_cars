@@ -14,10 +14,13 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LanguageSwitcher } from './language-switcher/language-switcher';
 import { Language } from './language';
 import { ThemeSwitcher } from './theme-switcher/theme-switcher';
+import { ToastHost } from './toast-host/toast-host';
+import { NotFound } from './not-found/not-found';
+import { UiModule } from './ui/ui-module';
 
 @NgModule({
-  declarations: [App, NavBar, Footer, ConfirmDialog, LanguageSwitcher, ThemeSwitcher],
-  imports: [BrowserModule, AppRoutingModule, MatDialogModule, TranslatePipe],
+  declarations: [App, NavBar, Footer, ConfirmDialog, LanguageSwitcher, ThemeSwitcher, ToastHost, NotFound],
+  imports: [BrowserModule, AppRoutingModule, MatDialogModule, TranslatePipe, UiModule],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withInterceptors([authInterceptor])),
