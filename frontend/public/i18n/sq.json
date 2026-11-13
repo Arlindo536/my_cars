@@ -80,7 +80,14 @@
     "step3Title": "Merr çelësat",
     "step3Text": "Pas konfirmimit, eja në zyrën tonë dhe nisu për rrugë.",
     "findUs": "Na gjeni",
-    "findUsText": "Të gjitha makinat merren dhe kthehen në zyrën tonë në qendër të Tiranës."
+    "findUsText": "Të gjitha makinat merren dhe kthehen në zyrën tonë në qendër të Tiranës.",
+    "searchAria": "Kërko një makinë",
+    "scrollCue": "Shko te makinat",
+    "carUnitOne": "makinë",
+    "carUnitMany": "makina",
+    "activeFilters": "Filtrat",
+    "removeFilter": "Hiq filtrin",
+    "clearAll": "Pastro të gjitha"
   },
   "ordering": {
     "price_per_day": "Çmimi: nga më i ulëti",

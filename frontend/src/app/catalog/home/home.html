@@ -1,60 +1,118 @@
-<section class="dark-band-wrap hero-wrap">
+<section class="dark-band-wrap hero-wrap" aria-labelledby="hero-title">
   <div class="dark-band hero">
-    <div class="container-xl hero-inner">
-      <p class="hero-kicker">{{ 'home.kicker' | translate }}</p>
-      <h1 class="hero-title">{{ 'home.titleLine1' | translate }}<br /><span class="text-accent">{{ 'home.titleLine2' | translate }}</span></h1>
-      <p class="hero-lead">{{ 'home.lead' | translate }}</p>
-      <button type="button" class="btn btn-primary btn-lg" (click)="scrollToCars()">{{ 'home.cta' | translate }}</button>
-      <a *ngIf="hasDemo" routerLink="/auth/login" class="demo-link">{{ 'demo.heroLink' | translate }}</a>
+    <!-- Original line art standing in for a hero photo (Arlindo's decision); the layer drifts slightly on scroll -->
+    <div class="hero-media" appParallax aria-hidden="true">
+      <svg class="hero-art" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <defs>
+          <radialGradient id="hero-horizon" cx="1130" cy="500" r="620" gradientUnits="userSpaceOnUse">
+            <stop offset="0" class="art-glow-stop" />
+            <stop offset="1" class="art-glow-stop end" />
+          </radialGradient>
+        </defs>
+        <rect width="1600" height="900" fill="url(#hero-horizon)" />
+        <path class="art-ridge far" d="M520 500 L640 452 L720 474 L820 410 L910 455 L990 428 L1130 500 L1230 446 L1320 470 L1420 418 L1530 462 L1600 440 L1600 500 Z" />
+        <path class="art-ridge" d="M560 500 L700 470 L790 488 L880 462 L1000 492 L1130 500 L1260 480 L1380 494 L1480 472 L1600 486 L1600 500 Z" />
+        <line class="art-horizon" x1="480" y1="500" x2="1600" y2="500" />
+        <polygon class="art-road" points="1130,500 760,900 1740,900" />
+        <line class="art-edge" x1="1130" y1="500" x2="760" y2="900" />
+        <line class="art-edge" x1="1130" y1="500" x2="1740" y2="900" />
+        <polygon class="art-dash" points="1237.0,900.0 1263.0,900.0 1241.7,836.0 1219.9,836.0" />
+        <polygon class="art-dash" points="1207.0,788.0 1225.8,788.0 1208.7,736.8 1193.3,736.8" />
+        <polygon class="art-dash" points="1184.1,702.2 1197.2,702.2 1183.6,661.3 1173.1,661.3" />
+        <polygon class="art-dash" points="1166.7,637.0 1175.6,637.0 1164.7,604.2 1157.9,604.2" />
+        <polygon class="art-dash" points="1153.5,587.8 1159.2,587.8 1150.5,561.6 1146.5,561.6" />
+        <polygon class="art-dash" points="1143.7,551.1 1147.0,551.1 1140.0,530.1 1138.0,530.1" />
+      </svg>
     </div>
+
+    <div class="container-xl hero-inner">
+      <p class="hero-kicker enter" style="--i: 0">{{ 'home.kicker' | translate }}</p>
+      <h1 id="hero-title" class="hero-title">
+        <span class="hero-line enter" style="--i: 1">{{ 'home.titleLine1' | translate }}</span>
+        <span class="hero-line enter text-accent" style="--i: 2">{{ 'home.titleLine2' | translate }}</span>
+      </h1>
+      <p class="hero-lead enter" style="--i: 3">{{ 'home.lead' | translate }}</p>
+
+      <!-- Glass search panel: same controls as the filters below (dates are picked on the car page) -->
+      <form class="search-panel enter" style="--i: 4" [formGroup]="filters" (ngSubmit)="showResults()" role="search" [attr.aria-label]="'home.searchAria' | translate">
+        <div class="panel-field panel-search">
+          <label for="hero-search">{{ 'home.search' | translate }}</label>
+          <div class="input-icon">
+            <i class="material-icons" aria-hidden="true">search</i>
+            <input id="hero-search" type="search" class="form-control" formControlName="search" [placeholder]="'home.searchPlaceholder' | translate" autocomplete="off" />
+          </div>
+        </div>
+        <div class="panel-field">
+          <label for="hero-type">{{ 'home.type' | translate }}</label>
+          <select id="hero-type" class="form-select" formControlName="type">
+            <option value="">{{ 'home.all' | translate }}</option>
+            <option *ngFor="let o of typeOptions" [value]="o">{{ 'type.' + o | translate }}</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary panel-submit">{{ 'home.cta' | translate }}</button>
+      </form>
+
+      <a *ngIf="hasDemo" routerLink="/auth/login" class="demo-link enter" style="--i: 5">{{ 'demo.heroLink' | translate }}</a>
+    </div>
+
+    <a class="scroll-cue" href="#makinat" (click)="$event.preventDefault(); showResults()">
+      <i class="material-icons" aria-hidden="true">expand_more</i>
+      <span class="visually-hidden">{{ 'home.scrollCue' | translate }}</span>
+    </a>
   </div>
 </section>
 
-<section id="makinat" class="container-xl catalog">
-  <form class="filter-bar" [formGroup]="filters" (submit)="$event.preventDefault()" role="search" [attr.aria-label]="'home.filtersAria' | translate">
-    <div class="filter-field filter-search">
-      <label for="f-search">{{ 'home.search' | translate }}</label>
-      <input id="f-search" type="search" class="form-control" formControlName="search" [placeholder]="'home.searchPlaceholder' | translate" autocomplete="off" />
-    </div>
-    <div class="filter-field">
-      <label for="f-type">{{ 'home.type' | translate }}</label>
-      <select id="f-type" class="form-select" formControlName="type">
-        <option value="">{{ 'home.all' | translate }}</option>
-        <option *ngFor="let o of typeOptions" [value]="o">{{ 'type.' + o | translate }}</option>
-      </select>
-    </div>
-    <div class="filter-field">
-      <label for="f-fuel">{{ 'home.fuel' | translate }}</label>
-      <select id="f-fuel" class="form-select" formControlName="fuel">
-        <option value="">{{ 'home.all' | translate }}</option>
-        <option *ngFor="let o of fuelOptions" [value]="o">{{ 'fuel.' + o | translate }}</option>
-      </select>
-    </div>
-    <div class="filter-field">
-      <label for="f-transmission">{{ 'home.transmission' | translate }}</label>
-      <select id="f-transmission" class="form-select" formControlName="transmission">
-        <option value="">{{ 'home.all' | translate }}</option>
-        <option *ngFor="let o of transmissionOptions" [value]="o">{{ 'transmission.' + o | translate }}</option>
-      </select>
-    </div>
-    <div class="filter-field">
-      <label for="f-ordering">{{ 'home.sort' | translate }}</label>
-      <select id="f-ordering" class="form-select" formControlName="ordering">
-        <option *ngFor="let o of orderingOptions" [value]="o">{{ 'ordering.' + o | translate }}</option>
-      </select>
-    </div>
-    <div class="filter-field filter-clear">
-      <button type="button" class="btn btn-outline-light w-100" (click)="clearFilters()" [disabled]="!hasActiveFilters">{{ 'home.clear' | translate }}</button>
-    </div>
-  </form>
-
-  <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-3">
-    <h2 class="section-title mb-0">{{ 'home.ourCars' | translate }}</h2>
-    <p class="text-muted mb-0" aria-live="polite">
+<section id="makinat" class="container-xl catalog" aria-labelledby="cars-title">
+  <div class="catalog-head">
+    <h2 id="cars-title" class="section-title mb-0" tabindex="-1" #resultsHeading>{{ 'home.ourCars' | translate }}</h2>
+    <p class="result-count mb-0">
+      <ng-container *ngIf="!failed()">
+        <span class="count-num" aria-hidden="true" [appCountUp]="count()"></span>
+        <span aria-hidden="true"> {{ (count() === 1 ? 'home.carUnitOne' : 'home.carUnitMany') | translate }}</span>
+      </ng-container>
+    </p>
+    <!-- Screen readers hear the final count once per change -->
+    <p class="visually-hidden" aria-live="polite">
       <ng-container *ngIf="!loading() && !failed()">
         {{ (count() === 1 ? 'home.carCountOne' : 'home.carCountMany') | translate: { count: count() } }}
       </ng-container>
     </p>
+  </div>
+
+  <div class="filter-panel" role="group" [attr.aria-label]="'home.filtersAria' | translate">
+    <div class="chip-group" role="group" [attr.aria-labelledby]="'chips-' + group.key" *ngFor="let group of chipGroups">
+      <span class="chip-label" [id]="'chips-' + group.key">{{ group.label | translate }}</span>
+      <div class="chips">
+        <button type="button" class="chip" [attr.aria-pressed]="!value(group.key)" (click)="setFilter(group.key, '')">
+          {{ 'home.all' | translate }}
+        </button>
+        <button
+          *ngFor="let o of group.options"
+          type="button"
+          class="chip"
+          [attr.aria-pressed]="value(group.key) === o"
+          (click)="setFilter(group.key, o)"
+        >
+          {{ group.prefix + o | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="sort-field">
+      <label for="f-ordering" class="chip-label">{{ 'home.sort' | translate }}</label>
+      <select id="f-ordering" class="form-select" [formControl]="filters.controls.ordering">
+        <option *ngFor="let o of orderingOptions" [value]="o">{{ 'ordering.' + o | translate }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="activeFilters().length > 0" class="active-filters">
+    <span class="chip-label">{{ 'home.activeFilters' | translate }}</span>
+    <button *ngFor="let f of activeFilters()" type="button" class="active-pill" (click)="setFilter(f.key, '')">
+      <span class="visually-hidden">{{ 'home.removeFilter' | translate }}: </span>
+      {{ f.labelKey ? (f.labelKey | translate) : '“' + f.text + '”' }}
+      <i class="material-icons" aria-hidden="true">close</i>
+    </button>
+    <button type="button" class="btn btn-link btn-sm clear-all" (click)="clearFilters()">{{ 'home.clearAll' | translate }}</button>
   </div>
 
   <app-skeleton *ngIf="loading()" variant="card" [count]="6"></app-skeleton>
@@ -67,28 +125,28 @@
     <button type="button" class="btn btn-dark" (click)="clearFilters()">{{ 'home.clearFilters' | translate }}</button>
   </app-empty-state>
 
-  <div *ngIf="!loading() && cars().length > 0" class="row g-4">
-    <div class="col-12 col-sm-6 col-lg-4" *ngFor="let car of cars()">
+  <ul *ngIf="!loading() && cars().length > 0" class="car-grid list-unstyled">
+    <li *ngFor="let car of cars(); let i = index" class="grid-item" [style.--i]="i">
       <app-car-card [car]="car"></app-car-card>
-    </div>
-  </div>
+    </li>
+  </ul>
 
   <nav *ngIf="!loading() && totalPages() > 1" class="d-flex justify-content-center gap-2 mt-4" [attr.aria-label]="'common.pages' | translate">
-    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === 1" (click)="goToPage(page() - 1)">
+    <button type="button" class="btn btn-outline-secondary btn-sm page-btn" [disabled]="page() === 1" (click)="goToPage(page() - 1)">
       <span aria-hidden="true">‹</span><span class="visually-hidden">{{ 'common.prevPage' | translate }}</span>
     </button>
     <button
       type="button"
       *ngFor="let p of pageNumbers()"
-      class="btn btn-sm"
-      [class.btn-primary]="p === page()"
+      class="btn btn-sm page-btn"
+      [class.btn-dark]="p === page()"
       [class.btn-outline-secondary]="p !== page()"
       [attr.aria-current]="p === page() ? 'page' : null"
       (click)="goToPage(p)"
     >
       {{ p }}
     </button>
-    <button type="button" class="btn btn-outline-secondary btn-sm" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">
+    <button type="button" class="btn btn-outline-secondary btn-sm page-btn" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">
       <span aria-hidden="true">›</span><span class="visually-hidden">{{ 'common.nextPage' | translate }}</span>
     </button>
   </nav>

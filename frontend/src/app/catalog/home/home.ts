@@ -1,15 +1,18 @@
-import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, ElementRef, OnInit, computed, inject, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, map, merge } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, merge, startWith } from 'rxjs';
 import { Catalog, CatalogFilters } from '../catalog';
 import { environment } from '../../../environments/environment';
 import { CAR_TYPES, CatalogCar, FUEL_TYPES, TRANSMISSION_TYPES } from '../../shared/car-labels';
 import { scrollBehavior } from '../../motion';
 
 const PAGE_SIZE = 9;
+
+type ChipKey = 'type' | 'fuel' | 'transmission';
+type FilterKey = ChipKey | 'search';
 
 @Component({
   selector: 'app-home',
@@ -38,6 +41,37 @@ export class Home implements OnInit {
     transmission: '',
     ordering: 'price_per_day',
   });
+
+  // Chip rows under the heading; the hero panel binds search and type to the same controls
+  readonly chipGroups: { key: ChipKey; label: string; prefix: string; options: string[] }[] = [
+    { key: 'type', label: 'home.type', prefix: 'type.', options: CAR_TYPES },
+    { key: 'fuel', label: 'home.fuel', prefix: 'fuel.', options: FUEL_TYPES },
+    { key: 'transmission', label: 'home.transmission', prefix: 'transmission.', options: TRANSMISSION_TYPES },
+  ];
+
+  private readonly filterValue = toSignal(
+    this.filters.valueChanges.pipe(
+      startWith(null),
+      map(() => this.filters.getRawValue()),
+    ),
+    { requireSync: true },
+  );
+
+  readonly activeFilters = computed(() => {
+    const value = this.filterValue();
+    const active: { key: FilterKey; labelKey?: string; text?: string }[] = [];
+    if (value.search.trim()) {
+      active.push({ key: 'search', text: value.search.trim() });
+    }
+    for (const group of this.chipGroups) {
+      if (value[group.key]) {
+        active.push({ key: group.key, labelKey: group.prefix + value[group.key] });
+      }
+    }
+    return active;
+  });
+
+  private resultsHeading = viewChild<ElementRef<HTMLElement>>('resultsHeading');
 
   readonly cars = signal<CatalogCar[]>([]);
   readonly count = signal(0);
@@ -105,18 +139,28 @@ export class Home implements OnInit {
   }
 
   clearFilters() {
-    this.filters.reset({ search: '', type: '', fuel: '', transmission: '', ordering: 'price_per_day' }, { emitEvent: false });
+    // One reload for the whole reset (the per-control subscription would fire once per field)
+    this.filters.reset({ search: '', type: '', fuel: '', transmission: '', ordering: this.filters.controls.ordering.value }, { emitEvent: false });
+    this.filters.updateValueAndValidity();
     this.page.set(1);
     this.load();
   }
 
-  get hasActiveFilters(): boolean {
-    const { search, type, fuel, transmission } = this.filters.getRawValue();
-    return !!(search || type || fuel || transmission);
+  value(key: ChipKey): string {
+    return this.filterValue()[key];
   }
 
-  scrollToCars() {
+  // Chips toggle: choosing the active one again goes back to "all"
+  setFilter(key: FilterKey, option: string) {
+    const control = this.filters.controls[key];
+    control.setValue(key !== 'search' && control.value === option ? '' : option);
+  }
+
+  // Hero panel submit and scroll cue: move to the results and put focus on their heading
+  showResults() {
+    const heading = this.resultsHeading()?.nativeElement;
     document.getElementById('makinat')?.scrollIntoView({ behavior: scrollBehavior() });
+    heading?.focus({ preventScroll: true });
   }
 
   // Updates the address bar without a router navigation (which would reload and scroll)

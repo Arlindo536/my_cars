@@ -80,7 +80,14 @@
     "step3Title": "Schlüssel abholen",
     "step3Text": "Nach der Bestätigung in unser Büro kommen und losfahren.",
     "findUs": "So findest du uns",
-    "findUsText": "Alle Autos werden in unserem Büro im Zentrum von Tirana abgeholt und zurückgegeben."
+    "findUsText": "Alle Autos werden in unserem Büro im Zentrum von Tirana abgeholt und zurückgegeben.",
+    "searchAria": "Auto suchen",
+    "scrollCue": "Zu den Autos",
+    "carUnitOne": "Auto",
+    "carUnitMany": "Autos",
+    "activeFilters": "Filter",
+    "removeFilter": "Filter entfernen",
+    "clearAll": "Alle zurücksetzen"
   },
   "ordering": {
     "price_per_day": "Preis: aufsteigend",

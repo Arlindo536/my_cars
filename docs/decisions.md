@@ -123,3 +123,38 @@ Phase 1 questions still open, so the defaults stay (Sora, theme follows the syst
 - Lighthouse (`lighthouse-phase3.txt`): accessibility 100, CLS 0 on home, car page and register; mobile perf 74 / 73 / 83, desktop 98-99.
 - Tests: backend 76 OK; frontend 44 passed / 8 failed (same 8 legacy specs). New specs: nav bar initials, drawer/breakpoint, Escape, logout clears the username; reveal keeps on-screen content visible.
 - Screenshots: `docs/visual-upgrade/phase3/`.
+
+## Phase 4: home (2026-11-13) — review point
+
+Phase 1 questions still open: Sora headings, theme follows the system, no photos (placeholders), `/login` route untouched.
+
+### What changed
+- **Hero:** full-bleed graphite with an original line-art scene (horizon, two mountain ridges, a road with foreshortened centre dashes, red horizon glow) in a "photo slot" layer under a graphite overlay, so a real photo can replace the SVG later without touching the layout. The layer drifts at 0.25× scroll on desktop with a fine pointer (`appParallax`; off on touch and with reduced motion). Kicker, two headline lines, lead and panel rise in one after another (90 ms apart, **transform only**, so the heading is painted from the first frame and LCP is not delayed). Scroll cue on desktop: three gentle nudges, then still.
+- **Glass search panel:** search + type + the red "Browse cars" button; translucent graphite with a light top edge. Submitting scrolls to the results and moves focus to their heading. It shares the form controls with the filters below, so both stay in sync. Dates stay on the car page (manual).
+- **Filters:** chip rows for type, fuel and gearbox (`aria-pressed`, "All" first, choosing the active chip again resets it; phones get one horizontally scrollable row per group, wider screens wrap) + sort select. Active filters show as removable pills ("Remove filter: Electric") with "Clear all". "Clear all" now keeps the sort order (sorting isn't a filter) and reloads once instead of once per field. Search/filters/sort still sync to the URL and deep links work.
+- **Results count** counts up/down (`appCountUp`, 500 ms, off with reduced motion); the visible number is `aria-hidden` and a separate `aria-live` text announces the final count once.
+- **Grid:** CSS grid 1 / 2 / 3 columns. The manual suggests up to 4, but the API returns 9 cars per page (backend unchanged), which would leave rows of 4 + 4 + 1. Each new result set enters with a 60 ms stagger (opacity + 14 px rise, capped at 8 steps).
+- **Card:** 16:10 frame with a slow 4 % zoom on hover (hover-capable devices only), spec row with icons (fuel / gearbox / km), price tag with "/ day", one dark action button that is a stretched link (the whole card is clickable, one tab stop). Photos use `NgOptimizedImage` (`fill` + `sizes`). **No "Available / Reserved" badge:** the catalog API has no availability per car, and a badge we can't back with data would be false.
+- **Optional trust strip:** not added (the "how it works" steps already say what's true; the wording would be Arlindo's).
+
+### Performance work (LCP)
+| Change | Effect |
+|---|---|
+| Leaflet loads via `import()` when the map is within 400 px of the viewport | catalog chunk −38 kB gz; OSM tiles only requested when the map is near |
+| Car page moved to its own lazy module (`CarPageModule`, `/catalog/:id`) | home chunk 50 → 9 kB gz (the Material datepicker stays on the car page) |
+| `theme-init.js` also sets `<html lang>` and preloads `i18n/<lang>.json` | translations no longer wait for the app bundle |
+| `scripts/preload-initial.mjs` after `ng build` (in `npm run build` and the Dockerfile) | Angular emits at most 10 `modulepreload` hints and dropped the 100 kB framework chunk; the script adds the missing ones plus the home route's chunk |
+| Glass panel without `backdrop-filter` | scroll over the hero: dropped frames per run 15 → 6 under 4× CPU throttle (headless, no GPU) |
+
+**Result:** home mobile LCP 4.6 → 4.2 s (Lighthouse simulated) and 6.3 → 4.9 s with real DevTools throttling; FCP and LCP now coincide (the hero paints with the nav bar). **The manual's LCP < 2.5 s on mobile is not met.** What remains is the framework (~190 kB gz JS) + one 39 kB CSS file that must download and run before anything paints in a client-rendered Angular app. Reaching < 2.5 s needs **prerendering the home page** (Angular SSG: server-safe code for `localStorage`/`window`, a static `index.html` for `/`, and an nginx fallback to the CSR shell). That's an architecture change, so it's a question for Arlindo, not done silently; trimming Bootstrap (Phase 7) would help but not reach 2.5 s on its own. Performance stays above the manual's fallback rule (baseline 46 → 69-72 now). Desktop: 98-99, LCP 0.9 s.
+
+TBT on mobile rose from ~200 to ~400 ms (more script, style and paint: hero art, entrance animations, chips). Phase 7 item: check the hero art's paint cost and whether `.enter` + stagger can be cheaper.
+
+### Verified
+- Filters (scripted, dev and prod build): chip on/off, two filters combined, hero select and chips in sync, hero search + Enter (URL, count, pills, focus on the results heading), remove one pill, clear all, sort, deep link `/?fuel=diesel`. All correct.
+- Widths 360 / 768 / 1024 / 1440 / 1920 in sq, en and de (with active filters): no horizontal page scroll, no clipped chip/button/label text.
+- Smoothness under 4× CPU throttle (headless Chrome, software rendering): card hover 60 fps / 0 dropped; stagger after a filter change ~56 fps (3 frames over 25 ms); scroll over the hero after the blur change: worst frame 33 ms.
+- Production build with the nginx CSP: every page at 375 / 1280 light and 1280 dark, 0 console errors, only third party `tile.openstreetmap.org`. Car page (now its own chunk) renders with datepicker, booking and message box.
+- Lighthouse (`lighthouse-phase4.txt`): accessibility 100, CLS 0 on home, car page, register.
+- Tests: backend 76 OK; frontend 48 passed / 8 failed (same 8 legacy specs). New: Home (default load, chip toggle + pill, clear all keeps sort), CountUp; Reveal spec fixed to actually instantiate the directive.
+- Before/after: `docs/visual-upgrade/phase4/before-after-home-1280.webp` and `-375.webp`; more in `phase4/`.

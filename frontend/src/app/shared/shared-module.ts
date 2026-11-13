@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { CarCard } from './car-card/car-card';
@@ -10,7 +10,7 @@ import { UiModule } from '../ui/ui-module';
 
 @NgModule({
   declarations: [CarCard, CarPlaceholder, OfficeMap, PricePipe],
-  imports: [CommonModule, RouterModule, TranslatePipe, UiModule],
+  imports: [CommonModule, NgOptimizedImage, RouterModule, TranslatePipe, UiModule],
   exports: [CarCard, CarPlaceholder, OfficeMap, PricePipe, TranslatePipe, UiModule],
 })
 export class SharedModule {}

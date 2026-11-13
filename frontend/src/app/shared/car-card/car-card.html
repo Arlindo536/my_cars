@@ -1,7 +1,15 @@
-<article class="car-card h-100">
+<article class="car-card">
   <div class="car-photo">
-    <img *ngIf="car.image; else placeholder" [src]="car.image" [alt]="car.model" loading="lazy" />
-    <ng-template #placeholder><app-car-placeholder></app-car-placeholder></ng-template>
+    <div class="photo-frame">
+      <img
+        *ngIf="car.image; else placeholder"
+        [ngSrc]="car.image"
+        fill
+        sizes="(min-width: 992px) 33vw, (min-width: 576px) 50vw, 100vw"
+        [alt]="car.model"
+      />
+      <ng-template #placeholder><app-car-placeholder></app-car-placeholder></ng-template>
+    </div>
     <span class="price-tag car-price"
       ><span>{{ car.price_per_day | price: language.locale() }} <small>{{ 'common.perDay' | translate }}</small></span></span
     >
@@ -9,12 +17,22 @@
   <div class="car-body">
     <h3 class="car-name">{{ car.model }}</h3>
     <p class="car-meta">{{ car.year }} · {{ 'type.' + car.type | translate }}</p>
-    <ul class="pills list-unstyled">
-      <li>{{ 'fuel.' + car.fuel_type | translate }}</li>
-      <li>{{ 'transmission.' + car.transmission_type | translate }}</li>
-      <li>{{ car.km | number: '1.0-0' : language.locale() }} km</li>
+    <ul class="specs list-unstyled">
+      <li>
+        <i class="material-icons" aria-hidden="true">{{ fuelIcon }}</i>
+        {{ 'fuel.' + car.fuel_type | translate }}
+      </li>
+      <li>
+        <i class="material-icons" aria-hidden="true">settings</i>
+        {{ 'transmission.' + car.transmission_type | translate }}
+      </li>
+      <li>
+        <i class="material-icons" aria-hidden="true">speed</i>
+        {{ car.km | number: '1.0-0' : language.locale() }} km
+      </li>
     </ul>
-    <a class="btn btn-dark w-100 mt-auto" [routerLink]="['/catalog', car.id]">
+    <!-- stretched-link: the whole card is clickable, the link stays the one focus stop -->
+    <a class="btn btn-dark w-100 mt-auto stretched-link" [routerLink]="['/catalog', car.id]">
       {{ 'car.details' | translate }}<span class="visually-hidden">: {{ car.model }}</span>
     </a>
   </div>

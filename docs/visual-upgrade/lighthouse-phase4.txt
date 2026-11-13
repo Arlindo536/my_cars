@@ -1,0 +1,7 @@
+home-mobile | perf 69 | a11y 100 | bp 100 | seo 82 | LCP 4.2 s | CLS 0 | TBT 410 ms
+home-desktop | perf 99 | a11y 100 | bp 100 | seo 82 | LCP 0.9 s | CLS 0 | TBT 0 ms
+car-mobile | perf 67 | a11y 100 | bp 100 | seo 83 | LCP 4.6 s | CLS 0 | TBT 380 ms
+car-desktop | perf 98 | a11y 100 | bp 100 | seo 83 | LCP 1.1 s | CLS 0 | TBT 0 ms
+register-mobile | perf 72 | a11y 100 | bp 100 | seo 82 | LCP 4.3 s | CLS 0 | TBT 290 ms
+register-desktop | perf 99 | a11y 100 | bp 100 | seo 82 | LCP 0.9 s | CLS 0 | TBT 10 ms
+home-mobile (devtools throttling) | perf 62 | FCP 4.5 s | LCP 4.9 s | TBT 370 ms

@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-RUN npx ng build --configuration production
+RUN npx ng build --configuration production && node scripts/preload-initial.mjs
 
 # 2. Serve it with nginx, which also proxies the API
 FROM nginx:1.27-alpine

@@ -71,7 +71,8 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - Motion tokens match arlindo.site (`--ease-out`, `--ease-in-out`, `--dur-*`); honour reduced motion; no smooth-scroll library.
 - Shared states live in `UiModule` (`src/app/ui/`: `app-skeleton`, `app-empty-state`, `app-status-badge`, `app-field-error`, `appPasswordToggle`); use them instead of ad-hoc "Loading…" text or empty boxes. Busy buttons: `[class.is-loading]` + `disabled` + `aria-busy`.
 - Notifications are our own toasts (`Notification` service + `<app-toast-host>` in `app.html`), not MatSnackBar. Unknown URLs render `NotFound`.
-- Shell: nav bar is transparent over a hero when the route has `data: { overlayHeader: true }` (the hero then needs `margin-top: calc(-1 * var(--header-h))`), blurred after scrolling, hides on scroll down; drawer below 992 px (1200 px for admins). `localStorage` `username` is display-only (initials). Route view transitions via `provideRouter(..., withViewTransitions())` in `app-routing-module.ts`. Scroll reveals: `appReveal` (UiModule), never on admin pages; use `scrollBehavior()` from `src/app/motion.ts` instead of `'smooth'`.
+- Shell: nav bar is transparent over a hero when the route has `data: { overlayHeader: true }` (the hero then needs `margin-top: calc(-1 * var(--header-h))`), blurred after scrolling, hides on scroll down; drawer below 992 px (1200 px for admins). `localStorage` `username` is display-only (initials). Route view transitions via `provideRouter(..., withViewTransitions())` in `app-routing-module.ts`. Scroll reveals: `appReveal` (UiModule), never on admin pages; use `scrollBehavior()` from `src/app/motion.ts` instead of `'smooth'`. Also in UiModule: `appCountUp`, `appParallax`.
+- Lazy chunks: the car page is `CarPageModule` (`catalog/car-page-module.ts`, holds the Material datepicker); `CatalogModule` is the home page only. Leaflet is loaded with `import()` inside `OfficeMap` when the map nears the viewport. Production builds run `scripts/preload-initial.mjs` after `ng build` (`npm run build`, Dockerfile) to add `modulepreload` hints Angular caps at 10; it warns if it can't find the home route chunk.
 - Copy is Albanian by default (`sq`), mobile-first, accessible (real buttons/links, labels, 4.5:1 contrast, 44 px targets).
 
 ## Plan and status (blocks are ~90 min; target finish early December)
@@ -86,7 +87,7 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
 - [x] Deployed 2026-10-22 to https://my-cars.arlindo.site (see "Server" below).
-- [ ] Visual upgrade (manual above): phases 0-3 done 2026-11-13 (audit, tokens/themes, base components/states, shell + motion); phase 1 review questions still open (font, default theme, `/login` route, photos). Next: phase 4 (home), then review stop.
+- [ ] Visual upgrade (manual above): phases 0-4 done 2026-11-13 (audit, tokens/themes, base components/states, shell + motion, home); **review stop after phase 4** (open: font, default theme, `/login` route, photos, prerendering the home page for mobile LCP).
 
 ## Server (p51-server, Ubuntu 26.04)
 - SSH: `arlindo@100.78.198.77` (Tailscale). Docker + compose installed; user is in the docker group.

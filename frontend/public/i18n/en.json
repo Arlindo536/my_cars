@@ -80,7 +80,14 @@
     "step3Title": "Get the keys",
     "step3Text": "Once confirmed, come to our office and hit the road.",
     "findUs": "Find us",
-    "findUsText": "All cars are picked up and returned at our office in central Tirana."
+    "findUsText": "All cars are picked up and returned at our office in central Tirana.",
+    "searchAria": "Search for a car",
+    "scrollCue": "Go to the cars",
+    "carUnitOne": "car",
+    "carUnitMany": "cars",
+    "activeFilters": "Filters",
+    "removeFilter": "Remove filter",
+    "clearAll": "Clear all"
   },
   "ordering": {
     "price_per_day": "Price: low to high",
