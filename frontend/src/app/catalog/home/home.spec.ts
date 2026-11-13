@@ -48,6 +48,25 @@ describe('Home', () => {
     expect(component.activeFilters()).toEqual([]);
   });
 
+  it('keeps the chips folded until the filter button opens them, and counts active chips', async () => {
+    const el: HTMLElement = fixture.nativeElement;
+    const panel = el.querySelector<HTMLElement>('#filter-panel')!;
+    const toggle = el.querySelector<HTMLButtonElement>('.filter-toggle')!;
+    expect(panel.hidden).toBe(true);
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    toggle.click();
+    await fixture.whenStable();
+    expect(panel.hidden).toBe(false);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+
+    component.setFilter('fuel', 'diesel');
+    component.setFilter('search', 'golf');
+    await fixture.whenStable();
+    // the search text is not a chip, so the button counts 1
+    expect(component.chipCount()).toBe(1);
+    expect(el.querySelector('.filter-count')?.textContent).toContain('1');
+  });
+
   it('clear all reloads once and keeps the sort order', () => {
     component.filters.patchValue({ type: 'suv', ordering: '-year' });
     const before = calls.length;

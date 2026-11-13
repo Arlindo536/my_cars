@@ -697,8 +697,11 @@ a {
   font-size: var(--fs-2xl);
 }
 
-/* Tables scroll inside their own box so the header row can stick */
+/* Tables scroll inside their own box so the header row can stick.
+   position: relative keeps the absolutely positioned screen-reader texts in the cells inside the box too
+   (otherwise they widened the page on phones). */
 .admin-table {
+  position: relative;
   max-height: 70vh;
   overflow: auto;
   background: var(--bg-1);

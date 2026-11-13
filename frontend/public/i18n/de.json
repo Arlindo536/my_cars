@@ -87,7 +87,8 @@
     "carUnitMany": "Autos",
     "activeFilters": "Filter",
     "removeFilter": "Filter entfernen",
-    "clearAll": "Alle zurücksetzen"
+    "clearAll": "Alle zurücksetzen",
+    "filterButton": "Filtern"
   },
   "ordering": {
     "price_per_day": "Preis: aufsteigend",

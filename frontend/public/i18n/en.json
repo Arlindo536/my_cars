@@ -87,7 +87,8 @@
     "carUnitMany": "cars",
     "activeFilters": "Filters",
     "removeFilter": "Remove filter",
-    "clearAll": "Clear all"
+    "clearAll": "Clear all",
+    "filterButton": "Filter"
   },
   "ordering": {
     "price_per_day": "Price: low to high",

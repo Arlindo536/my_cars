@@ -71,6 +71,10 @@ export class Home implements OnInit {
     return active;
   });
 
+  // Chip panel starts folded; the button shows how many chip filters are on
+  readonly filtersOpen = signal(false);
+  readonly chipCount = computed(() => this.activeFilters().filter(f => f.key !== 'search').length);
+
   private resultsHeading = viewChild<ElementRef<HTMLElement>>('resultsHeading');
 
   readonly cars = signal<CatalogCar[]>([]);

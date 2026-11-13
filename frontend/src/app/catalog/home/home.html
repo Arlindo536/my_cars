@@ -59,7 +59,31 @@
     </p>
   </div>
 
-  <div class="filter-panel" role="group" [attr.aria-label]="'home.filtersAria' | translate">
+  <!-- Filters fold away behind one button; sorting stays visible next to it -->
+  <div class="filter-bar">
+    <button
+      type="button"
+      class="filter-toggle"
+      [attr.aria-expanded]="filtersOpen()"
+      aria-controls="filter-panel"
+      (click)="filtersOpen.update(open => !open)"
+    >
+      <i class="material-icons" aria-hidden="true">tune</i>
+      {{ 'home.filterButton' | translate }}
+      <span *ngIf="chipCount() > 0" class="filter-count">
+        {{ chipCount() }}<span class="visually-hidden"> {{ 'home.activeFilters' | translate }}</span>
+      </span>
+      <i class="material-icons chevron" aria-hidden="true">expand_more</i>
+    </button>
+    <div class="sort-field">
+      <label for="f-ordering" class="chip-label">{{ 'home.sort' | translate }}</label>
+      <select id="f-ordering" class="form-select" [formControl]="filters.controls.ordering">
+        <option *ngFor="let o of orderingOptions" [value]="o">{{ 'ordering.' + o | translate }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="filter-panel" class="filter-panel" role="group" [attr.aria-label]="'home.filtersAria' | translate" [hidden]="!filtersOpen()">
     <div class="chip-group" role="group" [attr.aria-labelledby]="'chips-' + group.key" *ngFor="let group of chipGroups">
       <span class="chip-label" [id]="'chips-' + group.key">{{ group.label | translate }}</span>
       <div class="chips">
@@ -76,12 +100,6 @@
           {{ group.prefix + o | translate }}
         </button>
       </div>
-    </div>
-    <div class="sort-field">
-      <label for="f-ordering" class="chip-label">{{ 'home.sort' | translate }}</label>
-      <select id="f-ordering" class="form-select" [formControl]="filters.controls.ordering">
-        <option *ngFor="let o of orderingOptions" [value]="o">{{ 'ordering.' + o | translate }}</option>
-      </select>
     </div>
   </div>
 

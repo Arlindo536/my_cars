@@ -87,7 +87,8 @@
     "carUnitMany": "makina",
     "activeFilters": "Filtrat",
     "removeFilter": "Hiq filtrin",
-    "clearAll": "Pastro të gjitha"
+    "clearAll": "Pastro të gjitha",
+    "filterButton": "Filtro"
   },
   "ordering": {
     "price_per_day": "Çmimi: nga më i ulëti",

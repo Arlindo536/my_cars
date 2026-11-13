@@ -14,6 +14,9 @@
   top: 0;
   z-index: 1000;
   height: var(--header-h);
+  /* While hidden (transform) the bar is the containing block of the closed drawer, which sits off to
+     the right: clip sideways so it can't widen the page. Vertical stays visible for the account menu. */
+  overflow-x: clip;
   transition: transform var(--dur-ui) var(--ease-out);
 }
 

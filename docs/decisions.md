@@ -246,3 +246,9 @@ Backend 76 OK. Frontend 52 passed / 7 failed: the remaining legacy `should creat
 
 ### Before/after
 `docs/visual-upgrade/phase7/before-after-*.webp` (home, car page, login, my bookings, thread, admin bookings) and `firefox-home-car-admin.webp`.
+
+### After review (Arlindo, 2026-11-13)
+- **Filters fold away:** the chip panel is hidden behind one "Filter" button (`aria-expanded`, a count of active chip filters, chevron); sorting stays visible next to it, active filters still show as removable pills below. The panel fades in (off with reduced motion).
+- **Two horizontal-overflow bugs found while checking it** (both fixed, a scan of 15 pages × 360/375/768/1024, at the top and after scrolling, now finds none):
+  - Since Phase 3: once the nav bar hid on scroll (it gets a `transform`), the closed mobile drawer was positioned against the bar instead of the viewport and widened the page by its width (330 px). The bar now clips sideways (`overflow-x: clip`); the drawer still opens normally.
+  - Admin tables (Phase 6): the hidden screen-reader texts in action buttons are `position: absolute` and escaped the table's scroll box. `.admin-table` is now `position: relative`.
