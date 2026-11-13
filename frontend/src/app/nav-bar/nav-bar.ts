@@ -100,7 +100,7 @@ export class NavBar implements OnInit {
   openMenu() {
     this.menuOpen.set(true);
     this.hidden.set(false);
-    document.documentElement.classList.add('drawer-open');
+    document.documentElement.classList.add('scroll-locked');
     afterNextRender(() => this.focusables()[0]?.focus(), { injector: this.injector });
   }
 
@@ -109,7 +109,7 @@ export class NavBar implements OnInit {
       return;
     }
     this.menuOpen.set(false);
-    document.documentElement.classList.remove('drawer-open');
+    document.documentElement.classList.remove('scroll-locked');
     if (returnFocus) {
       this.menuToggle()?.nativeElement.focus();
     }

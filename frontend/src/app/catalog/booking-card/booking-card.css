@@ -1,6 +1,5 @@
 .booking-card {
-  position: sticky;
-  top: 5rem;
+  /* stickiness lives on the wrapper in the car page (.booking-slot) */
   background: var(--bg-1);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
@@ -53,4 +52,11 @@
   font-size: 1.7rem;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
+}
+
+/* Inside the mobile bottom sheet the sheet is the surface */
+:host-context(.sheet) .booking-card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }

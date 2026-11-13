@@ -1,5 +1,5 @@
 <div *ngIf="loading()" class="container-xl py-5">
-  <app-skeleton variant="detail"></app-skeleton>
+  <app-skeleton class="vt-photo-skeleton" variant="detail"></app-skeleton>
 </div>
 
 <div *ngIf="notFound()" class="container-xl py-5">
@@ -28,42 +28,45 @@
   <div class="container-xl py-4">
     <div class="row g-4">
       <div class="col-12 col-lg-8">
-        <div class="photo">
-          <img *ngIf="car.image; else placeholder" [src]="car.image" [alt]="car.model" />
-          <ng-template #placeholder><app-car-placeholder></app-car-placeholder></ng-template>
-        </div>
+        <!-- view-transition-name pairs with the clicked card's photo (shared-element transition) -->
+        <app-gallery class="d-block car-photo-vt" [images]="car.image ? [car.image] : []" [alt]="car.model"></app-gallery>
 
-        <dl class="spec-panel">
-          <div>
+        <dl class="spec-grid">
+          <div class="spec">
+            <i class="material-icons" aria-hidden="true">event</i>
             <dt>{{ 'car.year' | translate }}</dt>
             <dd>{{ car.year }}</dd>
           </div>
-          <div>
+          <div class="spec">
+            <i class="material-icons" aria-hidden="true">{{ fuelIcon(car.fuel_type) }}</i>
             <dt>{{ 'car.fuel' | translate }}</dt>
             <dd>{{ 'fuel.' + car.fuel_type | translate }}</dd>
           </div>
-          <div>
+          <div class="spec">
+            <i class="material-icons" aria-hidden="true">settings</i>
             <dt>{{ 'car.transmission' | translate }}</dt>
             <dd>{{ 'transmission.' + car.transmission_type | translate }}</dd>
           </div>
-          <div>
+          <div class="spec">
+            <i class="material-icons" aria-hidden="true">directions_car</i>
             <dt>{{ 'car.type' | translate }}</dt>
             <dd>{{ 'type.' + car.type | translate }}</dd>
           </div>
-          <div>
+          <div class="spec">
+            <i class="material-icons" aria-hidden="true">speed</i>
             <dt>{{ 'car.mileage' | translate }}</dt>
             <dd>{{ car.km | number: '1.0-0' : language.locale() }} km</dd>
           </div>
         </dl>
 
-        <section *ngIf="car.description" class="mt-4">
+        <section *ngIf="car.description" class="mt-5" appReveal>
           <h2 class="section-title">{{ 'car.description' | translate }}</h2>
           <p class="description">{{ car.description }}</p>
         </section>
 
-        <app-ask-owner class="d-block mt-4" [car]="car"></app-ask-owner>
+        <app-ask-owner class="d-block mt-5" [car]="car" appReveal></app-ask-owner>
 
-        <section class="mt-4">
+        <section class="mt-5" appReveal>
           <h2 class="section-title">{{ 'car.pickupPlace' | translate }}</h2>
           <p class="text-muted">{{ 'car.pickupText' | translate }}</p>
           <app-office-map></app-office-map>
@@ -71,8 +74,64 @@
       </div>
 
       <div class="col-12 col-lg-4">
-        <app-booking-card [car]="car"></app-booking-card>
+        <!-- Wide screens: sticky column. Narrow screens: bottom sheet opened from the bar below -->
+        <div
+          #sheet
+          id="booking-sheet"
+          class="booking-slot"
+          [class.sheet]="!wide()"
+          [class.open]="sheetOpen()"
+          [attr.role]="wide() ? null : 'dialog'"
+          [attr.aria-modal]="wide() ? null : 'true'"
+          [attr.aria-label]="wide() ? null : ('booking.aria' | translate)"
+          (keydown)="onSheetKeydown($event)"
+          (click)="onSheetClick($event)"
+        >
+          <div *ngIf="!wide()" class="sheet-head">
+            <span class="sheet-grip" aria-hidden="true"></span>
+            <span class="sheet-title">{{ car.model }}</span>
+            <button type="button" class="sheet-close" (click)="closeSheet(true)" [attr.aria-label]="'common.close' | translate">
+              <i class="material-icons" aria-hidden="true">close</i>
+            </button>
+          </div>
+          <app-booking-card #bookingCard [car]="car"></app-booking-card>
+        </div>
       </div>
     </div>
+
+    <section *ngIf="similar().length > 0" class="similar" aria-labelledby="similar-title" appReveal>
+      <h2 id="similar-title" class="section-title">{{ 'car.similar' | translate }}</h2>
+      <ul class="similar-grid list-unstyled">
+        <li *ngFor="let other of similar()"><app-car-card [car]="other"></app-car-card></li>
+      </ul>
+    </section>
   </div>
+
+  <ng-container *ngIf="!wide()">
+    <div class="sheet-scrim" [class.open]="sheetOpen()" (click)="closeSheet()" aria-hidden="true"></div>
+    <div class="bottom-bar">
+      <div class="bar-price">
+        <ng-container *ngIf="bookingCard.quote()?.available; else perDay">
+          <span class="bar-amount">{{ bookingCard.quote()!.total_price | price: language.locale() }}</span>
+          <span class="bar-unit">
+            {{ (bookingCard.quote()!.days === 1 ? 'common.dayOne' : 'common.dayMany') | translate: { count: bookingCard.quote()!.days } }}
+          </span>
+        </ng-container>
+        <ng-template #perDay>
+          <span class="bar-amount">{{ car.price_per_day | price: language.locale() }}</span>
+          <span class="bar-unit">{{ 'common.perDay' | translate }}</span>
+        </ng-template>
+      </div>
+      <button
+        #sheetToggle
+        type="button"
+        class="btn btn-primary"
+        aria-controls="booking-sheet"
+        [attr.aria-expanded]="sheetOpen()"
+        (click)="openSheet()"
+      >
+        {{ (bookingCard.quote()?.available ? 'booking.bookNow' : 'booking.chooseDates') | translate }}
+      </button>
+    </div>
+  </ng-container>
 </ng-container>

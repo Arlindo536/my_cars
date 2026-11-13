@@ -20,6 +20,18 @@ html {
     (
       calendar-container-background-color: var(--bg-1),
       calendar-container-text-color: var(--text),
+      // Date states: selected ends are the red accent, the range between is a light wash,
+      // today has an outline, booked/past days are muted (and struck through in styles.css)
+      calendar-date-text-color: var(--text),
+      calendar-date-selected-state-background-color: var(--brand),
+      calendar-date-selected-state-text-color: var(--on-brand),
+      calendar-date-in-range-state-background-color: var(--brand-wash),
+      calendar-date-today-outline-color: var(--text-muted),
+      calendar-date-today-selected-state-outline-color: var(--on-brand),
+      calendar-date-preview-state-outline-color: var(--brand-ui),
+      calendar-date-hover-state-background-color: var(--bg-2),
+      calendar-date-focus-state-background-color: var(--bg-2),
+      calendar-date-disabled-state-text-color: var(--text-muted),
     )
   );
   @include mat.dialog-overrides(

@@ -129,7 +129,8 @@
     "mileage": "Kilometrazhi",
     "description": "Përshkrimi",
     "pickupPlace": "Vendi i marrjes",
-    "pickupText": "Makina merret dhe kthehet në zyrën tonë."
+    "pickupText": "Makina merret dhe kthehet në zyrën tonë.",
+    "similar": "Makina të ngjashme"
   },
   "booking": {
     "aria": "Rezervimi",
@@ -148,7 +149,8 @@
     "payNote": "Pa pagesë online: paguan në zyrë kur merr makinën.",
     "sent": "Rezervimi u dërgua. Do të konfirmohet së shpejti.",
     "conflict": "Këto data sapo u rezervuan nga dikush tjetër. Zgjidh data të tjera.",
-    "failed": "Rezervimi dështoi. Provo përsëri."
+    "failed": "Rezervimi dështoi. Provo përsëri.",
+    "chooseDates": "Zgjidh datat"
   },
   "myBookings": {
     "title": "Rezervimet e mia",
@@ -342,5 +344,14 @@
     "title": "Kjo faqe nuk u gjet",
     "text": "Adresa mund të jetë e gabuar ose faqja është hequr. Makinat tona janë ende këtu.",
     "home": "Shiko makinat"
+  },
+  "gallery": {
+    "label": "Fotot e makinës",
+    "open": "Hap foton në madhësi të plotë",
+    "close": "Mbyll",
+    "prev": "Foto e mëparshme",
+    "next": "Foto tjetër",
+    "zoom": "Zmadho",
+    "photo": "Foto {{n}} nga {{total}}"
   }
 }

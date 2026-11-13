@@ -52,9 +52,29 @@ html {
   scroll-padding-top: var(--header-h);
 }
 
-/* Page behind the mobile drawer does not scroll */
-html.drawer-open {
+/* Page behind a drawer, bottom sheet or lightbox does not scroll */
+html.scroll-locked,
+html:has(dialog[open]) {
   overflow: hidden;
+}
+
+/* Narrow car pages have a fixed booking bar: keep the footer and toasts above it */
+html.has-bottom-bar body {
+  padding-bottom: var(--bottom-bar-h);
+}
+
+html.has-bottom-bar {
+  --toast-offset: var(--bottom-bar-h);
+}
+
+/* Material popups (datepicker) open above the bottom sheet (1060); toasts stay on top (1200) */
+.cdk-overlay-container {
+  z-index: 1150;
+}
+
+/* Booked and past days: struck through as well as muted (not colour alone) */
+.mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+  text-decoration: line-through;
 }
 
 body {
@@ -523,6 +543,17 @@ a {
   animation: vt-fade-in var(--dur-ui) var(--ease-out) both;
 }
 
+/* Shared element: the clicked card's photo (car-card.ts) morphs into the car page's photo frame,
+   which is the skeleton's photo block while the car loads (only one of them exists at a time) */
+.vt-photo-skeleton .sk-hero {
+  view-transition-name: car-photo;
+}
+
+::view-transition-group(car-photo) {
+  animation-duration: var(--dur-ui);
+  animation-timing-function: var(--ease-out);
+}
+
 @keyframes vt-fade-out {
   to {
     opacity: 0;
@@ -545,6 +576,11 @@ a {
 
   ::view-transition-new(root) {
     animation-name: vt-fade-only;
+  }
+
+  /* no morph from the card photo into the car page */
+  ::view-transition-group(car-photo) {
+    animation-duration: 0s;
   }
 
   @keyframes vt-fade-only {

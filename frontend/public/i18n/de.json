@@ -129,7 +129,8 @@
     "mileage": "Kilometerstand",
     "description": "Beschreibung",
     "pickupPlace": "Abholort",
-    "pickupText": "Das Auto wird in unserem Büro abgeholt und zurückgegeben."
+    "pickupText": "Das Auto wird in unserem Büro abgeholt und zurückgegeben.",
+    "similar": "Ähnliche Autos"
   },
   "booking": {
     "aria": "Buchung",
@@ -148,7 +149,8 @@
     "payNote": "Keine Online-Zahlung: Du zahlst im Büro bei der Abholung.",
     "sent": "Buchung gesendet. Sie wird in Kürze bestätigt.",
     "conflict": "Diese Termine wurden gerade von jemand anderem gebucht. Bitte wähle andere Termine.",
-    "failed": "Die Buchung ist fehlgeschlagen. Bitte versuche es erneut."
+    "failed": "Die Buchung ist fehlgeschlagen. Bitte versuche es erneut.",
+    "chooseDates": "Daten wählen"
   },
   "myBookings": {
     "title": "Meine Buchungen",
@@ -342,5 +344,14 @@
     "title": "Seite nicht gefunden",
     "text": "Die Adresse ist vielleicht falsch oder die Seite wurde entfernt. Unsere Autos sind noch da.",
     "home": "Autos ansehen"
+  },
+  "gallery": {
+    "label": "Fotos des Autos",
+    "open": "Foto in voller Größe öffnen",
+    "close": "Schließen",
+    "prev": "Vorheriges Foto",
+    "next": "Nächstes Foto",
+    "zoom": "Vergrößern",
+    "photo": "Foto {{n}} von {{total}}"
   }
 }

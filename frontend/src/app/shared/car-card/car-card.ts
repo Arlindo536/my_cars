@@ -1,13 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
-import { CatalogCar } from '../car-labels';
+import { CatalogCar, fuelIcon } from '../car-labels';
 import { Language } from '../../language';
-
-const FUEL_ICONS: Record<string, string> = {
-  petrol: 'local_gas_station',
-  diesel: 'local_gas_station',
-  electric: 'ev_station',
-  hybrid: 'eco',
-};
 
 @Component({
   selector: 'app-car-card',
@@ -20,7 +13,15 @@ export class CarCard {
 
   readonly language = inject(Language);
 
+  // Shared-element transition: this card's photo morphs into the car page photo (.car-photo-vt).
+  // Names must be unique per page, so skip it when a car page photo is already on screen (similar cars).
+  markSharedPhoto(frame: HTMLElement) {
+    if (!document.querySelector('.car-photo-vt')) {
+      frame.style.setProperty('view-transition-name', 'car-photo');
+    }
+  }
+
   get fuelIcon(): string {
-    return FUEL_ICONS[this.car.fuel_type] ?? 'local_gas_station';
+    return fuelIcon(this.car.fuel_type);
   }
 }

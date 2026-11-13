@@ -10,6 +10,8 @@ import { prefersReducedMotion } from '../motion';
 export class CountUp implements OnChanges, OnDestroy {
   @Input({ required: true }) appCountUp!: number;
   @Input() countUpMs = 500;
+  // Text for a value (e.g. a price); intermediate frames get whole numbers, the last one the exact value
+  @Input() countUpFormat: (value: number) => string = String;
 
   private el = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private shown: number | null = null;
@@ -27,7 +29,7 @@ export class CountUp implements OnChanges, OnDestroy {
     const step = (now: number) => {
       const t = Math.min(1, (now - start) / this.countUpMs);
       const eased = 1 - Math.pow(1 - t, 3);
-      this.render(Math.round(from + (to - from) * eased));
+      this.render(t < 1 ? Math.round(from + (to - from) * eased) : to);
       if (t < 1) {
         this.frame = requestAnimationFrame(step);
       }
@@ -41,6 +43,6 @@ export class CountUp implements OnChanges, OnDestroy {
 
   private render(value: number) {
     this.shown = value;
-    this.el.textContent = String(value);
+    this.el.textContent = this.countUpFormat(value);
   }
 }

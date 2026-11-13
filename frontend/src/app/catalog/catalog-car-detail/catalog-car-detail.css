@@ -25,53 +25,251 @@
   font-size: 1.05rem;
 }
 
-.photo {
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--bg-2);
-}
-
-.photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.spec-panel {
+.spec-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  background: var(--band-1);
-  color: var(--band-text);
-  border-top: 3px solid var(--brand-ui);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: 1.25rem;
-  margin: 1.5rem 0 0;
+  gap: var(--space-3);
+  margin: var(--space-5) 0 0;
 }
 
-@media (min-width: 768px) {
-  .spec-panel {
-    grid-template-columns: repeat(5, 1fr);
+@media (min-width: 576px) {
+  .spec-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-.spec-panel dt {
-  color: var(--band-muted);
-  font-size: 0.75rem;
+/* five in a row only where long labels (de: "Kilometerstand") still fit */
+@media (min-width: 1200px) {
+  .spec-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Icon on top, label, value: narrow enough for five in a row next to the booking panel */
+.spec {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm), var(--highlight);
+}
+
+.spec .material-icons {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin-bottom: var(--space-2);
+  border-radius: 50%;
+  background: var(--bg-2);
+  color: var(--text-muted);
+  font-size: 1.2rem;
+}
+
+.spec dt {
+  color: var(--text-muted);
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
-.spec-panel dd {
+.spec dd {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1rem;
   margin: 0;
+  hyphens: auto;
+}
+
+/* The last tile spans the row when the 2-column grid has an odd count */
+@media (max-width: 575.98px) {
+  .spec:last-child {
+    grid-column: 1 / -1;
+  }
 }
 
 .description {
   font-size: 1.05rem;
   max-width: 44rem;
+}
+
+/* Shared-element transition target (the clicked card's photo carries the same name) */
+.car-photo-vt {
+  view-transition-name: car-photo;
+}
+
+/* ---------- Booking: sticky column on wide screens ---------- */
+.booking-slot:not(.sheet) {
+  position: sticky;
+  top: calc(var(--header-h) + var(--space-4));
+}
+
+/* ---------- Narrow screens: bottom bar + sheet ---------- */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--bottom-bar-h);
+  padding: var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: var(--band-1);
+  color: var(--band-text);
+  border-top: 1px solid var(--band-line);
+  box-shadow: var(--shadow-lg);
+  --focus-ring: var(--band-focus);
+}
+
+.bar-price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.bar-amount {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.bar-unit {
+  color: var(--band-muted);
+  font-size: var(--fs-sm);
+}
+
+.bottom-bar .btn {
+  min-height: 2.75rem;
+  white-space: nowrap;
+}
+
+.sheet-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: var(--scrim);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--dur-ui) var(--ease-out),
+    visibility 0s linear var(--dur-ui);
+}
+
+.sheet-scrim.open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--dur-ui) var(--ease-out);
+}
+
+.booking-slot.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1060;
+  max-height: 88dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--bg-1);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(100%);
+  visibility: hidden;
+  transition:
+    transform var(--dur-ui) var(--ease-out),
+    visibility 0s linear var(--dur-ui);
+}
+
+.booking-slot.sheet.open {
+  transform: none;
+  visibility: visible;
+  transition: transform var(--dur-ui) var(--ease-out);
+}
+
+.sheet-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-4) var(--space-2);
+}
+
+.sheet-grip {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  width: 2.5rem;
+  height: 4px;
+  margin-left: -1.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--line-strong);
+}
+
+.sheet-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.sheet-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-slot.sheet {
+    transform: none;
+    opacity: 0;
+    transition:
+      opacity var(--dur-ui) linear,
+      visibility 0s linear var(--dur-ui);
+  }
+
+  .booking-slot.sheet.open {
+    opacity: 1;
+    transition: opacity var(--dur-ui) linear;
+  }
+}
+
+/* ---------- Similar cars ---------- */
+.similar {
+  margin-top: var(--space-8);
+}
+
+.similar-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin: 0;
+}
+
+@media (min-width: 576px) {
+  .similar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .similar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

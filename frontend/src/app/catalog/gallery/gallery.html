@@ -1,0 +1,76 @@
+<div class="gallery" [attr.aria-label]="'gallery.label' | translate" role="group" (keydown)="onKeydown($event)">
+  <div class="stage" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)">
+    <ng-container *ngIf="list().length > 0; else placeholder">
+      <button type="button" class="stage-open" (click)="openLightbox()">
+        <img
+          *ngFor="let src of list(); let i = index"
+          [ngSrc]="src"
+          fill
+          [priority]="i === 0"
+          sizes="(min-width: 992px) 66vw, 100vw"
+          [alt]="alt"
+          [class.active]="i === index()"
+          [attr.aria-hidden]="i !== index() ? 'true' : null"
+        />
+        <span class="zoom-hint" aria-hidden="true"><i class="material-icons">zoom_out_map</i></span>
+        <span class="visually-hidden">{{ 'gallery.open' | translate }}</span>
+      </button>
+
+      <ng-container *ngIf="list().length > 1">
+        <button type="button" class="nav-btn prev" (click)="prev()" [attr.aria-label]="'gallery.prev' | translate">
+          <i class="material-icons" aria-hidden="true">chevron_left</i>
+        </button>
+        <button type="button" class="nav-btn next" (click)="next()" [attr.aria-label]="'gallery.next' | translate">
+          <i class="material-icons" aria-hidden="true">chevron_right</i>
+        </button>
+        <span class="counter" aria-live="polite">{{ 'gallery.photo' | translate: { n: index() + 1, total: list().length } }}</span>
+      </ng-container>
+    </ng-container>
+    <ng-template #placeholder><app-car-placeholder></app-car-placeholder></ng-template>
+  </div>
+
+  <div *ngIf="list().length > 1" class="thumbs">
+    <button
+      *ngFor="let src of list(); let i = index"
+      type="button"
+      class="thumb"
+      [attr.aria-current]="i === index() ? 'true' : null"
+      [attr.aria-label]="'gallery.photo' | translate: { n: i + 1, total: list().length }"
+      (click)="show(i)"
+    >
+      <img [ngSrc]="src" width="160" height="100" alt="" />
+    </button>
+  </div>
+
+  <dialog #lightbox class="lightbox" [attr.aria-label]="alt" (click)="onDialogClick($event)" (close)="zoomed.set(false)">
+    <div class="lb-bar">
+      <span *ngIf="list().length > 1" class="lb-counter">{{ 'gallery.photo' | translate: { n: index() + 1, total: list().length } }}</span>
+      <button type="button" class="lb-btn ms-auto" [attr.aria-pressed]="zoomed()" (click)="toggleZoom()">
+        <i class="material-icons" aria-hidden="true">{{ zoomed() ? 'zoom_out' : 'zoom_in' }}</i>
+        <span class="visually-hidden">{{ 'gallery.zoom' | translate }}</span>
+      </button>
+      <button type="button" class="lb-btn" (click)="closeLightbox()" [attr.aria-label]="'gallery.close' | translate">
+        <i class="material-icons" aria-hidden="true">close</i>
+      </button>
+    </div>
+    <div class="lb-stage" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)">
+      <img
+        *ngIf="current() as src"
+        class="lb-img"
+        [src]="src"
+        [alt]="alt"
+        [class.zoomed]="zoomed()"
+        [style.transform-origin]="zoomOrigin()"
+        (click)="toggleZoom($event)"
+      />
+    </div>
+    <ng-container *ngIf="list().length > 1">
+      <button type="button" class="lb-btn lb-nav prev" (click)="prev()" [attr.aria-label]="'gallery.prev' | translate">
+        <i class="material-icons" aria-hidden="true">chevron_left</i>
+      </button>
+      <button type="button" class="lb-btn lb-nav next" (click)="next()" [attr.aria-label]="'gallery.next' | translate">
+        <i class="material-icons" aria-hidden="true">chevron_right</i>
+      </button>
+    </ng-container>
+  </dialog>
+</div>

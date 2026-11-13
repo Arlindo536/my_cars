@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -10,12 +10,13 @@ import { SharedModule } from '../shared/shared-module';
 import { CatalogCarDetail } from './catalog-car-detail/catalog-car-detail';
 import { BookingCard } from './booking-card/booking-card';
 import { AskOwner } from './ask-owner/ask-owner';
+import { Gallery } from './gallery/gallery';
 
 // The car page (/catalog/:id) in its own chunk: the Material datepicker it needs stays out of the home page
 @NgModule({
-  declarations: [CatalogCarDetail, BookingCard, AskOwner],
+  declarations: [CatalogCarDetail, BookingCard, AskOwner, Gallery],
   imports: [
-    CommonModule, ReactiveFormsModule, SharedModule,
+    CommonModule, NgOptimizedImage, ReactiveFormsModule, SharedModule,
     MatDatepickerModule, MatFormFieldModule, MatInputModule,
     RouterModule.forChild([{ path: '', component: CatalogCarDetail }]),
   ],

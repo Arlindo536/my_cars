@@ -158,3 +158,34 @@ TBT on mobile rose from ~200 to ~400 ms (more script, style and paint: hero art,
 - Lighthouse (`lighthouse-phase4.txt`): accessibility 100, CLS 0 on home, car page, register.
 - Tests: backend 76 OK; frontend 48 passed / 8 failed (same 8 legacy specs). New: Home (default load, chip toggle + pill, clear all keeps sort), CountUp; Reveal spec fixed to actually instantiate the directive.
 - Before/after: `docs/visual-upgrade/phase4/before-after-home-1280.webp` and `-375.webp`; more in `phase4/`.
+
+## Phase 5: car page and booking (2026-11-13)
+
+Arlindo continued without answering the Phase 4 questions, so the defaults stay (no prerendering, no photos, Sora, theme follows the system, `/login` untouched).
+
+### What changed
+- **Gallery** (`app-gallery`, `CarPageModule`): 16:9 stage with crossfading photos, thumbnail strip, prev/next buttons and a counter when there is more than one photo, ← / → keys, horizontal swipe (`touch-action: pan-y`, so vertical scrolling still works). The first photo is `NgOptimizedImage` with `priority`. The **lightbox** is a native `<dialog>` (`showModal`: the page behind is inert, focus moves inside, Escape closes and focus returns to the photo). It shows the full photo with a 2× zoom around the clicked point (or the centre via the zoom button, `aria-pressed`). **The API has one photo per car**, so today there is never a thumbnail strip; the component already takes a list. Without a photo the placeholder shows and nothing opens.
+- **Spec grid:** five tiles (year, fuel, gearbox, type, mileage) with icons. 2 columns on phones (the last one spans), 3 up to 1199 px, 5 from 1200 px; German "Kilometerstand" didn't fit five in a row at 1024 px. Replaces the graphite strip with the red top border.
+- **Booking panel:** sticky beside the content on wide screens (on a wrapper; the card itself was sticky inside a box exactly its own height, so it never stuck). The total **counts to the new value** (`appCountUp` now takes a formatter; prices keep "99,50 €" formatting). The visible number is `aria-hidden` and the `aria-live` summary reads the final price from hidden text.
+- **Mobile (< 992 px): bottom bar + bottom sheet.** A fixed graphite bar shows the price per day, or the total and day count once dates are chosen, plus "Choose dates" / "Book now". The button opens the booking card in a bottom sheet (`role="dialog"`, `aria-modal`, focus on the close button, Tab trapped, Escape and the scrim close it, focus returns to the bar button, page scroll locked; it fades instead of sliding with reduced motion). The Material calendar opens above the sheet (`.cdk-overlay-container` z-index 1150, toasts 1200). "Message the owner" inside the sheet closes it before scrolling to the form. The page gets bottom padding and toasts move up while the bar is shown.
+- **Date picker states** (Material overrides with tokens): selected start/end in brand red, the range between as a light red wash, today outlined, hover/focus neutral, booked and past days muted **and struck through** (not colour alone). Keyboard navigation is Material's (arrows, Enter, Page Up/Down); verified picking a range by keyboard on desktop and in the sheet.
+- **Similar cars:** up to 3 cars of the same type (cheapest first) from the public catalog endpoint, below the content. The page now follows the `:id` parameter, so clicking a similar car loads it (the component is reused).
+- **Section reveals** on description, "ask the owner", pickup map and similar cars.
+- **Shared-element transition:** clicking a card names its photo `car-photo`. The car page's photo frame carries the same name: the skeleton's photo block while loading, then the gallery. So the card photo morphs into place (350 ms, ease-out). Off with reduced motion (0 s); skipped when a car-page photo is already on screen (similar cars), because names must be unique.
+- Fuel icon mapping moved to `shared/car-labels.ts` (`fuelIcon()`), used by the card and the spec grid. `html.drawer-open` renamed to `html.scroll-locked` (drawer, sheet); a modal `<dialog>` locks scrolling via `:has(dialog[open])`.
+
+### Booking flow unchanged
+Same API calls (availability, quote, create), same rules and messages. Checked in the browser: customer picks dates → quote → total; guest "Log in to book" goes to `/auth/login?returnUrl=/catalog/35`; admin sees the disabled button and note (unchanged template). No backend change.
+
+### Verified
+- Scripted (dev + production build with the nginx CSP), 0 console errors:
+  - Lightbox opens by keyboard (Enter on the photo), zoom toggles, Escape closes and refocuses.
+  - Booking panel stays at 80 px from the top while scrolling.
+  - Date range picked by keyboard; the total and hidden text match.
+  - Similar cars render (3) and navigate (`/catalog/35` → `/catalog/29`).
+  - Mobile sheet: focus, Escape, scroll lock, calendar on top (hit-tested), bar shows "160 € · 2 days · Book now" after choosing.
+  - Shared-element group `car-photo` animates (350 ms; 0 with reduced motion).
+- Photo features were tested with a **generated test image** uploaded to dev car 35 through the existing admin endpoint, then removed with the same endpoint (car 35 has no image again; the file was deleted). The lightbox screenshot in `phase5/` shows that test image.
+- Spec grid: 360 to 1440 px in sq / en / de, no broken words or overflowing tiles.
+- Lighthouse (`lighthouse-phase5.txt`): car page accessibility 100, CLS 0 (bottom bar included); mobile perf 74, desktop 98.
+- Tests: backend 76 OK; frontend 51 passed / 8 failed (same 8 legacy specs). New: Gallery (no photos, keyboard wrap + thumbnails, swipe doesn't open the lightbox).

@@ -47,6 +47,7 @@
 
   /* Layout */
   --header-h: 4rem; /* sticky bar height; heroes slide under it */
+  --bottom-bar-h: 4.5rem; /* fixed booking bar on narrow car pages */
 
   /* Fills that look the same in both themes (white text on them) */
   --brand: #c62828;

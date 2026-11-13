@@ -50,7 +50,7 @@ describe('NavBar behaviour', () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('username');
-    document.documentElement.classList.remove('drawer-open');
+    document.documentElement.classList.remove('scroll-locked');
   });
 
   it('builds initials from the stored username', async () => {
@@ -78,13 +78,13 @@ describe('NavBar behaviour', () => {
     toggle.click();
     await fixture.whenStable();
     expect(component.menuOpen()).toBe(true);
-    expect(document.documentElement.classList.contains('drawer-open')).toBe(true);
+    expect(document.documentElement.classList.contains('scroll-locked')).toBe(true);
     const drawer: HTMLElement = fixture.nativeElement.querySelector('#main-menu');
     expect(drawer.getAttribute('role')).toBe('dialog');
     drawer.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await fixture.whenStable();
     expect(component.menuOpen()).toBe(false);
-    expect(document.documentElement.classList.contains('drawer-open')).toBe(false);
+    expect(document.documentElement.classList.contains('scroll-locked')).toBe(false);
   });
 
   it('logout forgets the stored username', async () => {

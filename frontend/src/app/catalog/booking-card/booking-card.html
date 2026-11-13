@@ -27,7 +27,9 @@
           </div>
           <div class="total d-flex justify-content-between align-items-baseline">
             <span>{{ 'booking.total' | translate }}</span>
-            <span class="total-price">{{ q.total_price | price: language.locale() }}</span>
+            <!-- counts to the new total; screen readers get the final value from the hidden text -->
+            <span class="total-price" aria-hidden="true" [appCountUp]="+q.total_price" [countUpFormat]="priceFormat()"></span>
+            <span class="visually-hidden">{{ q.total_price | price: language.locale() }}</span>
           </div>
         </div>
         <ng-template #unavailable>

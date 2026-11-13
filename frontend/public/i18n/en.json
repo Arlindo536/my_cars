@@ -129,7 +129,8 @@
     "mileage": "Mileage",
     "description": "Description",
     "pickupPlace": "Pick-up location",
-    "pickupText": "The car is picked up and returned at our office."
+    "pickupText": "The car is picked up and returned at our office.",
+    "similar": "Similar cars"
   },
   "booking": {
     "aria": "Booking",
@@ -148,7 +149,8 @@
     "payNote": "No online payment: you pay at the office when you pick up the car.",
     "sent": "Booking sent. It will be confirmed shortly.",
     "conflict": "These dates were just booked by someone else. Please choose other dates.",
-    "failed": "The booking failed. Please try again."
+    "failed": "The booking failed. Please try again.",
+    "chooseDates": "Choose dates"
   },
   "myBookings": {
     "title": "My bookings",
@@ -342,5 +344,14 @@
     "title": "Page not found",
     "text": "The address may be wrong or the page was removed. Our cars are still here.",
     "home": "Browse cars"
+  },
+  "gallery": {
+    "label": "Car photos",
+    "open": "Open the photo full size",
+    "close": "Close",
+    "prev": "Previous photo",
+    "next": "Next photo",
+    "zoom": "Zoom",
+    "photo": "Photo {{n}} of {{total}}"
   }
 }

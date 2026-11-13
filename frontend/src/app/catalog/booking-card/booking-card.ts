@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Input, OnInit, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
@@ -9,6 +9,7 @@ import { BookedRange, Bookings, Quote, fromApiDate, toApiDate } from '../../book
 import { Notification } from '../../notification';
 import { Language } from '../../language';
 import { scrollBehavior } from '../../motion';
+import { PricePipe } from '../../shared/price-pipe';
 
 @Component({
   selector: 'app-booking-card',
@@ -41,6 +42,13 @@ export class BookingCard implements OnInit {
   readonly quote = signal<Quote | null>(null);
   readonly quoteError = signal(false);
   readonly submitting = signal(false);
+
+  // Formats the animated total in the current language
+  private readonly pricePipe = new PricePipe();
+  readonly priceFormat = computed(() => {
+    const locale = this.language.locale();
+    return (value: number) => this.pricePipe.transform(value, locale);
+  });
 
   get role(): string | null {
     return localStorage.getItem('role');

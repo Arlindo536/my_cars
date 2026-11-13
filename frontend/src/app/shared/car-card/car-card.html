@@ -1,6 +1,6 @@
 <article class="car-card">
   <div class="car-photo">
-    <div class="photo-frame">
+    <div #frame class="photo-frame">
       <img
         *ngIf="car.image; else placeholder"
         [ngSrc]="car.image"
@@ -32,7 +32,7 @@
       </li>
     </ul>
     <!-- stretched-link: the whole card is clickable, the link stays the one focus stop -->
-    <a class="btn btn-dark w-100 mt-auto stretched-link" [routerLink]="['/catalog', car.id]">
+    <a class="btn btn-dark w-100 mt-auto stretched-link" [routerLink]="['/catalog', car.id]" (click)="markSharedPhoto(frame)">
       {{ 'car.details' | translate }}<span class="visually-hidden">: {{ car.model }}</span>
     </a>
   </div>
