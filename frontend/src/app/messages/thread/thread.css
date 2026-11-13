@@ -4,17 +4,19 @@
 }
 
 .back-link {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   text-decoration: none;
   font-size: 0.9rem;
+  display: inline-block;
+  padding: 0.35rem 0;
 }
 
 .back-link:hover {
-  color: #ffffff;
+  color: var(--band-text);
 }
 
 .thread-title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: var(--fs-3xl);
   margin: 0.4rem 0 0.2rem;
 }
 
@@ -24,11 +26,11 @@
 }
 
 .thread-title a:hover {
-  color: #ff3b55;
+  color: var(--band-brand-text);
 }
 
 .thread-with {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
 }
 
 .chat {
@@ -42,9 +44,10 @@
   gap: 0.6rem;
   height: min(60vh, 34rem);
   overflow-y: auto;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm), var(--highlight);
   padding: 1rem;
   margin-bottom: 0.75rem;
 }
@@ -59,15 +62,16 @@
 
 .bubble {
   max-width: 80%;
-  background: #f1f1f1;
-  border-radius: 12px 12px 12px 2px;
+  background: var(--bg-2);
+  color: var(--text);
+  border-radius: 14px 14px 14px 4px;
   padding: 0.55rem 0.8rem;
 }
 
 .mine .bubble {
-  background: var(--ink);
-  color: #ffffff;
-  border-radius: 12px 12px 2px 12px;
+  background: var(--btn-ink);
+  color: var(--btn-ink-text);
+  border-radius: 14px 14px 4px 14px;
 }
 
 .bubble-text {

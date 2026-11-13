@@ -37,17 +37,39 @@
                 "glob": "*.png",
                 "input": "node_modules/leaflet/dist/images",
                 "output": "leaflet"
+              },
+              {
+                "glob": "{inter-latin-wght-normal,inter-latin-ext-wght-normal}.woff2",
+                "input": "node_modules/@fontsource-variable/inter/files",
+                "output": "fonts"
+              },
+              {
+                "glob": "{sora-latin-wght-normal,sora-latin-ext-wght-normal}.woff2",
+                "input": "node_modules/@fontsource-variable/sora/files",
+                "output": "fonts"
+              },
+              {
+                "glob": "material-icons-latin-400-normal.woff2",
+                "input": "node_modules/@fontsource/material-icons/files",
+                "output": "fonts"
               }
             ],
-            "styles": ["src/material-theme.scss", "node_modules/leaflet/dist/leaflet.css", "src/styles.css"]
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/material-theme.scss",
+              "node_modules/leaflet/dist/leaflet.css",
+              "src/fonts.css",
+              "src/tokens.css",
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "950kB",
+                  "maximumError": "1.1MB"
                 },
                 {
                   "type": "anyComponentStyle",

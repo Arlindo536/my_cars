@@ -68,7 +68,7 @@ Where red and dark meet:
 | "CARS" in the footer logo, `#c8102e` on `#232529` | **2.6:1** | fails AA |
 | Focus ring `#c8102e` on the charcoal header/bands | ~2.3:1 | below 3:1 for UI components: focus is hard to see on dark |
 | Red 3 px rules: header bottom, footer top, the diagonal cut, dashed red divider | - | four full-width red lines on one screen, plus red tags on every card: red is everywhere |
-| Hero line 2 in `#ff3b55` on charcoal (huge type) | 4.6:1 | passes, but a big saturated red headline vibrating on dark |
+| Hero line 2 in `#ff3b55` on charcoal (huge type) | 3.95:1 | passes only as large text; a big saturated red headline vibrating on dark |
 | Error snackbar uses the brand red | - | brand and error look the same |
 | Active language pill, primary buttons: white on `#c8102e` | 5.9:1 | fine |
 
@@ -99,7 +99,7 @@ Console: no errors on any page except the broken `/login` and `/register` routes
 - **Red overuse:** red header rule + red diagonal + red price tags + red section bars + red dashed divider + red step numbers + red buttons on one screen.
 - **Booking card:** "Rezervo tani" is disabled (pink, reads as error) until dates are chosen, with no hint next to the button.
 - **Auth/profile pages:** generic Bootstrap cards with inline `#f8f9fa` backgrounds; they don't share the site's look.
-- **Admin:** list rows instead of tables in bookings; fleet/users tables without sticky headers; no skeletons.
+- **Admin:** the users page splits admins and customers but paginates them together, so on page 1 the "Admins" table is an empty header; list rows instead of tables in bookings; fleet/users tables without sticky headers; no skeletons.
 - **Albanian length:** nav labels fit at 1280; at 768 the nav collapses to the burger; no clipping seen. German is the longest and fits.
 - **Map:** OSM tiles are bright and will clash with a dark theme.
 

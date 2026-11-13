@@ -11,26 +11,24 @@
 }
 
 .tab {
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  border-radius: 999px;
-  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-1);
+  color: var(--text);
+  border-radius: var(--radius-pill);
+  min-height: 2.5rem;
+  padding: 0.3rem 1rem;
   font-size: 0.85rem;
   font-weight: 600;
 }
 
-.tab.active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #ffffff;
+.tab:hover {
+  background: var(--neutral-wash);
 }
 
-.empty-state {
-  text-align: center;
-  background: var(--card-bg);
-  border: 1px dashed #cfcfcf;
-  border-radius: var(--radius);
-  padding: 3rem 1rem;
+.tab.active {
+  background: var(--btn-ink);
+  border-color: var(--btn-ink);
+  color: var(--btn-ink-text);
 }
 
 .booking-list {
@@ -44,19 +42,20 @@
   grid-template-columns: 1fr auto;
   gap: 0.5rem 1rem;
   align-items: center;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm), var(--highlight);
   padding: 0.9rem 1.1rem;
 }
 
 .booking-row[data-status='pending'] {
-  border-left-color: #e0a800;
+  border-left-color: var(--warning);
 }
 
 .booking-row[data-status='confirmed'] {
-  border-left-color: #198754;
+  border-left-color: var(--success);
 }
 
 @media (min-width: 768px) {
@@ -67,17 +66,17 @@
 
 .booking-car {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.3rem;
-  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.1rem;
   color: var(--text);
   text-decoration: none;
 }
 
 .booking-total {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.3rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
   text-align: right;
 }
 
@@ -87,22 +86,3 @@
   gap: 0.4rem;
 }
 
-.status {
-  justify-self: start;
-  font-size: 0.78rem;
-  font-weight: 600;
-  border-radius: 999px;
-  padding: 0.15rem 0.6rem;
-  background: #f1f1f1;
-  color: #5f6368;
-}
-
-.status[data-status='pending'] {
-  background: #fff3cd;
-  color: #664d03;
-}
-
-.status[data-status='confirmed'] {
-  background: #d1e7dd;
-  color: #0a3622;
-}

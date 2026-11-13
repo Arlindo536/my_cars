@@ -3,14 +3,6 @@
   padding-bottom: 0.75rem;
 }
 
-.empty-state {
-  text-align: center;
-  background: var(--card-bg);
-  border: 1px dashed #cfcfcf;
-  border-radius: var(--radius);
-  padding: 3rem 1rem;
-}
-
 .conversation-list {
   display: flex;
   flex-direction: column;
@@ -21,21 +13,23 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm), var(--highlight);
   padding: 0.9rem 1.1rem;
   color: var(--text);
   text-decoration: none;
+  transition: border-color var(--dur-micro) var(--ease-out);
 }
 
 .conversation:hover {
-  border-color: #cfcfcf;
+  border-color: var(--line-strong);
 }
 
 .conversation.unread {
-  border-left-color: var(--accent);
+  border-left-color: var(--brand-ui);
 }
 
 .conversation-main {
@@ -44,9 +38,8 @@
 
 .conversation-car {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.3rem;
-  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.1rem;
   margin-right: 0.5rem;
 }
 
@@ -78,9 +71,9 @@
 }
 
 .unread-badge {
-  background: var(--accent);
-  color: var(--on-accent);
-  border-radius: 999px;
+  background: var(--brand);
+  color: var(--on-brand);
+  border-radius: var(--radius-pill);
   min-width: 1.5rem;
   padding: 0.1rem 0.45rem;
   text-align: center;

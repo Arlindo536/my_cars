@@ -18,7 +18,7 @@ Backend (`backend/`): Django 6 + Django REST Framework, PostgreSQL, Token authen
 - Role checks like the existing code: `request.user.role` (`'admin'` / `'customer'`), `IsOwnerOrAdmin` for object permissions. Default permission is `IsAuthenticated`; public views set `authentication_classes = []` and `permission_classes = [AllowAny]`.
 - Pagination: a `PageNumberPagination` subclass per view.
 - Money: `DecimalField`, never float. The server computes prices, never trust the client.
-Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy-loaded feature modules, services `providedIn: 'root'`, Bootstrap 5 (CDN) for layout, Angular Material only for dialogs/snackbars/datepicker, token and role in `localStorage`, `authInterceptor`, route guards.
+Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy-loaded feature modules, services `providedIn: 'root'`, Bootstrap 5.3.3 (npm, bundled) for layout, Angular Material only for dialogs/snackbars/datepicker, token and role in `localStorage`, `authInterceptor`, route guards.
 
 ## Findings about the original code
 - Fixed in step 0: `RegisterSerializer.validate` sat outside the class (password confirmation never checked); stray empty `backend/__init__.py` broke test discovery.
@@ -62,13 +62,14 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - `@ngx-translate/core` + `@ngx-translate/http-loader` 18.0.0, `public/i18n/{sq,en,de}.json` (keep the three files' keys identical), choice kept in `localStorage` (`lang`). `Language` service (`src/app/language.ts`): `current`, `locale()` for number/date pipes (pass it explicitly: `number:'1.0-2':language.locale()`), `intlLocale()` for the datepicker, `t()` for strings in code. `TranslatePipe` is standalone: import it in each NgModule (SharedModule re-exports it). Specs use `provideTestTranslations()` from `src/testing/translate.ts`.
 - Leaflet 1.9.4 + `@types/leaflet` (fix marker icon assets in `angular.json`). Office coordinates and address in `environment.ts`.
 
-## Design (Albanian flag colours, a bit distinctive, never excessive)
-- Palette: charcoal `--ink #2B2D31` / `--ink-2 #33363B` / `--ink-3 #3D4046` (softened from pure black on Arlindo's request, less harsh with red and white), footer `#232529`, red accent `#C8102E` (`--accent`), text `#26282C`, white cards, page background `#F6F6F6`. Contrast checked: white on charcoal >= 12:1, muted grey >= 5:1, white on red 5.9:1.
-- Fonts: **Barlow Condensed** (800, uppercase) for headings, prices and numerals; **Inter** for body.
-- Motifs: dark header + hero with a diagonal red cut at the bottom (`clip-path` over a red wrapper), skewed red price tags and labels, small skewed red bar before section titles, dashed "road line" dividers.
-- Home: hero with background photo + title (no date form in the hero), then dark filter bar (name search + type / fuel / transmission / sort + clear), 3-column car cards (photo, name, year · type, pills, price tag, black "Shiko detajet" button), "Si funksionon" (01/02/03), dark contact/map section, black footer.
-- Car page: dark title band, photo gallery, dark spec panel (year, fuel, transmission, type) with a red top border, description, "Pyet pronarin" message box, pickup map, sticky booking card (black price header, date range, total, red "Rezervo tani", outline "Dërgo mesazh pronarit").
-- Copy is Albanian by default (`sq`), mobile-first, accessible (real buttons/links, labels, 4.5:1 contrast).
+## Design (visual upgrade in progress, branch `visual-upgrade`)
+Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 0-7, review stops after phases 1 and 4). Log: `docs/audit.md`, `docs/decisions.md`; screenshots in `docs/visual-upgrade/`.
+- Tokens in `frontend/src/tokens.css` (colours light + dark, type, spacing, radius, shadow, motion). **No hard-coded colours in components**; graphite bands use `--band-*`, red on dark uses `--band-brand-text`. Re-check contrast with `python3 -I docs/visual-upgrade/contrast.py` when a colour changes.
+- Themes light/dark/system: `public/theme-init.js` (before paint, CSP-safe) + `Theme` service (`src/app/theme.ts`), `localStorage` `theme`. Bootstrap follows via `data-bs-theme`, Material via `color-scheme`.
+- Red is an accent only (primary button, price tag, small bars, badges, active underline); errors use rose/coral, never brand red. No pure black/white surfaces (white cards in light theme are fine).
+- Fonts: Sora (display) + Inter (UI), self-hosted from Fontsource in `/fonts`; Material Icons self-hosted; Bootstrap 5.3.3 bundled from npm. No CDNs (CSP is `style-src 'self' 'unsafe-inline'; font-src 'self'`).
+- Motion tokens match arlindo.site (`--ease-out`, `--ease-in-out`, `--dur-*`); honour reduced motion; no smooth-scroll library.
+- Copy is Albanian by default (`sq`), mobile-first, accessible (real buttons/links, labels, 4.5:1 contrast, 44 px targets).
 
 ## Plan and status (blocks are ~90 min; target finish early December)
 - [x] Step 0: local setup, register bug fix, first tests, `.env.example`, version checks.
@@ -82,6 +83,7 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
 - [x] Deployed 2026-10-22 to https://my-cars.arlindo.site (see "Server" below).
+- [ ] Visual upgrade (manual above): phase 0 audit + phase 1 tokens/themes done 2026-11-13, waiting for Arlindo's review.
 
 ## Server (p51-server, Ubuntu 26.04)
 - SSH: `arlindo@100.78.198.77` (Tailscale). Docker + compose installed; user is in the docker group.

@@ -1,39 +1,43 @@
 .site-footer {
-  background: #232529;
-  color: var(--text-on-dark);
-  border-top: 3px solid var(--accent);
+  background: var(--band-0);
+  color: var(--band-text);
+  border-top: 1px solid var(--band-line);
 }
 
 .footer-brand {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.8rem;
-  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
 }
 
 .text-accent {
-  color: var(--accent);
+  color: var(--band-brand-text);
 }
 
 .footer-heading {
-  font-size: 1rem;
-  color: #ffffff;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--band-text);
   margin-bottom: 0.75rem;
 }
 
 .footer-muted {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
 }
 
 .site-footer a {
-  color: var(--text-on-dark);
+  color: var(--band-muted);
   text-decoration: none;
-  line-height: 2;
+  display: inline-block;
+  padding: 0.3rem 0;
 }
 
 .site-footer a:hover {
-  color: #ffffff;
+  color: var(--band-text);
   text-decoration: underline;
 }
 
@@ -41,6 +45,6 @@
   border: 0;
   height: 2px;
   opacity: 1;
-  background: repeating-linear-gradient(90deg, #45484e 0 24px, transparent 24px 40px);
+  background: repeating-linear-gradient(90deg, var(--band-line) 0 24px, transparent 24px 40px);
   margin: 2rem 0 1rem;
 }

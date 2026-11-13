@@ -1,6 +1,6 @@
 .site-header {
-  background: var(--ink);
-  border-bottom: 3px solid var(--accent);
+  background: var(--band-1);
+  border-bottom: 1px solid var(--band-line);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  color: var(--text-on-dark);
+  color: var(--band-text);
   text-decoration: none;
 }
 
@@ -21,8 +21,9 @@
   width: 2.2rem;
   height: 2.2rem;
   margin-left: 0.3rem;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--brand);
+  color: var(--on-brand);
+  border-radius: 4px;
   transform: skewX(-12deg);
 }
 
@@ -33,22 +34,21 @@
 
 .brand-text {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
 }
 
 .text-accent {
-  color: var(--accent);
+  color: var(--band-brand-text);
 }
 
 .menu-toggle {
   background: transparent;
-  border: 1px solid #4a4d54;
-  border-radius: var(--radius);
-  color: var(--text-on-dark);
-  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--band-line);
+  border-radius: var(--radius-md);
+  color: var(--band-text);
+  padding: 0.55rem;
   line-height: 0;
 }
 
@@ -66,26 +66,28 @@
 }
 
 .nav-link-item {
-  color: var(--text-on-dark);
+  color: var(--band-muted);
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 0.25rem;
+  padding: 0.6rem 0.25rem;
   border-bottom: 2px solid transparent;
+  transition: color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
 }
 
 .nav-link-item:hover {
-  color: #ffffff;
+  color: var(--band-text);
 }
 
 .nav-link-item.active {
-  border-bottom-color: var(--accent);
+  color: var(--band-text);
+  border-bottom-color: var(--band-brand-text);
 }
 
 .nav-badge {
   display: inline-block;
-  background: var(--accent);
-  color: var(--on-accent);
-  border-radius: 999px;
+  background: var(--brand);
+  color: var(--on-brand);
+  border-radius: var(--radius-pill);
   font-size: 0.7rem;
   font-weight: 700;
   min-width: 1.3rem;
@@ -106,12 +108,16 @@
   font-size: 1rem;
 }
 
-.nav-lang {
+.nav-prefs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   margin-top: 0.5rem;
 }
 
 @media (min-width: 768px) {
-  .nav-lang {
+  .nav-prefs {
     margin-top: 0;
   }
 

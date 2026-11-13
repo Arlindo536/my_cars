@@ -1,11 +1,11 @@
-<div style="background-color: #f8f9fa; min-height: 85vh;" class="py-5">
+<div style="min-height: 85vh;" class="py-5">
   <div class="container" style="max-width: 600px;">
     <a [routerLink]="backLink" class="btn btn-outline-secondary btn-sm mb-3">
       <i class="material-icons" style="font-size: 16px; vertical-align: middle;">arrow_back</i> Back to My Cars
     </a>
     <div class="card shadow p-4" *ngIf="car">
       <div class="text-center mb-4">
-        <i class="material-icons" style="font-size: 64px; color: #2c3e50;">directions_car</i>
+        <i class="material-icons" style="font-size: 64px; color: var(--steel);">directions_car</i>
         <h2 class="mt-2 mb-1">{{ car.model }}</h2>
         <span class="badge" [class.bg-success]="car.fuel_type === 'electric'" [class.bg-secondary]="car.fuel_type !== 'electric'">
           {{ car.fuel_type }}

@@ -7,6 +7,7 @@ import { provideTestTranslations } from '../../testing/translate';
 
 import { NavBar } from './nav-bar';
 import { LanguageSwitcher } from '../language-switcher/language-switcher';
+import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 
 describe('NavBar', () => {
   let component: NavBar;
@@ -14,7 +15,7 @@ describe('NavBar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NavBar, LanguageSwitcher],
+      declarations: [NavBar, LanguageSwitcher, ThemeSwitcher],
       imports: [RouterModule.forRoot([]), TranslatePipe],
       providers: [provideTestTranslations(), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();

@@ -1,8 +1,8 @@
 .hero {
   /* Placeholder until Arlindo picks a hero photo */
   background:
-    radial-gradient(circle at 85% 20%, rgba(200, 16, 46, 0.28), transparent 45%),
-    linear-gradient(160deg, #383b41 0%, var(--ink) 60%);
+    radial-gradient(circle at 85% 20%, var(--hero-glow), transparent 45%),
+    linear-gradient(160deg, var(--band-2) 0%, var(--band-1) 60%);
 }
 
 .hero-inner {
@@ -15,7 +15,7 @@
 }
 
 .hero-kicker {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -23,18 +23,19 @@
 }
 
 .hero-title {
-  font-size: clamp(2.6rem, 7vw, 4.8rem);
-  line-height: 0.95;
+  font-size: var(--fs-hero);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   margin-bottom: 1.25rem;
 }
 
 .text-accent {
-  color: #ff3b55; /* lighter red for contrast on black */
+  color: var(--band-brand-text);
 }
 
 .hero-lead {
-  color: var(--text-on-dark);
-  font-size: 1.1rem;
+  color: var(--band-text);
+  font-size: var(--fs-lg);
   max-width: 36rem;
   margin-bottom: 1.75rem;
 }
@@ -42,12 +43,13 @@
 .demo-link {
   display: inline-block;
   margin-left: 1rem;
-  color: var(--text-on-dark);
+  padding: 0.6rem 0;
+  color: var(--band-text);
   font-weight: 600;
 }
 
 .demo-link:hover {
-  color: #ff3b55;
+  color: var(--band-brand-text);
 }
 
 .catalog {
@@ -59,15 +61,20 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
-  background: var(--ink-2);
-  border-radius: var(--radius);
+  background: var(--band-1);
+  color: var(--band-text);
+  border: 1px solid var(--band-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   padding: 1rem;
+  /* focus ring readable on the graphite bar */
+  --focus-ring: var(--band-focus);
   margin-bottom: 2rem;
 }
 
 .filter-field label {
   display: block;
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -97,8 +104,8 @@
 
 .skeleton {
   height: 22rem;
-  border-radius: var(--radius);
-  background: linear-gradient(90deg, #ececec 25%, #f6f6f6 50%, #ececec 75%);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(90deg, var(--bg-2) 25%, var(--bg-1) 50%, var(--bg-2) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.2s infinite linear;
 }
@@ -115,20 +122,13 @@
   }
 }
 
-.empty-state {
-  text-align: center;
-  background: var(--card-bg);
-  border: 1px dashed #cfcfcf;
-  border-radius: var(--radius);
-  padding: 3rem 1rem;
-}
-
 .step-number {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 3rem;
+  font-weight: 700;
+  font-size: 2.6rem;
   line-height: 1;
-  color: var(--accent);
+  letter-spacing: -0.03em;
+  color: var(--steel);
 }
 
 .step-title {
@@ -137,18 +137,22 @@
 }
 
 .contact {
-  background: var(--ink);
-  color: var(--text-on-dark);
+  background: var(--band-1);
+  color: var(--band-text);
+  --focus-ring: var(--band-focus);
+}
+
+.contact h2 {
+  color: var(--band-text);
 }
 
 .contact-text {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   max-width: 40rem;
 }
 
 .contact-address {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.6rem;
-  text-transform: uppercase;
+  font-weight: 700;
+  font-size: var(--fs-xl);
 }

@@ -19,6 +19,12 @@
     "en": "English",
     "de": "Deutsch"
   },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "Match system"
+  },
   "nav": {
     "mainNav": "Main navigation",
     "menu": "Menu",

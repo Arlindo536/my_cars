@@ -19,6 +19,12 @@
     "en": "English",
     "de": "Deutsch"
   },
+  "theme": {
+    "label": "Pamja",
+    "light": "E çelët",
+    "dark": "E errët",
+    "system": "Sipas sistemit"
+  },
   "nav": {
     "mainNav": "Navigimi kryesor",
     "menu": "Menuja",

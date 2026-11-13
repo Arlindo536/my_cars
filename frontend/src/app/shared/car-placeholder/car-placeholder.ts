@@ -21,10 +21,10 @@ import { Component } from '@angular/core';
     .ph {
       width: 100%; height: 100%; min-height: 10rem;
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;
-      background: linear-gradient(135deg, #ececec 0%, #dcdcdc 100%);
-      color: #8a8a8a;
+      background: linear-gradient(135deg, var(--placeholder-a) 0%, var(--placeholder-b) 100%);
+      color: var(--placeholder-fg);
     }
-    svg { width: 45%; max-width: 12rem; fill: #c4c4c4; }
+    svg { width: 45%; max-width: 12rem; fill: var(--placeholder-shape); }
     span { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
   `,
 })

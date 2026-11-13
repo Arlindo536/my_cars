@@ -1,0 +1,38 @@
+/* Same shape as the language switcher */
+.theme-switch {
+  display: inline-flex;
+  border: 1px solid var(--band-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  color: var(--band-muted);
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+}
+
+.theme-btn + .theme-btn {
+  border-left: 1px solid var(--band-line);
+}
+
+.theme-btn .material-icons {
+  font-size: 1.1rem;
+}
+
+.theme-btn:hover {
+  color: var(--band-text);
+  background: var(--band-hover);
+}
+
+.theme-btn.active {
+  background: var(--band-active);
+  color: var(--band-text);
+  box-shadow: inset 0 -2px 0 var(--band-brand-text);
+}

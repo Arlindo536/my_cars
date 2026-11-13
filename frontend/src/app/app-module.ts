@@ -13,9 +13,10 @@ import { TranslatePipe, provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LanguageSwitcher } from './language-switcher/language-switcher';
 import { Language } from './language';
+import { ThemeSwitcher } from './theme-switcher/theme-switcher';
 
 @NgModule({
-  declarations: [App, NavBar, Footer, ConfirmDialog, LanguageSwitcher],
+  declarations: [App, NavBar, Footer, ConfirmDialog, LanguageSwitcher, ThemeSwitcher],
   imports: [BrowserModule, AppRoutingModule, MatDialogModule, TranslatePipe],
   providers: [
     provideBrowserGlobalErrorListeners(),

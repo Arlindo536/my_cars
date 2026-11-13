@@ -1,26 +1,30 @@
 .booking-card {
   position: sticky;
   top: 5rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md), var(--highlight);
   overflow: hidden;
 }
 
 .booking-head {
-  background: var(--ink);
-  color: #ffffff;
+  background: var(--band-1);
+  color: var(--band-text);
+  border-bottom: 1px solid var(--band-line);
   padding: 1rem 1.25rem;
 }
 
 .booking-price {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 2.4rem;
+  font-weight: 700;
+  font-size: 2.2rem;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
 
 .booking-unit {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   margin-left: 0.25rem;
 }
 
@@ -37,7 +41,7 @@
 }
 
 .total {
-  border-top: 1px dashed #cfcfcf;
+  border-top: 1px dashed var(--line-strong);
   margin-top: 0.5rem;
   padding-top: 0.5rem;
   font-weight: 600;
@@ -45,6 +49,8 @@
 
 .total-price {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.8rem;
+  font-weight: 700;
+  font-size: 1.7rem;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }

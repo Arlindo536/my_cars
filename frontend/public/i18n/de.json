@@ -19,6 +19,12 @@
     "en": "English",
     "de": "Deutsch"
   },
+  "theme": {
+    "label": "Darstellung",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "Wie das System"
+  },
   "nav": {
     "mainNav": "Hauptnavigation",
     "menu": "Menü",

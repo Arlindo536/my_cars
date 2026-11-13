@@ -1,33 +1,45 @@
-/* ---------- Theme tokens (Albanian flag colours: charcoal + red, softened from pure black) ---------- */
-:root {
-  --ink: #2b2d31;
-  --ink-2: #33363b;
-  --ink-3: #3d4046;
-  --accent: #c8102e;
-  --accent-dark: #a00d25;
-  --on-accent: #ffffff;
-  --page-bg: #f6f6f6;
-  --card-bg: #ffffff;
-  --text: #26282c;
-  --text-muted: #5f6368;
-  --text-on-dark: #f2f2f2;
-  --text-on-dark-muted: #a6a6a6;
-  --border: #e2e2e2;
-  --radius: 6px;
-  --font-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+/* Global styles. Colours, type, spacing and motion come from tokens.css; no hard-coded colours here. */
 
-  /* Bootstrap 5 hooks, so existing pages pick up the theme */
+/* ---------- Bootstrap 5.3 hooks, so its components follow the tokens in both themes ---------- */
+:root[data-bs-theme] {
   --bs-body-font-family: var(--font-body);
-  --bs-body-bg: var(--page-bg);
+  --bs-body-bg: var(--bg-0);
   --bs-body-color: var(--text);
-  --bs-primary: var(--accent);
-  --bs-primary-rgb: 200, 16, 46;
-  --bs-link-color: var(--accent);
-  --bs-link-color-rgb: 200, 16, 46;
-  --bs-link-hover-color: var(--accent-dark);
-  --bs-link-hover-color-rgb: 160, 13, 37;
-  --bs-border-radius: var(--radius);
+  --bs-emphasis-color: var(--text);
+  --bs-secondary-color: var(--text-muted);
+  --bs-secondary-bg: var(--bg-2);
+  --bs-tertiary-bg: var(--bg-2);
+  --bs-heading-color: var(--text);
+  --bs-border-color: var(--field-border);
+  --bs-border-color-translucent: var(--line);
+  --bs-border-radius: var(--radius-md);
+  --bs-border-radius-sm: var(--radius-sm);
+  --bs-border-radius-lg: var(--radius-lg);
+  --bs-link-color: var(--text);
+  --bs-link-hover-color: var(--brand-text);
+  --bs-box-shadow: var(--shadow-md);
+  --bs-box-shadow-sm: var(--shadow-sm);
+  --bs-box-shadow-lg: var(--shadow-lg);
+  --bs-focus-ring-color: var(--brand-wash);
+}
+
+/* Bootstrap's "*-rgb" triplets can't take var(); they follow the theme here */
+:root[data-bs-theme='light'] {
+  --bs-link-color-rgb: 23, 24, 27;
+  --bs-link-hover-color-rgb: 198, 40, 40;
+  --bs-primary-rgb: 198, 40, 40;
+  --bs-danger-rgb: 190, 24, 93;
+  --bs-success-rgb: 19, 112, 56;
+  --bs-secondary-rgb: 91, 96, 104;
+}
+
+:root[data-bs-theme='dark'] {
+  --bs-link-color-rgb: 241, 238, 233;
+  --bs-link-hover-color-rgb: 242, 107, 107;
+  --bs-primary-rgb: 198, 40, 40;
+  --bs-danger-rgb: 255, 138, 128;
+  --bs-success-rgb: 74, 222, 128;
+  --bs-secondary-rgb: 154, 163, 175;
 }
 
 html,
@@ -36,9 +48,10 @@ body {
 }
 
 body {
-  background-color: var(--page-bg);
+  background-color: var(--bg-0);
   color: var(--text);
   font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Sticky footer: app-root is a column that fills the viewport */
@@ -50,67 +63,213 @@ app-root {
 
 .app-main {
   flex: 1 0 auto;
+  /* keep the footer below the fold while a lazy route loads (it used to jump down: CLS ~0.45) */
+  min-height: 100vh;
 }
 
+/* ---------- Type ---------- */
 h1,
 h2,
 h3,
 .display-font {
   font-family: var(--font-display);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
 }
 
+h1 {
+  font-size: var(--fs-3xl);
+}
+
+h2 {
+  font-size: var(--fs-2xl);
+}
+
+h3 {
+  font-size: var(--fs-xl);
+}
+
+/* Prices, totals and tables line up */
+.num,
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  text-decoration-color: var(--brand-ui);
+  text-underline-offset: 0.18em;
+}
+
+/* ---------- Focus: 2px ring, visible on both themes and on graphite bands ---------- */
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
-/* ---------- Bootstrap component overrides ---------- */
+.dark-band,
+.site-header,
+.site-footer,
+.on-band {
+  --focus-ring: var(--band-focus);
+}
+
+/* ---------- Buttons ---------- */
 .btn {
-  font-weight: 600;
+  --bs-btn-font-weight: 600;
+  --bs-btn-border-radius: var(--radius-md);
+  --bs-btn-focus-box-shadow: none;
+  transition:
+    background-color var(--dur-micro) var(--ease-out),
+    border-color var(--dur-micro) var(--ease-out),
+    color var(--dur-micro) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
 }
 
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Primary: the one red action per view */
 .btn-primary {
-  --bs-btn-bg: var(--accent);
-  --bs-btn-border-color: var(--accent);
-  --bs-btn-hover-bg: var(--accent-dark);
-  --bs-btn-hover-border-color: var(--accent-dark);
-  --bs-btn-active-bg: var(--accent-dark);
-  --bs-btn-active-border-color: var(--accent-dark);
-  --bs-btn-disabled-bg: var(--accent);
-  --bs-btn-disabled-border-color: var(--accent);
-  --bs-btn-focus-shadow-rgb: 200, 16, 46;
+  --bs-btn-color: var(--on-brand);
+  --bs-btn-bg: var(--brand);
+  --bs-btn-border-color: var(--brand);
+  --bs-btn-hover-color: var(--on-brand);
+  --bs-btn-hover-bg: var(--brand-hover);
+  --bs-btn-hover-border-color: var(--brand-hover);
+  --bs-btn-active-color: var(--on-brand);
+  --bs-btn-active-bg: var(--brand-pressed);
+  --bs-btn-active-border-color: var(--brand-pressed);
+  /* disabled: neutral, so it never reads as an error */
+  --bs-btn-disabled-color: var(--text-muted);
+  --bs-btn-disabled-bg: var(--bg-2);
+  --bs-btn-disabled-border-color: var(--line-strong);
+  --bs-btn-disabled-opacity: 1;
 }
 
+/* Neutral solid (secondary actions, card buttons) */
 .btn-dark {
-  --bs-btn-bg: var(--ink);
-  --bs-btn-border-color: var(--ink);
-  --bs-btn-hover-bg: var(--ink-3);
-  --bs-btn-hover-border-color: var(--ink-3);
+  --bs-btn-color: var(--btn-ink-text);
+  --bs-btn-bg: var(--btn-ink);
+  --bs-btn-border-color: var(--btn-ink);
+  --bs-btn-hover-color: var(--btn-ink-text);
+  --bs-btn-hover-bg: var(--btn-ink-hover);
+  --bs-btn-hover-border-color: var(--btn-ink-hover);
+  --bs-btn-active-color: var(--btn-ink-text);
+  --bs-btn-active-bg: var(--btn-ink-hover);
+  --bs-btn-active-border-color: var(--btn-ink-hover);
+  --bs-btn-disabled-color: var(--text-muted);
+  --bs-btn-disabled-bg: var(--bg-2);
+  --bs-btn-disabled-border-color: var(--line-strong);
+  --bs-btn-disabled-opacity: 1;
+}
+
+/* Outline (secondary) */
+.btn-outline-secondary,
+.btn-outline-dark {
+  --bs-btn-color: var(--text);
+  --bs-btn-border-color: var(--field-border);
+  --bs-btn-hover-color: var(--text);
+  --bs-btn-hover-bg: var(--neutral-wash);
+  --bs-btn-hover-border-color: var(--text-muted);
+  --bs-btn-active-color: var(--text);
+  --bs-btn-active-bg: var(--neutral-wash);
+  --bs-btn-active-border-color: var(--text);
+  --bs-btn-disabled-color: var(--text-muted);
+  --bs-btn-disabled-border-color: var(--line-strong);
+  --bs-btn-disabled-bg: transparent;
+}
+
+/* Outline on graphite bands */
+.btn-outline-light {
+  --bs-btn-color: var(--band-text);
+  --bs-btn-border-color: var(--band-line);
+  --bs-btn-hover-color: var(--band-text);
+  --bs-btn-hover-bg: var(--band-hover);
+  --bs-btn-hover-border-color: var(--band-muted);
+  --bs-btn-active-color: var(--band-text);
+  --bs-btn-active-bg: var(--band-active);
+  --bs-btn-active-border-color: var(--band-text);
+  --bs-btn-disabled-color: var(--band-muted);
+  --bs-btn-disabled-border-color: var(--band-line);
+}
+
+/* Destructive: the error hue, never the brand red */
+.btn-outline-danger {
+  --bs-btn-color: var(--error);
+  --bs-btn-border-color: var(--error);
+  --bs-btn-hover-color: var(--on-brand);
+  --bs-btn-hover-bg: var(--error-strong);
+  --bs-btn-hover-border-color: var(--error-strong);
+  --bs-btn-active-color: var(--on-brand);
+  --bs-btn-active-bg: var(--error-strong);
+  --bs-btn-active-border-color: var(--error-strong);
+}
+
+.btn-success {
+  --bs-btn-bg: var(--success-strong);
+  --bs-btn-border-color: var(--success-strong);
+  --bs-btn-hover-bg: var(--success-strong);
+  --bs-btn-hover-border-color: var(--success-strong);
 }
 
 .text-primary {
-  color: var(--accent) !important;
+  color: var(--brand-text) !important;
 }
 
 .bg-primary {
-  background-color: var(--accent) !important;
+  background-color: var(--brand) !important;
+}
+
+.text-danger {
+  color: var(--error) !important;
+}
+
+/* ---------- Forms ---------- */
+.form-control,
+.form-select {
+  background-color: var(--field-bg);
+  border-color: var(--field-border);
+  color: var(--text);
+  border-radius: var(--radius-md);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
 }
 
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 0.2rem rgba(200, 16, 46, 0.2);
+  background-color: var(--field-bg);
+  color: var(--text);
+  border-color: var(--brand-ui);
+  box-shadow: 0 0 0 3px var(--brand-wash);
 }
 
+.form-control:disabled,
+.form-select:disabled {
+  background-color: var(--bg-2);
+}
+
+/* ---------- Surfaces ---------- */
 .card {
-  border-color: var(--border);
-  border-radius: var(--radius);
+  --bs-card-bg: var(--bg-1);
+  --bs-card-color: var(--text);
+  --bs-card-border-color: var(--line);
+  --bs-card-border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm), var(--highlight);
 }
 
-/* ---------- Brand motifs (used from step 3 on) ---------- */
+.table {
+  --bs-table-bg: var(--bg-1);
+  --bs-table-color: var(--text);
+  --bs-table-border-color: var(--line);
+  --bs-table-striped-bg: var(--neutral-wash);
+  --bs-table-hover-bg: var(--neutral-wash);
+}
+
+/* ---------- Brand motifs ---------- */
 
 /* Section title with a small skewed red bar in front */
 .section-title {
@@ -121,21 +280,24 @@ h3,
 
 .section-title::before {
   content: '';
-  width: 0.9rem;
-  height: 1.1em;
-  background: var(--accent);
+  width: 0.55rem;
+  height: 1em;
+  background: var(--brand-ui);
   transform: skewX(-18deg);
+  border-radius: 2px;
   flex-shrink: 0;
 }
 
 /* Skewed red price tag / label; the inner span keeps the text upright */
 .price-tag {
   display: inline-block;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--brand);
+  color: var(--on-brand);
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
   padding: 0.2rem 0.75rem;
+  border-radius: 4px;
   transform: skewX(-12deg);
 }
 
@@ -144,40 +306,76 @@ h3,
   transform: skewX(12deg);
 }
 
-/* Dashed "road line" divider */
+/* Dashed "road line" divider (neutral; red is kept for actions) */
 .road-divider {
   border: 0;
-  height: 4px;
+  height: 3px;
   opacity: 1;
-  background: repeating-linear-gradient(90deg, var(--accent) 0 28px, transparent 28px 48px);
-  margin: 2.5rem 0;
+  background: repeating-linear-gradient(90deg, var(--line-strong) 0 28px, transparent 28px 48px);
+  margin: 3rem 0;
 }
 
-/* Dark band with a diagonal red cut at the bottom (hero, page titles) */
+/* Graphite band with a thin diagonal red cut at the bottom (hero, page titles) */
 .dark-band-wrap {
-  background: var(--accent);
-  padding-bottom: 6px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 32px));
+  background: var(--brand-ui);
+  padding-bottom: 3px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 28px));
 }
 
 .dark-band {
-  background: var(--ink);
-  color: var(--text-on-dark);
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), 0 calc(100% - 38px));
-  padding-bottom: 38px;
+  background: var(--band-1);
+  color: var(--band-text);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3px), 0 calc(100% - 31px));
+  padding-bottom: 31px;
 }
 
-/* ---------- Snackbars ---------- */
+.dark-band h1,
+.dark-band h2 {
+  color: var(--band-text);
+}
+
+/* Empty / error placeholders (shared look until the Phase 2 component) */
+.empty-state {
+  text-align: center;
+  background: var(--bg-1);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  padding: 3rem 1rem;
+}
+
+/* Status chips: always text (never colour alone), tinted by status */
+.status {
+  display: inline-block;
+  justify-self: start;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  padding: 0.15rem 0.65rem;
+  background: var(--neutral-wash);
+  color: var(--text-muted);
+}
+
+.status[data-status='pending'] {
+  background: var(--warning-wash);
+  color: var(--warning);
+}
+
+.status[data-status='confirmed'],
+.status.listed {
+  background: var(--success-wash);
+  color: var(--success);
+}
+
+/* ---------- Snackbars (status colours, not the brand red) ---------- */
 .mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
-  background-color: var(--accent) !important;
+  background-color: var(--error-strong) !important;
 }
 
 .mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
-  background-color: #198754 !important;
-  color: white !important;
+  background-color: var(--success-strong) !important;
 }
 
 .mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__label,
-.mat-mdc-snack-bar-container.success .mdc-snackbar__label {
-  color: white !important;
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__label {
+  color: var(--on-brand) !important;
 }

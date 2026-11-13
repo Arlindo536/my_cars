@@ -1,0 +1,4 @@
+home-mobile | perf 72 | a11y 100 | bp 100 | seo 83 | LCP 4.7 s | CLS 0 | TBT 170 ms
+home-desktop | perf 98 | a11y 100 | bp 100 | seo 83 | LCP 1.0 s | CLS 0 | TBT 0 ms
+car-mobile | perf 74 | a11y 100 | bp 100 | seo 83 | LCP 4.7 s | CLS 0 | TBT 170 ms
+car-desktop | perf 98 | a11y 100 | bp 100 | seo 83 | LCP 1.0 s | CLS 0 | TBT 0 ms

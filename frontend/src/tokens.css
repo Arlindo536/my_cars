@@ -1,0 +1,183 @@
+/*
+ * Design tokens: colour, type, spacing, radius, shadow, motion.
+ * Light and dark themes: `data-theme` on <html> is set before first paint by public/theme-init.js
+ * (system preference or the saved choice) and kept in sync by the Theme service. Contrast of every pairing is recorded
+ * in docs/decisions.md (measured with the WCAG formula).
+ */
+
+/* ---------- Theme-independent ---------- */
+:root {
+  /* Type */
+  --font-display: 'Sora Variable', 'Inter Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: clamp(1.06rem, 1rem + 0.3vw, 1.2rem);
+  --fs-xl: clamp(1.3rem, 1.15rem + 0.6vw, 1.6rem);
+  --fs-2xl: clamp(1.6rem, 1.3rem + 1.2vw, 2.2rem);
+  --fs-3xl: clamp(2rem, 1.5rem + 2.2vw, 3.2rem);
+  --fs-hero: clamp(2.4rem, 1.6rem + 4vw, 4.4rem);
+
+  /* Spacing (4/8/12/16/24/32/48/64/96) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px; /* inputs, buttons */
+  --radius-lg: 16px; /* cards, panels */
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  /* Motion (same easings and names as arlindo.site, shorter app durations) */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 0.18s;
+  --dur-ui: 0.35s;
+  --dur-reveal: 0.7s;
+  --stagger: 60ms;
+
+  /* Fills that look the same in both themes (white text on them) */
+  --brand: #c62828;
+  --on-brand: #ffffff;
+  --success-strong: #137038;
+  --error-strong: #be185d;
+
+  color-scheme: light;
+}
+
+/* ---------- Light theme (default) ---------- */
+:root,
+:root[data-theme='light'] {
+  --bg-0: #f6f4f0; /* page */
+  --bg-1: #ffffff; /* card */
+  --bg-2: #efebe5; /* raised / sunken fills: pills, chips, bubbles */
+  --line: rgba(23, 24, 27, 0.1);
+  --line-strong: rgba(23, 24, 27, 0.2);
+  --field-bg: #ffffff;
+  --field-border: #80858d;
+  --text: #17181b;
+  --text-muted: #5b6068;
+  --steel: #5b6068;
+
+  --brand-hover: #b71c1c;
+  --brand-pressed: #9f1818;
+  --brand-text: #c62828;
+  --brand-ui: #c62828;
+  --brand-wash: rgba(198, 40, 40, 0.08);
+  --focus-ring: var(--brand-ui);
+
+  --success: #137038;
+  --warning: #a35a00;
+  --error: #be185d;
+  --info: #1d6fb8;
+  --success-wash: rgba(19, 112, 56, 0.1);
+  --warning-wash: rgba(163, 90, 0, 0.1);
+  --error-wash: rgba(190, 24, 93, 0.1);
+  --info-wash: rgba(29, 111, 184, 0.1);
+  --neutral-wash: rgba(23, 24, 27, 0.06);
+
+  /* Graphite bands: header, page-title bands, filter bar, footer */
+  --band-0: #1b1f25;
+  --band-1: #22272e;
+  --band-2: #2b313a;
+  --band-text: #f1eee9;
+  --band-muted: #a3a8b0;
+  --band-line: rgba(241, 238, 233, 0.14);
+  --band-brand-text: #f47a7a;
+  --band-focus: #f47a7a;
+  --band-hover: rgba(241, 238, 233, 0.08);
+  --band-active: rgba(241, 238, 233, 0.12);
+  --hero-glow: rgba(198, 40, 40, 0.22);
+
+  /* Neutral solid button (was btn-dark) */
+  --btn-ink: #22272e;
+  --btn-ink-hover: #343b45;
+  --btn-ink-text: #f1eee9;
+
+  --placeholder-a: #ece8e2;
+  --placeholder-b: #e0dbd3;
+  --placeholder-fg: #545960;
+  --placeholder-shape: #c9c3ba;
+
+  --shadow-sm: 0 1px 2px rgba(23, 24, 27, 0.06), 0 1px 3px rgba(23, 24, 27, 0.08);
+  --shadow-md: 0 2px 4px rgba(23, 24, 27, 0.05), 0 8px 24px rgba(23, 24, 27, 0.08);
+  --shadow-lg: 0 4px 8px rgba(23, 24, 27, 0.06), 0 18px 48px rgba(23, 24, 27, 0.12);
+  --highlight: none; /* inner highlight replaces shadows in dark */
+}
+
+/* ---------- Dark theme ---------- */
+:root[data-theme='dark'] {
+  --bg-0: #0f1114;
+  --bg-1: #161a1f;
+  --bg-2: #1e232a;
+  --line: rgba(241, 238, 233, 0.09);
+  --line-strong: rgba(241, 238, 233, 0.18);
+  --field-bg: #0f1114;
+  --field-border: #6b727c;
+  --text: #f1eee9;
+  --text-muted: #a3a8b0;
+  --steel: #9aa3af;
+
+  --brand-hover: #d32f2f;
+  --brand-pressed: #b71c1c;
+  --brand-text: #f26b6b;
+  --brand-ui: #e03c3c;
+  --brand-wash: rgba(198, 40, 40, 0.14);
+  --focus-ring: var(--brand-text);
+
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #ff8a80;
+  --info: #7db7f0;
+  --success-wash: rgba(74, 222, 128, 0.14);
+  --warning-wash: rgba(251, 191, 36, 0.14);
+  --error-wash: rgba(255, 138, 128, 0.14);
+  --info-wash: rgba(125, 183, 240, 0.14);
+  --neutral-wash: rgba(241, 238, 233, 0.07);
+
+  --band-0: #0f1114;
+  --band-1: #161a1f;
+  --band-2: #1e232a;
+  --band-text: #f1eee9;
+  --band-muted: #a3a8b0;
+  --band-line: rgba(241, 238, 233, 0.09);
+  --band-brand-text: #f47a7a;
+  --band-focus: #f47a7a;
+  --band-hover: rgba(241, 238, 233, 0.08);
+  --band-active: rgba(241, 238, 233, 0.12);
+  --hero-glow: rgba(198, 40, 40, 0.16);
+
+  --btn-ink: #2a3038;
+  --btn-ink-hover: #343b45;
+  --btn-ink-text: #f1eee9;
+
+  --placeholder-a: #1e232a;
+  --placeholder-b: #252b33;
+  --placeholder-fg: #a3a8b0;
+  --placeholder-shape: #3a414b;
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.45);
+  --highlight: inset 0 1px 0 rgba(241, 238, 233, 0.05);
+
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-micro: 0.01ms;
+    --dur-ui: 0.15s;
+    --dur-reveal: 0.15s;
+    --stagger: 0ms;
+  }
+}

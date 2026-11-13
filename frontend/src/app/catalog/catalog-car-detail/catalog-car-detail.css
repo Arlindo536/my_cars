@@ -4,30 +4,32 @@
 }
 
 .back-link {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   text-decoration: none;
   font-size: 0.9rem;
+  display: inline-block;
+  padding: 0.35rem 0;
 }
 
 .back-link:hover {
-  color: #ffffff;
+  color: var(--band-text);
 }
 
 .car-title {
-  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  font-size: var(--fs-3xl);
   margin: 0.4rem 0 0.2rem;
 }
 
 .car-subtitle {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   font-size: 1.05rem;
 }
 
 .photo {
   aspect-ratio: 16 / 9;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: #e9e9e9;
+  background: var(--bg-2);
 }
 
 .photo img {
@@ -40,10 +42,10 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  background: var(--ink-2);
-  color: var(--text-on-dark);
-  border-top: 4px solid var(--accent);
-  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--band-1);
+  color: var(--band-text);
+  border-top: 3px solid var(--brand-ui);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   padding: 1.25rem;
   margin: 1.5rem 0 0;
 }
@@ -55,7 +57,7 @@
 }
 
 .spec-panel dt {
-  color: var(--text-on-dark-muted);
+  color: var(--band-muted);
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -64,9 +66,8 @@
 
 .spec-panel dd {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.4rem;
-  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.15rem;
   margin: 0;
 }
 

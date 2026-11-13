@@ -44,7 +44,10 @@
         <a routerLink="/auth/register" class="btn btn-primary btn-sm nav-cta">{{ 'nav.register' | translate }}</a>
       </ng-container>
 
-      <app-language-switcher class="nav-lang"></app-language-switcher>
+      <div class="nav-prefs">
+        <app-language-switcher></app-language-switcher>
+        <app-theme-switcher></app-theme-switcher>
+      </div>
     </div>
   </nav>
 </header>

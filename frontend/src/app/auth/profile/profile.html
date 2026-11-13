@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
   <div class="card shadow-sm p-4" style="width: 100%; max-width: 440px;" *ngIf="profile">
     <div class="text-center mb-4">
-      <i class="material-icons" style="font-size: 64px; color: var(--ink);" aria-hidden="true">account_circle</i>
+      <i class="material-icons" style="font-size: 64px; color: var(--steel);" aria-hidden="true">account_circle</i>
       <h1 class="h2 mt-2 mb-1">{{ profile.username }}</h1>
       <span class="badge" [class.bg-primary]="profile.role === 'admin'" [class.bg-secondary]="profile.role !== 'admin'">
         {{ (profile.role === 'admin' ? 'users.roleAdmin' : 'users.roleCustomer') | translate }}
