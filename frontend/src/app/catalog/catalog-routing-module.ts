@@ -4,7 +4,8 @@ import { Home } from './home/home';
 import { CatalogCarDetail } from './catalog-car-detail/catalog-car-detail';
 
 const routes: Routes = [
-  { path: '', component: Home, pathMatch: 'full' },
+  // overlayHeader: the nav bar starts transparent over the hero
+  { path: '', component: Home, pathMatch: 'full', data: { overlayHeader: true } },
   { path: 'catalog/:id', component: CatalogCarDetail },
 ];
 

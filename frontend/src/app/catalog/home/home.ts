@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged, map, merge } from 'rxjs';
 import { Catalog, CatalogFilters } from '../catalog';
 import { environment } from '../../../environments/environment';
 import { CAR_TYPES, CatalogCar, FUEL_TYPES, TRANSMISSION_TYPES } from '../../shared/car-labels';
+import { scrollBehavior } from '../../motion';
 
 const PAGE_SIZE = 9;
 
@@ -100,7 +101,7 @@ export class Home implements OnInit {
     }
     this.page.set(page);
     this.load();
-    document.getElementById('makinat')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('makinat')?.scrollIntoView({ behavior: scrollBehavior() });
   }
 
   clearFilters() {
@@ -115,7 +116,7 @@ export class Home implements OnInit {
   }
 
   scrollToCars() {
-    document.getElementById('makinat')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('makinat')?.scrollIntoView({ behavior: scrollBehavior() });
   }
 
   // Updates the address bar without a router navigation (which would reload and scroll)

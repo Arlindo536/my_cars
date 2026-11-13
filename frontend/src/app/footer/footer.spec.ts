@@ -4,6 +4,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { provideTestTranslations } from '../../testing/translate';
 
 import { Footer } from './footer';
+import { LanguageSwitcher } from '../language-switcher/language-switcher';
+import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 
 describe('Footer', () => {
   let component: Footer;
@@ -11,7 +13,7 @@ describe('Footer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [Footer],
+      declarations: [Footer, LanguageSwitcher, ThemeSwitcher],
       imports: [TranslatePipe, RouterModule.forRoot([])],
       providers: [provideTestTranslations()],
     }).compileComponents();

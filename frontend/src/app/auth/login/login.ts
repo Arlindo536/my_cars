@@ -56,6 +56,8 @@ export class Login {
         this.submitting.set(false);
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
+        // Display only (initials in the nav bar); permissions still come from the token
+        localStorage.setItem('username', response.username ?? '');
         this.notification.success(this.language.t('auth.loginSuccess'));
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {

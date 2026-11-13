@@ -38,12 +38,18 @@
     "login": "Anmelden",
     "register": "Registrieren",
     "messages": "Nachrichten",
-    "adminBookings": "Buchungen"
+    "adminBookings": "Buchungen",
+    "closeMenu": "Menü schließen",
+    "accountMenu": "Kontomenü",
+    "account": "Konto"
   },
   "footer": {
     "tagline": "Autovermietung in Tirana. Portfolio-Projekt: Autos und Preise sind Beispiele, keine echten Zahlungen.",
     "account": "Konto",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "explore": "Entdecken",
+    "preferences": "Sprache und Design",
+    "newTab": "öffnet in neuem Tab"
   },
   "home": {
     "kicker": "Autovermietung · Tirana",

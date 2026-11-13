@@ -10,4 +10,14 @@ import { environment } from '../../environments/environment';
 export class Footer {
   readonly year = new Date().getFullYear();
   readonly office = environment.office;
+  readonly mapUrl =
+    `https://www.openstreetmap.org/?mlat=${this.office.lat}&mlon=${this.office.lng}#map=17/${this.office.lat}/${this.office.lng}`;
+
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  get role(): string | null {
+    return localStorage.getItem('role');
+  }
 }

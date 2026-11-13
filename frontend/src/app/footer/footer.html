@@ -1,23 +1,42 @@
 <footer class="site-footer">
   <div class="container-xl py-5">
     <div class="row g-4">
-      <div class="col-12 col-md-6">
-        <p class="footer-brand">My<span class="text-accent">Cars</span></p>
+      <div class="col-12 col-lg-4">
+        <a class="footer-brand" routerLink="/">
+          <span class="brand-mark" aria-hidden="true"><i class="material-icons">directions_car</i></span>
+          <span>My<span class="text-accent">Cars</span></span>
+        </a>
         <p class="footer-muted mb-0">{{ 'footer.tagline' | translate }}</p>
       </div>
-      <div class="col-6 col-md-3">
-        <h2 class="footer-heading">{{ 'footer.account' | translate }}</h2>
+      <nav class="col-6 col-md-4 col-lg-2" [attr.aria-label]="'footer.explore' | translate">
+        <h2 class="footer-heading">{{ 'footer.explore' | translate }}</h2>
         <ul class="list-unstyled mb-0">
-          <li><a routerLink="/auth/login">{{ 'nav.login' | translate }}</a></li>
-          <li><a routerLink="/auth/register">{{ 'nav.register' | translate }}</a></li>
+          <li><a routerLink="/">{{ 'nav.catalog' | translate }}</a></li>
+          <ng-container *ngIf="!isLoggedIn">
+            <li><a routerLink="/auth/login">{{ 'nav.login' | translate }}</a></li>
+            <li><a routerLink="/auth/register">{{ 'nav.register' | translate }}</a></li>
+          </ng-container>
+          <li *ngIf="isLoggedIn && role === 'customer'"><a routerLink="/bookings">{{ 'nav.myBookings' | translate }}</a></li>
+          <li *ngIf="isLoggedIn"><a routerLink="/messages">{{ 'nav.messages' | translate }}</a></li>
         </ul>
-      </div>
-      <div class="col-6 col-md-3">
+      </nav>
+      <div class="col-6 col-md-4 col-lg-3">
         <h2 class="footer-heading">{{ 'footer.contact' | translate }}</h2>
-        <p class="footer-muted mb-0">{{ office.address }}</p>
+        <address class="footer-muted mb-2">{{ office.address }}</address>
+        <a class="footer-map" [href]="mapUrl" target="_blank" rel="noopener noreferrer">
+          <i class="material-icons" aria-hidden="true">map</i> {{ 'map.open' | translate }}<span class="visually-hidden"> ({{ 'footer.newTab' | translate }})</span>
+        </a>
+      </div>
+      <div class="col-12 col-md-4 col-lg-3">
+        <h2 class="footer-heading">{{ 'footer.preferences' | translate }}</h2>
+        <div class="footer-prefs">
+          <app-language-switcher></app-language-switcher>
+          <app-theme-switcher></app-theme-switcher>
+        </div>
       </div>
     </div>
-    <hr class="footer-rule" />
-    <p class="footer-muted small mb-0">&copy; {{ year }} My Cars · Arlindo Dishi</p>
+    <div class="footer-small">
+      <p class="mb-0">&copy; {{ year }} My Cars · Arlindo Dishi</p>
+    </div>
   </div>
 </footer>

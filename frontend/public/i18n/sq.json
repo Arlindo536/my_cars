@@ -38,12 +38,18 @@
     "login": "Hyr",
     "register": "Regjistrohu",
     "messages": "Mesazhet",
-    "adminBookings": "Rezervimet"
+    "adminBookings": "Rezervimet",
+    "closeMenu": "Mbyll menunë",
+    "accountMenu": "Menuja e llogarisë",
+    "account": "Llogaria"
   },
   "footer": {
     "tagline": "Makina me qira në Tiranë. Projekt portofoli: makinat dhe çmimet janë shembuj, pa pagesa reale.",
     "account": "Llogaria",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "explore": "Shfleto",
+    "preferences": "Gjuha dhe pamja",
+    "newTab": "hapet në skedë të re"
   },
   "home": {
     "kicker": "Makina me qira · Tiranë",

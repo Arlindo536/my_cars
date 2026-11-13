@@ -88,3 +88,38 @@ Arlindo had not answered the Phase 1 questions yet, so the defaults stay: Sora h
 ### Deferred
 - Auth pages keep their card layout (split layout is Phase 6); floating labels likewise.
 - Admin "Confirm/Reject" show `aria-busy` but no spinner (both share one busy flag, so the clicked one isn't known).
+
+## Phase 3: layout shell and motion foundation (2026-11-13)
+
+Phase 1 questions still open, so the defaults stay (Sora, theme follows the system, `/login` route and admins table untouched).
+
+### What changed
+- **Nav bar states:** transparent over the home hero (route data `overlayHeader`; the hero slides under the bar with `margin-top: -var(--header-h)`), solid graphite on other pages, translucent (94 %) + `backdrop-filter` blur after 40 px of scroll, slides away while scrolling down and returns on scroll up. It never hides near the top, while a menu is open, while it holds keyboard focus (`:focus-visible`), or with reduced motion. The background sits on `::before`, so the blur does not trap the fixed drawer. Fixed height (`--header-h`, 64 px), so no layout shift.
+- **Bug found:** the bar was never actually sticky: the `app-nav-bar` host box (as tall as the bar) was its containing block. `:host { display: contents }` fixes it.
+- **Drawer** below 992 px (1200 px for admins, who have five links): slides in from the right over a scrim, `role="dialog"` + `aria-modal`, focus moves to its close button, Tab is trapped, Escape and the scrim close it and focus returns to the menu button, page scroll locked. Links close it; language/theme buttons don't. Reduced motion: fades instead of sliding.
+- **Account menu:** initials avatar (from the username the login response already returns, now kept in `localStorage` `username` for display only and removed on logout/account deletion; users logged in before this see a person icon). Dropdown with name, profile (customers) and logout; Escape returns focus, click outside or tabbing away closes. Logout moved from the bar into this menu (in the drawer it is listed flat).
+- **Language and theme:** one pill shape with a sliding neutral indicator (`.pill-switch` in `styles.css`), 44 px targets, `aria-pressed`; no red needed. Also in the footer.
+- **Footer:** wordmark + tagline, links that depend on the session (guests: login/register; customers: bookings; logged in: messages), contact address + "open map" link to openstreetmap.org (new tab, announced), language/theme, small print. No motion.
+- **Route transitions:** `withViewTransitions` (router setup moved from `RouterModule.forRoot` to `provideRouter` in the routing module, because only the functional API has the hook). Old page fades out in 180 ms, new page fades + rises 8 px in 350 ms; the bar keeps its own `view-transition-name` so it does not flash. Skipped on the first load (would delay LCP) and when only the query string changes. Reduced motion: 150 ms opacity only. Browsers without the API switch instantly.
+- **`appReveal`** (`UiModule`): IntersectionObserver adds `.reveal` / `.is-revealed` (opacity + 16 px rise, 700 ms, stagger via `--i` × 60 ms). It never hides anything already on screen at load (so never the LCP), and hides nothing without IntersectionObserver, with reduced motion or in print. Used on the home "how it works" steps and the map section; not in admin.
+- **Reduced motion:** `scrollIntoView` (home CTA, pagination, booking card) uses `auto` instead of `smooth` (`src/app/motion.ts`).
+- Component style budget raised to 8 kB warning / 12 kB error: `nav-bar.css` is 6.9 kB (drawer + menu + states). Initial bundle 883 kB raw / 189 kB transferred (+18 kB raw).
+
+### Contrast of the new surfaces (`contrast.py`)
+| Pair | Light | Dark | Needs |
+|---|---|---|---|
+| Nav text on scrolled glass over a white card / on the hero glow | 10.8 / 10.2 | 12.9 / 12.5 | 4.5 |
+| Nav muted links on the same | 5.2 / 4.9 | 6.2 / 6.0 | 4.5 |
+| Light red (large logo text, active underline) on the same | 4.7 / 4.5 | 5.6 / 5.4 | 3 |
+
+90 % glass gave 4.1 for the logo red over white, so the bar is 94 % opaque.
+
+### Verified
+- Header at 360 / 768 / 1024 / 1440 for guest, customer and admin in sq / en / de: one row, 64 px, no horizontal scroll (a footer gutter overflow at 1024 px was found and fixed).
+- Drawer: focus trap wraps after 12 Tab presses, Escape closes and returns focus, scroll lock removed. Account menu: Escape closes and refocuses the avatar.
+- Real navigations run a view transition (2 of 2), the filter change does not; no console errors.
+- Reduced motion: bar never hides, no `.reveal` element is hidden.
+- Production build with the nginx CSP: every page, 0 console errors, only third party `tile.openstreetmap.org`.
+- Lighthouse (`lighthouse-phase3.txt`): accessibility 100, CLS 0 on home, car page and register; mobile perf 74 / 73 / 83, desktop 98-99.
+- Tests: backend 76 OK; frontend 44 passed / 8 failed (same 8 legacy specs). New specs: nav bar initials, drawer/breakpoint, Escape, logout clears the username; reveal keeps on-screen content visible.
+- Screenshots: `docs/visual-upgrade/phase3/`.

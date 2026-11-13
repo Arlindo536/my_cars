@@ -98,7 +98,14 @@ def main():
             print(f'  {s} on its {"14" if name == "DARK" else "10"}% chip over card: {v:.1f}' + ('' if v >= 4.5 else '   <-- FAIL'))
         v = ratio(t['text'], washed(t, 'text', 0.06, 'bg-1'))
         print(f'  Text on neutral chip (6% text over card): {v:.1f}')
-        # Brand-coloured dot/hairline next to dark surfaces
+        # Scrolled nav bar: band-1 at 94% over the lightest thing that can scroll under it (a white card),
+        # and the transparent bar over the hero's red glow (worst spot of the gradient)
+        glass = over((*parse(t['band-1'])[:3], 0.94), '#FFFFFF')
+        glow = over('rgba(198, 40, 40, %s)' % ('0.16' if name == 'DARK' else '0.22'), t['band-2'])
+        for label, fg, minimum in (('text', 'band-text', 4.5), ('muted', 'band-muted', 4.5), ('red (large logo, active underline)', 'band-brand-text', 3.0)):
+            vals = [ratio(t[fg], glass), ratio(t[fg], glow)]
+            flag = '' if min(vals) >= minimum else '   <-- FAIL'
+            print(f'  Nav {label} on scrolled glass over white / on hero glow: ' + ' / '.join(f'{v:.1f}' for v in vals) + flag)
     print('== FILLS (both themes)')
     for fill in ('#C62828', '#B71C1C', '#D32F2F', '#9F1818'):
         print(f'  White on brand {fill}: {ratio("#FFFFFF", fill):.1f}')

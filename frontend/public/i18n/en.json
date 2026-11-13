@@ -38,12 +38,18 @@
     "login": "Log in",
     "register": "Sign up",
     "messages": "Messages",
-    "adminBookings": "Bookings"
+    "adminBookings": "Bookings",
+    "closeMenu": "Close menu",
+    "accountMenu": "Account menu",
+    "account": "Account"
   },
   "footer": {
     "tagline": "Car rental in Tirana. Portfolio project: cars and prices are examples, no real payments.",
     "account": "Account",
-    "contact": "Contact"
+    "contact": "Contact",
+    "explore": "Explore",
+    "preferences": "Language and theme",
+    "newTab": "opens in a new tab"
   },
   "home": {
     "kicker": "Car rental · Tirana",

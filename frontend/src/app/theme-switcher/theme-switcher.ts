@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { THEME_PREFS, Theme } from '../theme';
 
 @Component({
@@ -10,4 +10,6 @@ import { THEME_PREFS, Theme } from '../theme';
 export class ThemeSwitcher {
   readonly theme = inject(Theme);
   readonly prefs = THEME_PREFS;
+  // Position of the sliding indicator
+  readonly activeIndex = computed(() => Math.max(0, this.prefs.findIndex(p => p.pref === this.theme.pref())));
 }

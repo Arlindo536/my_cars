@@ -47,6 +47,16 @@ body {
   height: 100%;
 }
 
+/* Anchored sections stop below the sticky bar */
+html {
+  scroll-padding-top: var(--header-h);
+}
+
+/* Page behind the mobile drawer does not scroll */
+html.drawer-open {
+  overflow: hidden;
+}
+
 body {
   background-color: var(--bg-0);
   color: var(--text);
@@ -425,4 +435,121 @@ a {
 .status[data-status='listed'] {
   background: var(--success-wash);
   color: var(--success);
+}
+
+/* ---------- Segmented switch (language, theme): pill with a sliding indicator ---------- */
+.pill-switch {
+  position: relative;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  padding: 2px;
+  border: 1px solid var(--band-line);
+  border-radius: var(--radius-pill);
+  isolation: isolate;
+}
+
+.pill-indicator {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  z-index: -1;
+  width: calc((100% - 4px) / var(--count, 1));
+  border-radius: var(--radius-pill);
+  background: var(--band-active);
+  box-shadow: inset 0 0 0 1px var(--band-line);
+  transform: translateX(calc(var(--index, 0) * 100%));
+  transition: transform var(--dur-ui) var(--ease-out);
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--band-muted);
+  transition: color var(--dur-micro) var(--ease-out);
+}
+
+.pill-btn:hover,
+.pill-btn.active {
+  color: var(--band-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-indicator {
+    transition: none;
+  }
+}
+
+/* ---------- Scroll reveal (RevealDirective): only for content that starts below the fold ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Route transitions (View Transitions API; browsers without it switch instantly) ---------- */
+.site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-old(root) {
+  animation: vt-fade-out var(--dur-micro) var(--ease-in-out) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-fade-in var(--dur-ui) var(--ease-out) both;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Reduced motion: a short cross-fade, no movement */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.15s;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: vt-fade-only;
+  }
+
+  @keyframes vt-fade-only {
+    from {
+      opacity: 0;
+    }
+  }
 }

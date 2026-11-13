@@ -1,5 +1,13 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RouterModule,
+  Routes,
+  ViewTransitionInfo,
+  provideRouter,
+  withInMemoryScrolling,
+  withViewTransitions,
+} from '@angular/router';
 import { authGuard } from './auth/auth-guard';
 import { adminGuard } from './auth/admin-guard';
 import { guestGuard } from './auth/guest-guard';
@@ -49,8 +57,32 @@ const routes: Routes = [
   { path: '**', component: NotFound },
 ];
 
+// Cross-fade between pages, but not when only the query string changes (filters, pages of a list)
+function onViewTransitionCreated({ transition, from, to }: ViewTransitionInfo) {
+  if (pagePath(from) === pagePath(to)) {
+    transition.skipTransition();
+  }
+}
+
+function pagePath(root: ActivatedRouteSnapshot): string {
+  let route = root;
+  while (route.firstChild) {
+    route = route.firstChild;
+  }
+  return route.pathFromRoot.map(r => r.url.join('/')).join('/');
+}
+
+// provideRouter instead of RouterModule.forRoot: only the functional API has the transition hook
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
+  imports: [RouterModule],
+  providers: [
+    provideRouter(
+      routes,
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
+      // no fade on the first page load (it would delay the first paint)
+      withViewTransitions({ skipInitialTransition: true, onViewTransitionCreated }),
+    ),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

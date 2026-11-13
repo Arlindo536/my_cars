@@ -8,6 +8,7 @@ import { CatalogCar } from '../../shared/car-labels';
 import { BookedRange, Bookings, Quote, fromApiDate, toApiDate } from '../../booking/bookings';
 import { Notification } from '../../notification';
 import { Language } from '../../language';
+import { scrollBehavior } from '../../motion';
 
 @Component({
   selector: 'app-booking-card',
@@ -113,7 +114,7 @@ export class BookingCard implements OnInit {
 
   scrollToAsk() {
     const box = document.getElementById('pyet');
-    box?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    box?.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
     box?.querySelector<HTMLElement>('textarea, button')?.focus({ preventScroll: true });
   }
 

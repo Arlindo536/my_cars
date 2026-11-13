@@ -5,8 +5,13 @@
     linear-gradient(160deg, var(--band-2) 0%, var(--band-1) 60%);
 }
 
+.hero-wrap {
+  /* the hero slides under the transparent nav bar */
+  margin-top: calc(-1 * var(--header-h));
+}
+
 .hero-inner {
-  padding-top: 4.5rem;
+  padding-top: calc(var(--header-h) + 4.5rem);
   padding-bottom: 4rem;
 }
 

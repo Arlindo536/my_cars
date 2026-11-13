@@ -50,6 +50,7 @@ export class Profile implements OnInit {
           next: () => {
             localStorage.removeItem('token');
             localStorage.removeItem('role');
+            localStorage.removeItem('username');
             this.notification.success(this.language.t('profile.deleted'));
             this.router.navigate(['/auth/login']);
           },

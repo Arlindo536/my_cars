@@ -1,53 +1,120 @@
-<header class="site-header">
-  <nav class="container-xl d-flex flex-wrap align-items-center py-2" [attr.aria-label]="'nav.mainNav' | translate">
-    <a class="brand" routerLink="/" (click)="menuOpen = false">
+<header
+  class="site-header"
+  [class.inline]="inline()"
+  [class.is-overlay]="overlay() && !scrolled() && !menuOpen()"
+  [class.is-scrolled]="scrolled()"
+  [class.is-hidden]="hidden()"
+  (focusin)="onHeaderFocusin()"
+>
+  <div class="container-xl bar">
+    <a class="brand" routerLink="/" (click)="closeMenu()">
       <span class="brand-mark" aria-hidden="true"><i class="material-icons">directions_car</i></span>
       <span class="brand-text">My<span class="text-accent">Cars</span></span>
     </a>
 
     <button
+      #menuToggle
+      *ngIf="!inline()"
       type="button"
-      class="menu-toggle d-md-none ms-auto"
-      [attr.aria-expanded]="menuOpen"
+      class="icon-btn ms-auto"
+      [attr.aria-expanded]="menuOpen()"
       aria-controls="main-menu"
-      (click)="menuOpen = !menuOpen"
+      (click)="openMenu()"
     >
-      <i class="material-icons" aria-hidden="true">{{ menuOpen ? 'close' : 'menu' }}</i>
+      <i class="material-icons" aria-hidden="true">menu</i>
       <span class="visually-hidden">{{ 'nav.menu' | translate }}</span>
     </button>
 
-    <div id="main-menu" class="menu ms-md-auto" [class.open]="menuOpen" (click)="closeMenu($event)">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link-item">{{ 'nav.catalog' | translate }}</a>
-      <ng-container *ngIf="isLoggedIn">
-        <ng-container *ngIf="role === 'customer'">
-          <a routerLink="/bookings" routerLinkActive="active" class="nav-link-item">{{ 'nav.myBookings' | translate }}</a>
-          <a routerLink="/auth/profile" routerLinkActive="active" class="nav-link-item">{{ 'nav.profile' | translate }}</a>
-        </ng-container>
-        <ng-container *ngIf="role === 'admin'">
-          <a routerLink="/admin/bookings" routerLinkActive="active" class="nav-link-item">{{ 'nav.adminBookings' | translate }}</a>
-          <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link-item">{{ 'nav.fleet' | translate }}</a>
-          <a routerLink="/admin/users" routerLinkActive="active" class="nav-link-item">{{ 'nav.users' | translate }}</a>
-        </ng-container>
-        <a routerLink="/messages" routerLinkActive="active" class="nav-link-item">
-          {{ 'nav.messages' | translate }}
-          <span *ngIf="messages.unread() > 0" class="nav-badge">
-            {{ messages.unread() }}<span class="visually-hidden"> {{ 'messages.unread' | translate }}</span>
-          </span>
-        </a>
-        <button type="button" class="btn btn-outline-light btn-sm nav-cta" (click)="logout()">
-          <i class="material-icons" aria-hidden="true">logout</i> {{ 'nav.logout' | translate }}
+    <div *ngIf="!inline()" class="drawer-backdrop" [class.open]="menuOpen()" (click)="closeMenu()" aria-hidden="true"></div>
+
+    <div
+      #drawer
+      id="main-menu"
+      class="menu"
+      [class.open]="menuOpen()"
+      [attr.role]="inline() ? null : 'dialog'"
+      [attr.aria-modal]="inline() ? null : 'true'"
+      [attr.aria-label]="inline() ? null : ('nav.menu' | translate)"
+      (click)="onDrawerClick($event)"
+      (keydown)="onDrawerKeydown($event)"
+    >
+      <div *ngIf="!inline()" class="drawer-head">
+        <span class="drawer-title">{{ 'nav.menu' | translate }}</span>
+        <button type="button" class="icon-btn" [attr.aria-label]="'nav.closeMenu' | translate" (click)="closeMenu(true)">
+          <i class="material-icons" aria-hidden="true">close</i>
         </button>
-      </ng-container>
+      </div>
 
-      <ng-container *ngIf="!isLoggedIn">
-        <a routerLink="/auth/login" routerLinkActive="active" class="nav-link-item">{{ 'nav.login' | translate }}</a>
-        <a routerLink="/auth/register" class="btn btn-primary btn-sm nav-cta">{{ 'nav.register' | translate }}</a>
-      </ng-container>
+      <nav class="menu-links" [attr.aria-label]="'nav.mainNav' | translate">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link-item">{{ 'nav.catalog' | translate }}</a>
+        <ng-container *ngIf="isLoggedIn">
+          <a *ngIf="role === 'customer'" routerLink="/bookings" routerLinkActive="active" class="nav-link-item">{{ 'nav.myBookings' | translate }}</a>
+          <ng-container *ngIf="role === 'admin'">
+            <a routerLink="/admin/bookings" routerLinkActive="active" class="nav-link-item">{{ 'nav.adminBookings' | translate }}</a>
+            <a routerLink="/admin/cars" routerLinkActive="active" class="nav-link-item">{{ 'nav.fleet' | translate }}</a>
+            <a routerLink="/admin/users" routerLinkActive="active" class="nav-link-item">{{ 'nav.users' | translate }}</a>
+          </ng-container>
+          <a routerLink="/messages" routerLinkActive="active" class="nav-link-item">
+            {{ 'nav.messages' | translate }}
+            <span *ngIf="messages.unread() > 0" class="nav-badge">
+              {{ messages.unread() }}<span class="visually-hidden"> {{ 'messages.unread' | translate }}</span>
+            </span>
+          </a>
+        </ng-container>
+      </nav>
 
-      <div class="nav-prefs">
-        <app-language-switcher></app-language-switcher>
-        <app-theme-switcher></app-theme-switcher>
+      <div class="menu-end">
+        <div class="nav-prefs">
+          <app-language-switcher></app-language-switcher>
+          <app-theme-switcher></app-theme-switcher>
+        </div>
+
+        <div *ngIf="!isLoggedIn" class="guest-actions">
+          <a routerLink="/auth/login" routerLinkActive="active" class="nav-link-item">{{ 'nav.login' | translate }}</a>
+          <a routerLink="/auth/register" class="btn btn-primary btn-sm nav-cta">{{ 'nav.register' | translate }}</a>
+        </div>
+
+        <!-- Inline bar: account dropdown behind the initials -->
+        <div *ngIf="isLoggedIn && inline()" class="user-menu" (keydown)="onUserMenuKeydown($event)" (focusout)="onUserMenuFocusout($event)">
+          <button
+            #userToggle
+            type="button"
+            class="avatar-btn"
+            [attr.aria-expanded]="userMenuOpen()"
+            aria-controls="user-menu-panel"
+            [attr.aria-label]="'nav.accountMenu' | translate"
+            (click)="toggleUserMenu()"
+          >
+            <span *ngIf="initials; else noInitials" class="avatar" aria-hidden="true">{{ initials }}</span>
+            <ng-template #noInitials><span class="avatar" aria-hidden="true"><i class="material-icons">person</i></span></ng-template>
+            <i class="material-icons chevron" aria-hidden="true">expand_more</i>
+          </button>
+          <div id="user-menu-panel" class="user-panel" [hidden]="!userMenuOpen()">
+            <p *ngIf="username" class="user-name">{{ username }}</p>
+            <a *ngIf="role === 'customer'" routerLink="/auth/profile" class="user-item" (click)="userMenuOpen.set(false)">
+              <i class="material-icons" aria-hidden="true">person</i> {{ 'nav.profile' | translate }}
+            </a>
+            <button type="button" class="user-item" (click)="logout()">
+              <i class="material-icons" aria-hidden="true">logout</i> {{ 'nav.logout' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Drawer: the same account items, listed flat -->
+        <div *ngIf="isLoggedIn && !inline()" class="drawer-account">
+          <p class="drawer-user">
+            <span class="avatar" aria-hidden="true">
+              <ng-container *ngIf="initials; else noInitialsDrawer">{{ initials }}</ng-container>
+              <ng-template #noInitialsDrawer><i class="material-icons">person</i></ng-template>
+            </span>
+            <span>{{ username || ('nav.account' | translate) }}</span>
+          </p>
+          <a *ngIf="role === 'customer'" routerLink="/auth/profile" routerLinkActive="active" class="nav-link-item">{{ 'nav.profile' | translate }}</a>
+          <button type="button" class="btn btn-outline-light btn-sm nav-cta" (click)="logout(); closeMenu()">
+            <i class="material-icons" aria-hidden="true">logout</i> {{ 'nav.logout' | translate }}
+          </button>
+        </div>
       </div>
     </div>
-  </nav>
+  </div>
 </header>

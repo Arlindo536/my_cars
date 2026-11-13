@@ -1,8 +1,9 @@
-<div class="theme-switch" role="group" [attr.aria-label]="'theme.label' | translate">
+<div class="pill-switch" role="group" [attr.aria-label]="'theme.label' | translate" [style.--count]="prefs.length" [style.--index]="activeIndex()">
+  <span class="pill-indicator" aria-hidden="true"></span>
   <button
     *ngFor="let p of prefs"
     type="button"
-    class="theme-btn"
+    class="pill-btn"
     [class.active]="theme.pref() === p.pref"
     [attr.aria-pressed]="theme.pref() === p.pref"
     [attr.aria-label]="'theme.' + p.pref | translate"

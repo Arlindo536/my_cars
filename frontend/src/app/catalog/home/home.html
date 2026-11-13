@@ -1,4 +1,4 @@
-<section class="dark-band-wrap">
+<section class="dark-band-wrap hero-wrap">
   <div class="dark-band hero">
     <div class="container-xl hero-inner">
       <p class="hero-kicker">{{ 'home.kicker' | translate }}</p>
@@ -97,7 +97,7 @@
 
   <h2 class="section-title">{{ 'home.howItWorks' | translate }}</h2>
   <ol class="steps list-unstyled row g-4 mt-1">
-    <li class="col-12 col-md-4" *ngFor="let n of [1, 2, 3]">
+    <li class="col-12 col-md-4" *ngFor="let n of [1, 2, 3]; let i = index" [appReveal]="i">
       <span class="step-number">0{{ n }}</span>
       <h3 class="step-title">{{ 'home.step' + n + 'Title' | translate }}</h3>
       <p>{{ 'home.step' + n + 'Text' | translate }}</p>
@@ -107,7 +107,7 @@
 
 <section class="contact">
   <div class="container-xl py-5">
-    <div class="row g-4 align-items-center">
+    <div class="row g-4 align-items-center" appReveal>
       <div class="col-12 col-lg-5">
         <h2 class="section-title">{{ 'home.findUs' | translate }}</h2>
         <p class="contact-text">{{ 'home.findUsText' | translate }}</p>

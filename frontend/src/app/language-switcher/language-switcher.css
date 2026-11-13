@@ -1,35 +1,6 @@
-.lang-switch {
-  display: inline-flex;
-  border: 1px solid var(--band-line);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
+/* Shape and sliding indicator: .pill-switch in styles.css */
 .lang-btn {
-  background: transparent;
-  border: 0;
-  color: var(--band-muted);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  padding: 0 0.55rem;
-  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
-}
-
-.lang-btn + .lang-btn {
-  border-left: 1px solid var(--band-line);
-}
-
-.lang-btn:hover {
-  color: var(--band-text);
-  background: var(--band-hover);
-}
-
-/* Active choice: neutral fill + red underline (red stays an accent) */
-.lang-btn.active {
-  background: var(--band-active);
-  color: var(--band-text);
-  box-shadow: inset 0 -2px 0 var(--band-brand-text);
 }
