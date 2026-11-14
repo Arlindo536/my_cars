@@ -103,3 +103,45 @@ class DemoAccountTests(TestCase):
         self.client.force_authenticate(self.real_admin)
         response = self.client.delete(f'/api/users/admin/{self.demo_customer.id}/')
         self.assertIn(response.status_code, (200, 204))
+
+
+class AdminUserDetailTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.admin = CustomUser.objects.create(username='boss', role='admin')
+        self.customer = CustomUser.objects.create(
+            username='ana', role='customer', email='ana@example.com', first_name='Ana', last_name='K'
+        )
+        self.url = f'/api/users/admin/{self.customer.id}/'
+
+    def test_admin_reads_any_user(self):
+        # Users far past the first list page used to show a blank page
+        for i in range(12):
+            CustomUser.objects.create(username=f'filler{i}')
+        late = CustomUser.objects.create(username='late_user', email='late@example.com')
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(f'/api/users/admin/{late.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['username'], 'late_user')
+        response = self.client.get(self.url)
+        self.assertEqual(
+            response.data,
+            {'id': self.customer.id, 'username': 'ana', 'email': 'ana@example.com',
+             'first_name': 'Ana', 'last_name': 'K', 'role': 'customer'},
+        )
+
+    def test_customers_and_anonymous_cannot_read_users(self):
+        self.assertEqual(self.client.get(self.url).status_code, 401)
+        self.client.force_authenticate(self.customer)
+        self.assertEqual(self.client.get(self.url).status_code, 403)
+
+    def test_unknown_user_is_404(self):
+        self.client.force_authenticate(self.admin)
+        self.assertEqual(self.client.get('/api/users/admin/999999/').status_code, 404)
+
+    @override_settings(DEMO_ACCOUNTS=['demo_admin'])
+    def test_demo_admin_can_read_but_not_change(self):
+        demo_admin = CustomUser.objects.create(username='demo_admin', role='admin')
+        self.client.force_authenticate(demo_admin)
+        self.assertEqual(self.client.get(self.url).status_code, 200)
+        self.assertEqual(self.client.put(self.url, {}, format='json').status_code, 403)

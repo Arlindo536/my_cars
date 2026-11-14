@@ -342,7 +342,8 @@
     "deleteManyMessage": "{{count}} Benutzer löschen? Das kann nicht rückgängig gemacht werden.",
     "deletedMany": "Benutzer gelöscht.",
     "deleteManyFailed": "Einige Benutzer konnten nicht gelöscht werden.",
-    "detailTitle": "Benutzerdetails"
+    "detailTitle": "Benutzerdetails",
+    "notFound": "Dieser Benutzer wurde nicht gefunden"
   },
   "demo": {
     "title": "Mit Demo-Konto testen",

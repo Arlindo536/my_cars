@@ -25,6 +25,11 @@ export class Admin {
     return this.http.get(`${this.carsUrl}grouped/?page=${page}&search=${search}`);
   }
 
+  // One user by id (admin only)
+  getUser(id: number) {
+    return this.http.get<AdminUser>(`${this.usersBaseUrl}admin/${id}/`);
+  }
+
   updateUser(id: number, userData: any) {
     return this.http.put(`${this.usersBaseUrl}admin/${id}/`, userData);
   }
@@ -91,4 +96,13 @@ export interface FleetPage {
   next: string | null;
   previous: string | null;
   results: FleetCar[];
+}
+
+export interface AdminUser {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  role: 'admin' | 'customer';
 }

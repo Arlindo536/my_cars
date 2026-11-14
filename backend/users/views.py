@@ -128,6 +128,20 @@ class UserListView(APIView):
 class AdminUserDetailView(APIView):
     permission_classes = [IsAuthenticated, NotDemoAccount]
 
+    def get(self, request, pk):
+        # One user for the admin detail/edit pages (they used to search page 1 of the list)
+        if request.user.role != 'admin':
+            return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)
+        user = get_object_or_404(CustomUser, pk=pk)
+        return Response({
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "role": user.role
+        })
+
     def put(self, request, pk):
         if request.user.role != 'admin':
             return Response({"error": "Admin access required"}, status=status.HTTP_403_FORBIDDEN)

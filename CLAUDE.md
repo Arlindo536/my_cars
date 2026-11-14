@@ -24,7 +24,8 @@ Frontend (`frontend/`): Angular 21, **module-based** (`standalone: false`), lazy
 - Fixed in step 0: `RegisterSerializer.validate` sat outside the class (password confirmation never checked); stray empty `backend/__init__.py` broke test discovery.
 - Step 8 moved the admin fleet into the admin module (`/admin/cars`, `/admin/cars/new`, `/admin/cars/:id/edit`). The old `car` module (`/cars`, from when customers added their own cars) is now admin-only and unlinked; ask Arlindo before deleting it.
 - API base URLs: moved to `src/environments/environment(.prod).ts` in step 1 (prod uses relative `/api`).
-- Frontend specs: 7 legacy `should create` specs still fail (missing providers in TestBed: user detail/form, update profile, confirm dialog, legacy car pages); fix when touching each component.
+- Frontend specs: 5 legacy `should create` specs still fail (missing providers in TestBed: update profile, confirm dialog, legacy car pages); fix when touching each component.
+- 2026-11-14: `/login` and `/register` redirect to `/auth/login` / `/auth/register` (they rendered Login/Register outside AuthModule: blank page, NG0302). Admin user detail/edit load one user via `GET /api/users/admin/<id>/` (added; admin only, demo admin may read); they used to search page 1 of the list and showed nothing (detail) or an empty form (edit) for later users.
 - Step 2: the 11 pre-existing dev cars (owned by customers) have `price_per_day = 0` and no photo; the catalog must hide or handle them (ask Arlindo before deleting). Demo cars have no photos yet (his decision); the frontend needs a placeholder.
 - `price_per_day`/`description` are optional in `CarSerializer` so the old edit form (which does not send them) cannot reset them on PUT.
 - Step 3: `CarDetailView` had `permission_classes = [IsOwnerOrAdmin]` only, so anonymous requests crashed with 500 (AnonymousUser has no `role`); fixed to `[IsAuthenticated, IsOwnerOrAdmin]`. Check other views for the same pattern in the security audit.
@@ -89,7 +90,7 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
 - [x] Deployed 2026-10-22 to https://my-cars.arlindo.site (see "Server" below).
-- [x] Visual upgrade (manual above): phases 0-7 done, deployed 2026-11-14 (`main` = `02cb0ea`). Pre-existing bug found: `/admin/users/:id` is blank for users after the first page of the list (needs his OK to fix, like `/login`). Still open for Arlindo: font, default theme, `/login` route, photos, prerendering the home page for mobile LCP.
+- [x] Visual upgrade (manual above): phases 0-7 done, deployed 2026-11-14 (`main` = `02cb0ea`). Still open for Arlindo: font, default theme, photos, prerendering the home page for mobile LCP.
 
 ## Server (p51-server, Ubuntu 26.04)
 - SSH: `arlindo@100.78.198.77` (Tailscale). Docker + compose installed; user is in the docker group.

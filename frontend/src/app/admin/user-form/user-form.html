@@ -1,4 +1,21 @@
-<div class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
+<div *ngIf="loading()" class="container-fluid pb-5">
+  <app-skeleton variant="row" [count]="2"></app-skeleton>
+</div>
+
+<div *ngIf="notFound()" class="container-fluid pb-5">
+  <app-empty-state illustration="lost" [level]="1" [heading]="'users.notFound' | translate">
+    <a routerLink="/admin/users" class="btn btn-dark">{{ 'users.back' | translate }}</a>
+  </app-empty-state>
+</div>
+
+<div *ngIf="failed()" class="container-fluid pb-5">
+  <h1 class="visually-hidden">{{ 'users.editTitle' | translate }}</h1>
+  <app-empty-state illustration="error" [text]="'users.loadFailed' | translate">
+    <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </app-empty-state>
+</div>
+
+<div *ngIf="!loading() && !notFound() && !failed()" class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
   <div class="card shadow-sm p-4" style="width: 100%; max-width: 440px;">
     <h1 class="h2 mb-4 text-center">{{ 'users.editTitle' | translate }}</h1>
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">

@@ -10,9 +10,6 @@ import {
 } from '@angular/router';
 import { authGuard } from './auth/auth-guard';
 import { adminGuard } from './auth/admin-guard';
-import { guestGuard } from './auth/guest-guard';
-import { Register } from './auth/register/register';
-import { Login } from './auth/login/login';
 import { NotFound } from './not-found/not-found';
 
 const routes: Routes = [
@@ -41,14 +38,9 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin-module').then(m => m.AdminModule),
     canActivate: [authGuard, adminGuard]
   },
-  { path: 'register', 
-    component: Register, 
-    canActivate: [guestGuard] 
-  },
-  { path: 'login', 
-    component: Login, 
-    canActivate: [guestGuard] 
-  },
+  // Short URLs for the auth pages (they used to render Login/Register outside AuthModule: blank page, NG0302)
+  { path: 'login', redirectTo: 'auth/login' },
+  { path: 'register', redirectTo: 'auth/register' },
   // Public catalog: home page and car pages. Keep it after the other routes.
   {
     path: '',

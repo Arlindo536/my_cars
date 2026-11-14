@@ -342,7 +342,8 @@
     "deleteManyMessage": "Të fshij {{count}} përdorues? Nuk kthehet mbrapsht.",
     "deletedMany": "Përdoruesit u fshinë.",
     "deleteManyFailed": "Disa përdorues nuk u fshinë.",
-    "detailTitle": "Detajet e përdoruesit"
+    "detailTitle": "Detajet e përdoruesit",
+    "notFound": "Ky përdorues nuk u gjet"
   },
   "demo": {
     "title": "Provo me llogari demo",

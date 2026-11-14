@@ -1,5 +1,22 @@
-<div class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
-  <div class="card shadow-sm p-4" style="width: 100%; max-width: 460px;" *ngIf="user">
+<div *ngIf="loading()" class="container-fluid pb-5">
+  <app-skeleton variant="row" [count]="2"></app-skeleton>
+</div>
+
+<div *ngIf="notFound()" class="container-fluid pb-5">
+  <app-empty-state illustration="lost" [level]="1" [heading]="'users.notFound' | translate">
+    <a routerLink="/admin/users" class="btn btn-dark">{{ 'users.back' | translate }}</a>
+  </app-empty-state>
+</div>
+
+<div *ngIf="failed()" class="container-fluid pb-5">
+  <h1 class="visually-hidden">{{ 'users.detailTitle' | translate }}</h1>
+  <app-empty-state illustration="error" [text]="'users.loadFailed' | translate">
+    <button type="button" class="btn btn-dark" (click)="load()">{{ 'common.retry' | translate }}</button>
+  </app-empty-state>
+</div>
+
+<div *ngIf="user() as user" class="d-flex justify-content-center align-items-center py-5" style="min-height: 70vh;">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 460px;">
     <div class="text-center mb-4">
       <i class="material-icons" style="font-size: 64px; color: var(--steel);" aria-hidden="true">account_circle</i>
       <h1 class="h2 mt-2 mb-1">{{ user.username }}</h1>

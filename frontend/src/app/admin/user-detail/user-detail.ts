@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { Admin } from '../admin';
+import { Admin, AdminUser } from '../admin';
 import { Language } from '../../language';
 import { Notification } from '../../notification';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
@@ -14,7 +14,10 @@ import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 })
 export class UserDetail implements OnInit {
   private language = inject(Language);
-  user: any = null;
+  readonly user = signal<AdminUser | null>(null);
+  readonly loading = signal(true);
+  readonly notFound = signal(false);
+  readonly failed = signal(false);
   userId!: number;
 
   constructor(
@@ -22,18 +25,27 @@ export class UserDetail implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private notification: Notification,
-    private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.userId = Number(this.route.snapshot.paramMap.get('id'));
-    this.adminService.getAllUsers().subscribe({
-      next: (data: any) => {
-        this.user = data.results.find((u: any) => u.id === this.userId);
-        this.cdr.detectChanges();
+    this.load();
+  }
+
+  load() {
+    this.loading.set(true);
+    this.failed.set(false);
+    this.adminService.getUser(this.userId).subscribe({
+      next: user => {
+        this.user.set(user);
+        this.loading.set(false);
       },
-      error: () => this.notification.error(this.language.t('users.loadFailed'))
+      error: err => {
+        this.notFound.set(err.status === 404);
+        this.failed.set(err.status !== 404);
+        this.loading.set(false);
+      }
     });
   }
 
@@ -41,7 +53,7 @@ export class UserDetail implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
         title: this.language.t('users.deleteTitle'),
-        message: this.language.t('users.deleteMessage', { name: this.user.username }),
+        message: this.language.t('users.deleteMessage', { name: this.user()?.username }),
         confirmLabel: this.language.t('admin.delete'),
         cancelLabel: this.language.t('admin.cancel')
       }
