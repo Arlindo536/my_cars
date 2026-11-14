@@ -252,3 +252,10 @@ Backend 76 OK. Frontend 52 passed / 7 failed: the remaining legacy `should creat
 - **Two horizontal-overflow bugs found while checking it** (both fixed, a scan of 15 pages × 360/375/768/1024, at the top and after scrolling, now finds none):
   - Since Phase 3: once the nav bar hid on scroll (it gets a `transform`), the closed mobile drawer was positioned against the bar instead of the viewport and widened the page by its width (330 px). The bar now clips sideways (`overflow-x: clip`); the drawer still opens normally.
   - Admin tables (Phase 6): the hidden screen-reader texts in action buttons are `position: absolute` and escaped the table's scroll box. `.admin-table` is now `position: relative`.
+
+## Deploy (2026-11-14)
+- `main` fast-forwarded to the `visual-upgrade` branch (`b86662a` → `02cb0ea`) and pushed to GitHub (both branches).
+- On p51-server (`~/my-cars-site`), before any change: database dump `~/backups/my_cars_site_pre-visual_2026-11-14-1116.sql` (38 kB) and the running frontend image tagged `my-cars-site-web:pre-visual`.
+- Only the frontend was rebuilt and recreated (`docker compose build web && docker compose up -d --no-deps web`); backend and database containers were not touched (no backend change, no migrations). The first build failed at `npm ci` on a transient network error (the registry was reachable a minute later, from the host and from a container); the retry succeeded.
+- **Rollback, one command:** `~/my-cars-site/rollback-visual.sh` (checks out `b86662a`, re-tags `pre-visual` as latest, recreates `web` without building). The old image stays until Arlindo is happy with the new version.
+- Checked live (https://my-cars.arlindo.site) in Chrome: home, a car page, login, register and 404 at 375/1280 in light and dark (0 console errors, 0 failed requests, self-hosted fonts loaded, only third party is the Cloudflare beacon allowed by the CSP, no horizontal overflow); demo customer login → home, my bookings, messages, a quote on a car page (no booking made), logout; demo admin login → admin bookings with the stat cards, logout.

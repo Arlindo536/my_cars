@@ -89,7 +89,7 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - [x] Step 8: admin changes (car form with price/description/image, bookings, messages).
 - [x] Step 9: README with screenshots, Docker Compose, production settings (env-driven). Verified locally with rootless Podman (`docker compose` via the user podman socket).
 - [x] Deployed 2026-10-22 to https://my-cars.arlindo.site (see "Server" below).
-- [ ] Visual upgrade (manual above): phases 0-7 done 2026-11-13 except the deploy (waits for Arlindo's OK). Pre-existing bug found: `/admin/users/:id` is blank for users after the first page of the list (needs his OK to fix, like `/login`). Still open for Arlindo: font, default theme, `/login` route, photos, prerendering the home page for mobile LCP.
+- [x] Visual upgrade (manual above): phases 0-7 done, deployed 2026-11-14 (`main` = `02cb0ea`). Pre-existing bug found: `/admin/users/:id` is blank for users after the first page of the list (needs his OK to fix, like `/login`). Still open for Arlindo: font, default theme, `/login` route, photos, prerendering the home page for mobile LCP.
 
 ## Server (p51-server, Ubuntu 26.04)
 - SSH: `arlindo@100.78.198.77` (Tailscale). Docker + compose installed; user is in the docker group.
@@ -98,6 +98,8 @@ Follows Arlindo's manual `~/Downloads/my-cars-visual-upgrade-manual.md` (phases 
 - Live app: `~/my-cars-site` (clone of `main`, project `my-cars-site`, `.env` with generated secrets, mode 600). Update: `cd ~/my-cars-site && git pull && docker compose up -d --build`. Demo cars are owned by `demo_admin`. Demo accounts are app-role only (`is_staff=False`), so they cannot log into `/django-admin/`.
 - Backups before the switch: `~/backups/my_cars_old_2026-10-22-2002.sql` and `..._media_...tar.gz`.
 - Rollback: `cd ~/my-cars-site && docker compose stop && cd ~/my_cars && docker compose start`.
+- Visual upgrade rollback (frontend only): `~/my-cars-site/rollback-visual.sh` (back to `b86662a` with image `my-cars-site-web:pre-visual`). DB dump before it: `~/backups/my_cars_site_pre-visual_2026-11-14-1116.sql`. Remove the `pre-visual` image only after Arlindo approves the new version.
+- Update only the frontend: `cd ~/my-cars-site && git pull && docker compose build web && docker compose up -d --no-deps web`.
 - Cloudflare Web Analytics is enabled on the zone and injects a beacon; the CSP allows `static.cloudflareinsights.com` / `cloudflareinsights.com`.
 - Public demo accounts `demo_klient` / `demo_admin` (passwords in `environment.prod.ts`, meant to be public). Backend setting `DEMO_ACCOUNTS` blocks them from changing passwords/profiles, deleting accounts and editing/deleting users.
 Later: security audit write-up (OWASP-style: auth, IDOR on bookings/messages, XSS in messages, CORS, dependency scans, ZAP).
